@@ -1,0 +1,212 @@
+/* =======================================================
+   NavTools - Disinvestimento Fondi
+   ======================================================= */
+
+.tool-container {
+    padding-top: 24px;
+    padding-bottom: 48px;
+}
+
+.back-link {
+    display: inline-flex;
+    margin-bottom: 20px;
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+.tool-header {
+    max-width: 760px;
+    margin: 0 auto 28px;
+    text-align: center;
+}
+
+.tool-header .logo {
+    width: 96px;
+    max-width: 30vw;
+    margin: 0 auto 14px;
+}
+
+h1 {
+    margin: 0 0 8px;
+    color: var(--primary);
+    font-size: clamp(2rem, 4vw, 2.7rem);
+    letter-spacing: 0;
+}
+
+.description {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.55;
+}
+
+.calculator-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.input-column,
+.result-column {
+    display: grid;
+    gap: 20px;
+}
+
+.panel,
+.result-card {
+    padding: 24px;
+}
+
+.panel h2 {
+    margin: 0 0 18px;
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+label,
+legend {
+    display: block;
+    margin: 16px 0 6px;
+    color: #263846;
+    font-weight: 700;
+}
+
+fieldset {
+    margin: 16px 0 0;
+    padding: 0;
+    border: 0;
+}
+
+input,
+select {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid #cddbd6;
+    border-radius: 6px;
+    background: #ffffff;
+    color: var(--text);
+    font: inherit;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.15);
+}
+
+.radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 22px;
+    margin-top: 8px;
+}
+
+.radio-group label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.radio-group input {
+    width: auto;
+    min-height: auto;
+}
+
+.result-card {
+    text-align: center;
+    border-top: 5px solid var(--accent);
+}
+
+#resultTitle {
+    margin: 0 0 10px;
+    color: var(--muted);
+    font-weight: 700;
+}
+
+#resultValue {
+    min-height: 58px;
+    color: var(--primary);
+    font-size: clamp(2.1rem, 5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.15;
+}
+
+#resultMessage {
+    min-height: 22px;
+    margin: 12px 0 0;
+    font-weight: 700;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 11px 0;
+    vertical-align: top;
+}
+
+td:first-child {
+    color: var(--muted);
+}
+
+td:last-child {
+    text-align: right;
+    font-weight: 800;
+}
+
+tr:not(:last-child) {
+    border-bottom: 1px solid #edf2f0;
+}
+
+.info-card {
+    margin-top: 20px;
+    color: var(--muted);
+}
+
+.error {
+    color: var(--danger);
+}
+
+[hidden] {
+    display: none !important;
+}
+
+@media (max-width: 820px) {
+    .calculator-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .tool-container {
+        width: min(100% - 28px, 680px);
+        padding-top: 18px;
+    }
+}
+
+@media (max-width: 560px) {
+    .panel,
+    .result-card {
+        padding: 18px;
+    }
+
+    .radio-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    td:last-child {
+        padding-left: 12px;
+    }
+}

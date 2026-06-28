@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavTools - Disinvestimento Fondi</title>
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container tool-container">
+        <a href="../../index.html" class="back-link">&larr; Home</a>
+
+        <header class="tool-header">
+            <a href="../../index.html" class="logo-link" aria-label="Vai alla home di NavTools">
+                <img src="../../images/logo.svg" class="logo" alt="Logo NavTools">
+            </a>
+            <h1>Disinvestimento Fondi</h1>
+            <p class="description">
+                Calcola il lordo da disinvestire oppure il netto ottenibile tenendo conto
+                della fiscalità e delle commissioni della SGR.
+            </p>
+        </header>
+
+        <main class="calculator-layout">
+            <form class="input-column" aria-label="Dati del calcolo">
+                <section class="card panel">
+                    <h2>Dati del comparto</h2>
+
+                    <label for="marketValue">Valore di mercato (EUR)</label>
+                    <input id="marketValue" type="number" value="10000" min="0" step="0.01" inputmode="decimal">
+
+                    <fieldset>
+                        <legend>Inserimento del guadagno</legend>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="gainMode" value="percent" checked>
+                                Guadagno %
+                            </label>
+                            <label>
+                                <input type="radio" name="gainMode" value="euro">
+                                Plusvalenza EUR
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <div id="gainPercentBox">
+                        <label for="gainPercent">Guadagno (%)</label>
+                        <input id="gainPercent" type="number" value="20" step="0.01" inputmode="decimal">
+                    </div>
+
+                    <div id="gainEuroBox" hidden>
+                        <label for="gainEuro">Plusvalenza (EUR)</label>
+                        <input id="gainEuro" type="number" value="2000" step="0.01" inputmode="decimal">
+                    </div>
+
+                    <label for="tax">Aliquota fiscale (%)</label>
+                    <input id="tax" type="number" value="26" min="0" max="100" step="0.01" inputmode="decimal">
+
+                    <label for="sgr">Società di gestione</label>
+                    <select id="sgr"></select>
+                </section>
+
+                <section class="card panel">
+                    <h2>Operazione</h2>
+
+                    <fieldset>
+                        <legend>Modalità di calcolo</legend>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="mode" value="lordo" checked>
+                                Lordo da Netto
+                            </label>
+                            <label>
+                                <input type="radio" name="mode" value="netto">
+                                Netto da Lordo
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <label id="operationLabel" for="operationValue">Importo netto desiderato (EUR)</label>
+                    <input id="operationValue" type="number" value="1000" min="0" step="0.01" inputmode="decimal">
+                </section>
+            </form>
+
+            <aside class="result-column" aria-live="polite">
+                <section class="card result-card">
+                    <p id="resultTitle">Lordo da disinvestire</p>
+                    <div id="resultValue">-</div>
+                    <p id="resultMessage"></p>
+                </section>
+
+                <section class="card panel">
+                    <h2>Dettaglio calcoli</h2>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>Imposta stimata</td>
+                                <td id="taxValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>Commissione</td>
+                                <td id="commissionValue">-</td>
+                            </tr>
+                            <tr id="maxNetRow">
+                                <td>Netto massimo ottenibile</td>
+                                <td id="maxNetValue">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </aside>
+        </main>
+
+        <section class="card panel info-card">
+            <h2>Informazioni</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Versione</td>
+                        <td>1.0</td>
+                    </tr>
+                    <tr>
+                        <td>Ultimo aggiornamento</td>
+                        <td>28/06/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Autore</td>
+                        <td>Alessandro Navarini</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script src="../../assets/js/common.js"></script>
+    <script src="calculator.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

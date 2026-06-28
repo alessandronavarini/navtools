@@ -1,0 +1,54 @@
+:root {
+    --primary: #0f4c81;
+    --primary-dark: #0a3c67;
+    --accent: #237a4b;
+    --danger: #b42318;
+    --background: #f4f7f6;
+    --card: #ffffff;
+    --text: #25313b;
+    --muted: #5f6f7d;
+    --border: #dfe8e4;
+    --shadow: 0 12px 30px rgba(22, 44, 60, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--background);
+    color: var(--text);
+    font-family: Segoe UI, Arial, sans-serif;
+}
+
+.container {
+    width: min(1100px, 92%);
+    margin: 0 auto;
+}
+
+.card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    box-shadow: var(--shadow);
+}
+
+.logo {
+    display: block;
+}
+
+.logo-link {
+    display: inline-block;
+    color: inherit;
+    text-decoration: none;
+}
+
+:focus-visible {
+    outline: 3px solid rgba(15, 76, 129, 0.35);
+    outline-offset: 2px;
+}

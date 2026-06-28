@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavTools - Importo Mutuo Erogabile</title>
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container tool-container">
+        <a href="../../index.html" class="back-link">&larr; Home</a>
+
+        <header class="tool-header">
+            <a href="../../index.html" class="logo-link" aria-label="Vai alla home di NavTools">
+                <img src="../../images/logo.svg" class="logo" alt="Logo NavTools">
+            </a>
+            <h1>Importo Mutuo Erogabile</h1>
+            <p class="description">
+                Stima il capitale massimo finanziabile in base al reddito mensile,
+                agli impegni gi&agrave; in corso, al tasso fisso e alla durata desiderata.
+            </p>
+        </header>
+
+        <main class="calculator-layout">
+            <form class="input-column" aria-label="Dati del calcolo mutuo">
+                <section class="card panel">
+                    <h2>Dati reddituali</h2>
+
+                    <label for="monthlyIncome">Reddito netto mensile (EUR)</label>
+                    <input id="monthlyIncome" type="number" value="2000" min="0" step="0.01" inputmode="decimal">
+
+                    <label for="debtRatio">Reddito destinabile a finanziamenti (%)</label>
+                    <input id="debtRatio" type="number" value="35" min="0" max="100" step="0.01" inputmode="decimal">
+
+                    <label for="existingPayments">Rate finanziamenti gi&agrave; in corso (EUR)</label>
+                    <input id="existingPayments" type="number" value="0" min="0" step="0.01" inputmode="decimal">
+                </section>
+
+                <section class="card panel">
+                    <h2>Condizioni mutuo</h2>
+
+                    <label for="annualRate">Tasso di interesse annuo (%)</label>
+                    <input id="annualRate" type="number" value="3.5" min="0" step="0.01" inputmode="decimal">
+
+                    <label for="durationYears">Durata desiderata (anni)</label>
+                    <input id="durationYears" type="number" value="20" min="1" step="1" inputmode="numeric">
+                </section>
+            </form>
+
+            <aside class="result-column" aria-live="polite">
+                <section class="card result-card">
+                    <p id="resultTitle">Importo massimo erogabile</p>
+                    <div id="resultValue">-</div>
+                    <p id="resultMessage"></p>
+                </section>
+
+                <section class="card panel">
+                    <h2>Dettaglio calcoli</h2>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>Quota stipendio destinabile</td>
+                                <td id="availableIncomeValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>Rata massima sostenibile</td>
+                                <td id="availablePaymentValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>Numero rate</td>
+                                <td id="installmentsValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>Rata ipotizzata</td>
+                                <td id="paymentValue">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </aside>
+        </main>
+
+        <section class="card panel info-card">
+            <h2>Informazioni</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Versione</td>
+                        <td>1.0</td>
+                    </tr>
+                    <tr>
+                        <td>Ultimo aggiornamento</td>
+                        <td>28/06/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Autore</td>
+                        <td>Alessandro Navarini</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script src="../../assets/js/common.js"></script>
+    <script src="calculator.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

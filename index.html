@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavTools</title>
+    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container home-container">
+        <header class="site-header">
+            <a href="index.html" class="logo-link" aria-label="Vai alla home di NavTools">
+                <img src="images/logo.svg" class="logo" alt="Logo NavTools">
+            </a>
+            <h1>NavTools</h1>
+            <p class="subtitle">
+                Piccoli strumenti web per semplificare l'operatività quotidiana in Finanza.
+            </p>
+        </header>
+
+        <main class="tool-grid" aria-label="Strumenti disponibili">
+            <article class="tool-card">
+                <div>
+                    <p class="tool-status available">Disponibile</p>
+                    <h2>Disinvestimento Fondi</h2>
+                    <p>
+                        Calcola il lordo necessario per ottenere un netto desiderato oppure il netto
+                        ottenibile da un importo lordo, includendo imposte e commissioni SGR.
+                    </p>
+                </div>
+                <a class="button" href="tools/fondi/index.html">Apri strumento</a>
+            </article>
+
+            <article class="tool-card">
+                <div>
+                    <p class="tool-status available">Disponibile</p>
+                    <h2>Importo Mutuo Erogabile</h2>
+                    <p>
+                        Stima il massimo importo finanziabile partendo dal reddito netto mensile,
+                        dagli impegni gi&agrave; in corso, dal tasso fisso e dalla durata desiderata.
+                    </p>
+                </div>
+                <a class="button" href="tools/mutui/index.html">Apri strumento</a>
+            </article>
+
+            <article class="tool-card disabled" aria-disabled="true">
+                <div>
+                    <p class="tool-status draft">In bozza</p>
+                    <h2>Calcolatore PAC/PIC</h2>
+                    <p>Strumento previsto per simulare versamenti ricorrenti e investimenti iniziali.</p>
+                </div>
+            </article>
+
+            <article class="tool-card disabled" aria-disabled="true">
+                <div>
+                    <p class="tool-status draft">In bozza</p>
+                    <h2>Obbligazioni</h2>
+                    <p>Area futura per cedole, duration, fiscalità e rendimento obbligazionario.</p>
+                </div>
+            </article>
+        </main>
+    </div>
+</body>
+</html>
