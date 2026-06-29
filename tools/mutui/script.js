@@ -61,7 +61,7 @@ function validate(values) {
     }
 
     if (!Number.isFinite(values.rateInCorso) || values.rateInCorso < 0) {
-        return "Inserisci un importo valido per le rate gia in corso.";
+        return "Inserisci un importo valido per le rate già in corso.";
     }
 
     if (!Number.isFinite(values.tassoAnnuo) || values.tassoAnnuo < 0) {
@@ -86,7 +86,7 @@ function renderResult(result) {
     elements.paymentValue.textContent = formatEuro(result.rataMassima);
 
     if (result.rataMassima <= 0) {
-        elements.resultMessage.textContent = "Le rate gia in corso assorbono tutta la quota destinabile.";
+        elements.resultMessage.textContent = "Le rate già in corso assorbono tutta la quota destinabile.";
         elements.resultMessage.className = "error";
     }
 }

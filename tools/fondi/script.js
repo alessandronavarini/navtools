@@ -103,12 +103,12 @@ function validate(values) {
         return "Inserisci una plusvalenza compatibile con il valore di mercato.";
     }
 
-    if (values.gainPercent <= -100) {
-        return "Il guadagno deve essere superiore a -100%.";
+    if (values.gainPercent < 0) {
+        return "Il guadagno deve essere superiore a 0%.";
     }
 
-    if (!Number.isFinite(values.aliquota) || values.aliquota < 0 || values.aliquota > 100) {
-        return "Inserisci un'aliquota compresa tra 0% e 100%.";
+    if (!Number.isFinite(values.aliquota) || values.aliquota < 12.5 || values.aliquota > 26) {
+        return "Inserisci un'aliquota compresa tra 12,5% e 26%.";
     }
 
     if (!Number.isFinite(values.operationValue) || values.operationValue < 0) {

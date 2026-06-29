@@ -1,6 +1,6 @@
 # NavTools
 
-Piccoli strumenti web per semplificare l'operativita quotidiana in finanza.
+Piccoli strumenti web per semplificare l'operativita quotidiana in Banca.
 
 Il progetto è pensato per GitHub Pages e usa HTML, CSS e JavaScript puro: nessun backend, nessun database e nessun framework.
 
