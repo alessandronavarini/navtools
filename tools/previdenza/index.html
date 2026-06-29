@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavTools - Previdenza Complementare</title>
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container tool-container">
+        <a href="../../index.html" class="back-link">&larr; Home</a>
+
+        <header class="tool-header">
+            <a href="../../index.html" class="logo-link" aria-label="Vai alla home di NavTools">
+                <img src="../../images/logo.svg" class="logo" alt="Logo NavTools">
+            </a>
+            <h1>Previdenza Complementare</h1>
+            <p class="description">
+                Calcola il risparmio fiscale annuo derivante dal versamento a un fondo pensione
+                complementare e determina il costo effettivo netto del tuo contributo.
+            </p>
+        </header>
+
+        <main class="calculator-layout">
+            <form class="input-column" aria-label="Dati del calcolo previdenza" onsubmit="return false;">
+                <section class="card panel">
+                    <h2>Base imponibile</h2>
+
+                    <fieldset>
+                        <legend>Modalit&agrave; di inserimento</legend>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="incomeMode" value="RAL" checked>
+                                RAL / Imponibile INPS
+                            </label>
+                            <label>
+                                <input type="radio" name="incomeMode" value="IRPEF">
+                                Imponibile IRPEF
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <div id="ralInputs">
+                        <label for="ral">RAL / Imponibile INPS (EUR)</label>
+                        <input id="ral" type="number" value="35000" min="0" step="0.01" inputmode="decimal">
+
+                        <label for="inpsRate">Aliquota contributiva INPS (%)</label>
+                        <input id="inpsRate" type="number" value="9.19" min="0" max="100" step="0.01" inputmode="decimal">
+                    </div>
+
+                    <div id="irpefInputs" hidden>
+                        <label for="taxableIrpef">Imponibile IRPEF (EUR)</label>
+                        <input id="taxableIrpef" type="number" value="30000" min="0" step="0.01" inputmode="decimal">
+                    </div>
+                </section>
+
+                <section class="card panel">
+                    <h2>Versamento previdenziale</h2>
+
+                    <label for="annualContribution">Importo annuo da versare (EUR)</label>
+                    <input id="annualContribution" type="number" value="5000" min="0" step="0.01" inputmode="decimal">
+                    <p class="field-note">Il limite annuo di deducibilit&agrave; &egrave; &euro;5.300,00. La quota eccedente non beneficia di agevolazioni fiscali.</p>
+                    <div id="contributionWarningBadge" class="warning-badge" hidden>Limite superato</div>
+
+                    <fieldset>
+                        <legend>Modalit&agrave; di versamento</legend>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="paymentMode" value="busta_paga" checked>
+                                Trattenuta in busta paga
+                            </label>
+                            <label>
+                                <input type="radio" name="paymentMode" value="bonifico">
+                                Bonifico diretto
+                            </label>
+                        </div>
+                    </fieldset>
+                    <p id="paymentModeNote" class="field-note">Il beneficio fiscale si distribuisce mensilmente nel cedolino.</p>
+                </section>
+
+                <section class="card panel">
+                    <h2>Addizionali IRPEF</h2>
+
+                    <label for="regionalTax">Addizionale regionale (%)</label>
+                    <input id="regionalTax" type="number" value="1.23" min="0" max="100" step="0.01" inputmode="decimal">
+
+                    <label for="municipalTax">Addizionale comunale (%)</label>
+                    <input id="municipalTax" type="number" value="0.00" min="0" max="100" step="0.01" inputmode="decimal">
+                </section>
+            </form>
+
+            <aside class="result-column" aria-live="polite">
+                <section class="card result-card">
+                    <p id="resultTitle">Risparmio fiscale annuo</p>
+                    <div id="resultValue">-</div>
+                    <p id="resultMessage"></p>
+                    
+                    <div class="result-details">
+                        <div class="result-detail-line">
+                            <span class="detail-label">Costo effettivo del versamento:</span>
+                            <span id="effectiveCostValue" class="detail-val">-</span>
+                        </div>
+                        <div class="result-detail-line highlight-line">
+                            <span id="taxReturnRateText">-</span>
+                        </div>
+                        <div id="monthlyBenefitRow" class="result-detail-line">
+                            <span class="detail-label">Beneficio mensile in cedolino:</span>
+                            <span id="monthlyBenefitValue" class="detail-val">-</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card panel">
+                    <h2>Dettaglio calcoli</h2>
+                    <table class="detail-table">
+                        <thead>
+                            <tr>
+                                <th>Voce</th>
+                                <th>Senza contributo</th>
+                                <th>Con contributo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Imponibile IRPEF</td>
+                                <td id="taxableWithoutValue">-</td>
+                                <td id="taxableWithValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>IRPEF lorda</td>
+                                <td id="grossWithoutValue">-</td>
+                                <td id="grossWithValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>Detrazione lav. dipendente</td>
+                                <td id="deductionWithoutValue">-</td>
+                                <td id="deductionWithValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>IRPEF netta</td>
+                                <td id="netWithoutValue">-</td>
+                                <td id="netWithValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>Addizionale regionale</td>
+                                <td id="regWithoutValue">-</td>
+                                <td id="regWithValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>Addizionale comunale</td>
+                                <td id="comWithoutValue">-</td>
+                                <td id="comWithValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>Totale imposte</td>
+                                <td id="totalTaxWithoutValue">-</td>
+                                <td id="totalTaxWithValue">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="summary-block">
+                        <div class="summary-line">
+                            <span>Risparmio IRPEF:</span>
+                            <span id="savingIrpefValue">-</span>
+                        </div>
+                        <div class="summary-line">
+                            <span>Risparmio addizionali:</span>
+                            <span id="savingAdditionsValue">-</span>
+                        </div>
+                        <div class="summary-line highlight">
+                            <span>Risparmio fiscale totale:</span>
+                            <span id="savingTotalValue">-</span>
+                        </div>
+                    </div>
+
+                    <div id="excessWarningBlock" class="warning-box" hidden>
+                        <span class="warning-icon">&#9888;</span>
+                        <span id="excessWarningText"></span>
+                    </div>
+                </section>
+            </aside>
+        </main>
+
+        <p class="info-note">
+            Il TFR destinato al fondo pensione ha un regime fiscale separato e non concorre al limite annuo di deducibilit&agrave; di &euro;5.300,00.
+        </p>
+
+        <section class="card panel info-card">
+            <h2>Informazioni</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Versione</td>
+                        <td>1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>Ultimo aggiornamento</td>
+                        <td>29/06/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Autore</td>
+                        <td>Alessandro Navarini</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script src="../../assets/js/common.js"></script>
+    <script src="calculator.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

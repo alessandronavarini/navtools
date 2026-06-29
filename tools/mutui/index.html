@@ -45,6 +45,9 @@
 
                     <label for="durationYears">Durata desiderata (anni)</label>
                     <input id="durationYears" type="number" value="20" min="1" step="1" inputmode="numeric">
+
+                    <label for="ltv">Loan To Value – LTV (%)</label>
+                    <input id="ltv" type="number" value="80" min="1" max="100" step="1" inputmode="numeric">
                 </section>
             </form>
 
@@ -64,16 +67,20 @@
                                 <td id="availableIncomeValue">-</td>
                             </tr>
                             <tr>
-                                <td>Rata massima sostenibile</td>
-                                <td id="availablePaymentValue">-</td>
-                            </tr>
-                            <tr>
                                 <td>Numero rate</td>
                                 <td id="installmentsValue">-</td>
                             </tr>
                             <tr>
                                 <td>Rata ipotizzata</td>
                                 <td id="paymentValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>Valore minimo dell'immobile (EUR)</td>
+                                <td id="minPropertyValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>Anticipo minimo necessario (EUR)</td>
+                                <td id="minDepositValue">-</td>
                             </tr>
                         </tbody>
                     </table>
@@ -87,7 +94,7 @@
                 <tbody>
                     <tr>
                         <td>Versione</td>
-                        <td>1.0.1</td>
+                        <td>1.0.2</td>
                     </tr>
                     <tr>
                         <td>Ultimo aggiornamento</td>
