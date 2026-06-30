@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavTools - Prestazioni della Previdenza Complementare</title>
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container tool-container">
+        <a href="../../index.html" class="back-link">&larr; Home</a>
+
+        <header class="tool-header">
+            <a href="../../index.html" class="logo-link" aria-label="Vai alla home di NavTools">
+                <img src="../../images/logo.svg" class="logo" alt="Logo NavTools">
+            </a>
+            <h1>Prestazioni della Previdenza Complementare</h1>
+            <p class="description">
+                Determina l'aliquota fiscale applicabile alle prestazioni pensionistiche finali e scopri le modalità di liquidazione introdotte con la delibera COVIP del 25 giugno 2026.
+            </p>
+        </header>
+
+        <main class="calculator-layout">
+            <form class="input-column" aria-label="Dati del calcolo prestazioni" onsubmit="return false;">
+                <section class="card panel">
+                    <h2>Modalit&agrave; di calcolo</h2>
+
+                    <fieldset>
+                        <legend>Seleziona il metodo di inserimento</legend>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="inputMode" value="DATE" checked>
+                                Data prima iscrizione
+                            </label>
+                            <label>
+                                <input type="radio" name="inputMode" value="YEARS">
+                                Anni di partecipazione
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <div id="dateInputWrapper">
+                        <label for="firstEnrollmentDate">Data di prima iscrizione alla previdenza complementare</label>
+                        <input id="firstEnrollmentDate" type="date" value="2010-06-30">
+                        <p class="field-note">
+                            Anni di partecipazione calcolati ad oggi: <strong id="calculatedYearsText">-</strong>
+                        </p>
+                    </div>
+
+                    <div id="yearsInputWrapper" hidden>
+                        <label for="yearsInput">Numero di anni di partecipazione</label>
+                        <input id="yearsInput" type="number" value="16" min="0" max="70" step="1" inputmode="numeric">
+                    </div>
+                </section>
+            </form>
+
+            <aside class="result-column" aria-live="polite">
+                <section class="card result-card">
+                    <p id="resultTitle">Prestazioni soggette all'aliquota 15%-9%</p>
+                    <div id="resultValue" class="rate-highlight"><span id="rate1Display">-</span>%</div>
+                    <p id="resultMessage"></p>
+
+                    <div class="options-list">
+                        <div class="option-item">
+                            <h3>TUTTO IN CAPITALE</h3>
+                            <p>Liquidazione del montante accumulato interamente in un'unica soluzione, ammessa nei limiti di legge (montante ridotto).</p>
+                        </div>
+                        <div class="option-item">
+                            <h3>60% CAPITALE + 40% RENDITA VITALIZIA</h3>
+                            <p>Erogazione mista con quota in capitale fino al 60% del montante e la parte rimanente convertita in rendita vitalizia per l'iscritto, erogata da una compagnia assicurativa. La rendita può essere scelta tra diverse opzioni: rendita vitalizia; rendita certa per 5 o 10 anni e poi vitalizia; rendita vitalizia reversibile.</p>
+                        </div>
+                        <div class="option-item">
+                            <h3>RENDITA A DURATA DEFINITA</h3>
+                            <p>Rendita erogata direttamente dal fondo per un numero fisso di anni pari alla speranza di vita residua (introdotta dal 1&deg; luglio 2026).</p>
+                        </div>
+                        <div class="option-item">
+                            <h3>PRELIEVI LIBERAMENTE DETERMINABILI</h3>
+                            <p>Prelievi parziali flessibili effettuabili secondo le proprie necessità, nei limiti della rendita a durata definita maturata (introdotta dal 1&deg; luglio 2026).</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card result-card secondary-rate-card">
+                    <p id="resultTitle2" class="muted-title">Prestazioni soggette all'aliquota 20%-15%</p>
+                    <div id="resultValue2" class="rate-highlight secondary-rate"><span id="rate2Display">-</span>%</div>
+
+                    <div class="options-list">
+                        <div class="option-item">
+                            <h3>EROGAZIONE FRAZIONATA DEL MONTANTE ACCUMULATO</h3>
+                            <p>Ritiro programmato del capitale in forma di rate periodiche erogate dal fondo per un periodo non inferiore a 5 anni, senza conversione in rendita.</p>
+                            <span class="availability-badge">Disponibile dal 31 ottobre 2026.</span>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </main>
+
+        <section class="card panel info-card" style="margin-top: 20px;">
+            <h2>Nota sulla fiscalit&agrave; delle prestazioni</h2>
+            <div class="fiscal-notes">
+                <p>La disciplina fiscale della previdenza complementare prevede regole specifiche per ciascuna fase:</p>
+                <ul>
+                    <li><strong>Rendimenti finanziari:</strong> sono tassati annualmente in capo al fondo con un'imposta sostitutiva agevolata del 20% (ridotta al 12,5% per la quota investita in Titoli di Stato o in <italics>whitelist</italics>).</li>
+                    <li><strong>Contributi dedotti:</strong> i contributi dedotti durante la fase di accumulo (fino a 5.300 &euro; all'anno) vengono tassati al momento della liquidazione finale con l'aliquota calcolata in base agli anni di partecipazione (dal 15% al 9% o dal 20% al 15%).</li>
+                    <li><strong>Contributi non dedotti:</strong> le somme versate che hanno superato il limite annuo di deducibilit&agrave; e che sono state dichiarate alla forma pensionistica come non dedotte non subiscono alcuna tassazione al momento dell'erogazione della prestazione.</li>
+                    <li><strong>Trattamento di Fine Rapporto (TFR):</strong> il TFR conferito alla previdenza complementare segue le medesime aliquote fiscali sostitutive agevolate (dal 15% al 9% o dal 20% al 15%) applicate al resto del montante maturato dal 2007.</li>
+                    <li><strong>Premi di risultato:</strong> i premi di risultato aziendali destinati al fondo pensione sono esenti da IRPEF nei limiti di legge, non concorrono al plafond dei 5.300 &euro; e seguono il trattamento fiscale agevolato previsto dalla normativa.</li>
+                </ul>
+            </div>
+            <div class="covip-link-box" style="border-top: 1px solid var(--border); margin-top: 20px; padding-top: 16px; text-align: center;">
+                <a href="https://www.covip.it/sites/default/files/provvedimenti/istruzioni_prestazioni_25_06_2026.pdf" target="_blank" rel="noopener noreferrer" class="covip-link" style="color: var(--primary); font-weight: bold; text-decoration: none;">
+                    Istruzioni COVIP sulle prestazioni (Delibera del 25 giugno 2026) &rarr;
+                </a>
+            </div>
+        </section>
+
+        <section class="card panel info-card">
+            <h2>Disclaimer</h2>
+            <p class="disclaimer-text" style="font-size: 0.88rem; line-height: 1.5; color: var(--muted); margin: 0;">
+                <strong>Disclaimer:</strong> I calcoli proposti hanno finalit&agrave; esclusivamente informative, devono essere considerati indicativi e non sostituiscono una consulenza personalizzata.
+            </p>
+        </section>
+
+        <section class="card panel info-card">
+            <h2>Informazioni</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Versione</td>
+                        <td>1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>Ultimo aggiornamento</td>
+                        <td>30/06/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Autore</td>
+                        <td>Alessandro Navarini</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script src="../../assets/js/common.js"></script>
+    <script src="calculator.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
