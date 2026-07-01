@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavTools - Redditi di Capitale e Diversi</title>
+    <meta name="description" content="Guida alla fiscalità nel risparmio amministrato: redditi di capitale, redditi diversi, compensazione delle minusvalenze, aliquote e certificazioni.">
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container tool-container">
+        <a href="../../index.html" class="back-link">&larr; Home</a>
+
+        <header class="tool-header">
+            <a href="../../index.html" class="logo-link" aria-label="Vai alla home di NavTools">
+                <img src="../../images/logo.svg" class="logo" alt="Logo NavTools">
+            </a>
+            <h1>Redditi di Capitale e Diversi</h1>
+            <p class="description">
+                Approfondimento sulla fiscalità nel regime amministrato e sulla possibilità di
+                compensazione delle minusvalenze pregresse.
+            </p>
+        </header>
+
+        <main>
+
+            <!-- =====================================================
+                 SEZIONE 1 — Redditi di capitale vs redditi diversi
+                 ===================================================== -->
+            <section class="card panel section-card">
+                <h2>Redditi di capitale e redditi diversi</h2>
+                <p class="section-intro">
+                    Nel risparmio amministrato i proventi finanziari si suddividono in due categorie
+                    fiscalmente distinte: <strong>redditi di capitale</strong> e <strong>redditi diversi</strong>.
+                    La distinzione è significativa: cambia il regime di tassazione e, soprattutto,
+                    la possibilità di sfruttare eventuali minusvalenze pregresse.
+                </p>
+
+                <!-- Tabella riepilogativa delle due categorie -->
+                <div class="two-col-cards">
+                    <div class="category-card capital">
+                        <h3>Redditi di capitale</h3>
+                        <ul>
+                            <li>Proventi <strong>sempre positivi</strong>: cedole, dividendi, interessi, proventi da OICR.</li>
+                            <li>Tassati <strong>sempre</strong> al momento del pagamento, senza eccezioni.</li>
+                            <li><strong>Non compensabili</strong> con minusvalenze pregresse.</li>
+                        </ul>
+                    </div>
+                    <div class="category-card diverse">
+                        <h3>Redditi diversi</h3>
+                        <ul>
+                            <li><strong>Sempre compensabili</strong> con eventuali minusvalenze pregresse.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Sottosezione: classificazione interattiva -->
+                <div class="classifier-block">
+                    <h3>Classificatore fiscale</h3>
+                    <p class="field-note">
+                        Seleziona lo strumento e il tipo di provento per sapere se si tratta di un
+                        reddito di capitale o di un reddito diverso e se è compensabile con minusvalenze.
+                    </p>
+
+                    <div class="classifier-inputs">
+                        <div class="select-group">
+                            <label for="instrumentSelect">Strumento finanziario</label>
+                            <select id="instrumentSelect">
+                                <option value="">— Seleziona —</option>
+                                <option value="azioni">Azioni</option>
+                                <option value="obbligazioni">Obbligazioni / Titoli di Stato</option>
+                                <option value="oicr">OICR (Fondi comuni / ETF)</option>
+                                <option value="certificate">Certificate</option>
+                                <option value="etc_etn">ETC / ETN</option>
+                            </select>
+                        </div>
+                        <div class="select-group">
+                            <label for="incomeTypeSelect">Tipo di provento</label>
+                            <select id="incomeTypeSelect">
+                                <option value="">— Seleziona —</option>
+                                <option value="cedola">Cedola / Dividendo</option>
+                                <option value="plusvalenza">Plusvalenza</option>
+                                <option value="minusvalenza">Minusvalenza</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Risultato della classificazione (aggiornato via JS) -->
+                    <div id="classifierResult" class="classifier-result" hidden>
+                        <div id="classifierBadge" class="result-badge"></div>
+                        <p id="classifierText" class="classifier-text"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =====================================================
+                 SEZIONE 2 — Durata delle minusvalenze
+                 ===================================================== -->
+            <section class="card panel section-card">
+                <h2>Durata delle minusvalenze</h2>
+                <p class="section-intro">
+                    Le minusvalenze realizzate nel regime amministrato possono essere utilizzate per compensare redditi diversi nell'anno in cui sono state generate e nei <strong>quattro anni
+                    fiscali successivi</strong>.
+                </p>
+
+                <!-- Testi dinamici generati da JS in base all'anno corrente -->
+                <div class="minus-info-grid">
+                    <div class="minus-info-box accent-box">
+                        <span class="minus-info-label">Minusvalenze generate quest'anno</span>
+                        <p id="futureDeadlineText" class="minus-info-text">—</p>
+                    </div>
+                    <div class="minus-info-box warning-box-info">
+                        <span class="minus-info-label">Scadenza imminente</span>
+                        <p id="expiringText" class="minus-info-text">—</p>
+                    </div>
+                </div>
+
+                <!-- Linea del tempo interattiva -->
+                <div class="timeline-wrapper" aria-label="Linea del tempo delle minusvalenze">
+                    <div class="timeline-track">
+                        <div class="timeline-line"></div>
+                        <div id="timelinePoints" class="timeline-points">
+                            <!-- Punti generati da JS -->
+                        </div>
+                    </div>
+                    <p class="field-note" style="text-align:center; margin-top: 12px;">
+                        La data di scadenza delle minusvalenze è sempre il <strong>31 dicembre</strong> del quarto anno successivo alla generazione.
+                    </p>
+                </div>
+            </section>
+
+            <!-- =====================================================
+                 SEZIONE 3 — Aliquote fiscali e convertitore
+                 ===================================================== -->
+            <section class="card panel section-card">
+                <h2>Aliquote fiscali e convertitore</h2>
+                <p class="section-intro">
+                    In Italia esistono due aliquote principali per la tassazione dei redditi finanziari:
+                    il <strong>26%</strong> (aliquota ordinaria) e il <strong>12,5%</strong>
+                    (aliquota agevolata per i Titoli di Stato italiani ed equiparati).
+                    Per strumenti composti come gli OICR si applica un'aliquota <em>effettiva intermedia</em>,
+                    calcolata in base alla quota investita in titoli agevolati.
+                </p>
+                <div class="info-note-inline">
+                    <span class="info-icon">&#9432;</span>
+                    <span>
+                        Per convenzione, le minusvalenze sono <strong>sempre espresse al 26%</strong>,
+                        indipendentemente dallo strumento che le ha generate. Questo significa che, per
+                        compensare una plusvalenza tassata al 12,5%, il "valore equivalente" della
+                        minusvalenza disponibile è inferiore.
+                    </span>
+                </div>
+
+                <!-- Due convertitori affiancati -->
+                <div class="converters-grid">
+
+                    <!-- Convertitore A: minusvalenza (26%) necessaria per coprire plusvalenza agevolata -->
+                    <div class="card converter-card">
+                        <h3>Minusvalenze (26%) necessarie</h3>
+                        <p class="converter-subtitle">
+                            Quante minusvalenze al 26% servono per compensare una plusvalenza su
+                            Titoli di Stato (12,5%)?
+                        </p>
+                        <label for="plusAgevolataInput">Plusvalenza su Titoli di Stato (EUR)</label>
+                        <input id="plusAgevolataInput" type="number" value="1000" min="0" step="0.01" inputmode="decimal">
+                        <div class="converter-result">
+                            <span class="converter-result-label">Minusvalenze (26%) necessarie:</span>
+                            <span id="minusNecessarieResult" class="converter-result-value">—</span>
+                        </div>
+                        <p class="field-note">Rapporto di conversione: 12,5% &divide; 26% &asymp; 0,4808</p>
+                    </div>
+
+                    <!-- Convertitore B: plusvalenza agevolata (12,5%) che "libera" una minusvalenza (26%) -->
+                    <div class="card converter-card">
+                        <h3>Plusvalenze (12,5%) equivalenti</h3>
+                        <p class="converter-subtitle">
+                            Quante plusvalenze su Titoli di Stato (12,5%) servono per utilizzare
+                            interamente una minusvalenza al 26%?
+                        </p>
+                        <label for="minusDisponibileInput">Minusvalenza disponibile (EUR)</label>
+                        <input id="minusDisponibileInput" type="number" value="1000" min="0" step="0.01" inputmode="decimal">
+                        <div class="converter-result">
+                            <span class="converter-result-label">Plusvalenze (12,5%) equivalenti:</span>
+                            <span id="plusEquivalentiResult" class="converter-result-value">—</span>
+                        </div>
+                        <p class="field-note">Rapporto di conversione: 26% &divide; 12,5% = 2,08</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =====================================================
+                 SEZIONE 4 — Certificazione delle minusvalenze
+                 ===================================================== -->
+            <section class="card panel section-card">
+                <h2>Certificazione delle minusvalenze</h2>
+                <p class="section-intro">
+                    Alla chiusura di un rapporto di investimento (dossier titoli, deposito amministrato)
+                    l'intermediario rilascia una <strong>certificazione delle minusvalenze</strong> residue.
+                    Questo documento può essere consegnato a un altro intermediario per continuare
+                    a sfruttare le perdite pregresse entro le scadenze di legge.
+                </p>
+
+                <!-- Schema visivo delle regole di trasferibilità -->
+                <h3 style="margin: 28px 0 12px;">Regole di trasferibilità</h3>
+                <div class="transfer-grid">
+                    <div class="transfer-box from-gestito">
+                        <div class="transfer-badge">Risparmio gestito</div>
+                        <p>Certificazione da gestione patrimoniale.</p>
+                        <div class="transfer-arrows">
+                            <div class="transfer-arrow ok">
+                                <span class="arrow-icon">&#8594;</span>
+                                <span>Altra posizione in <strong>risparmio gestito</strong></span>
+                                <span class="arrow-tag ok-tag">&#10003; Consentito</span>
+                            </div>
+                            <div class="transfer-arrow ok">
+                                <span class="arrow-icon">&#8594;</span>
+                                <span>Posizione in <strong>risparmio amministrato</strong></span>
+                                <span class="arrow-tag ok-tag">&#10003; Consentito</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transfer-box from-amministrato">
+                        <div class="transfer-badge">Risparmio amministrato</div>
+                        <p>Certificazione da dossier titoli o deposito in regime amministrato.</p>
+                        <div class="transfer-arrows">
+                            <div class="transfer-arrow ok">
+                                <span class="arrow-icon">&#8594;</span>
+                                <span>Altra posizione in <strong>risparmio amministrato</strong></span>
+                                <span class="arrow-tag ok-tag">&#10003; Consentito</span>
+                            </div>
+                            <div class="transfer-arrow no">
+                                <span class="arrow-icon">&#8594;</span>
+                                <span>Posizione in <strong>risparmio gestito</strong></span>
+                                <span class="arrow-tag no-tag">&#10007; Non consentito</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-note-inline" style="margin-top: 20px;">
+                    <span class="info-icon">&#9432;</span>
+                    <span>
+                        La scadenza quadriennale si applica anche alle minusvalenze certificate.
+                    </span>
+                </div>
+            </section>
+
+            <!-- =====================================================
+                 SEZIONE 5 — Risparmio gestito
+                 ===================================================== -->
+            <section class="card panel section-card">
+                <h2>Risparmio gestito</h2>
+                <p class="section-intro">
+                    Nel <strong>risparmio gestito</strong> (gestioni patrimonial) il calcolo fiscale avviene a livello di <em>portafoglio complessivo</em>,
+                    non strumento per strumento.
+                </p>
+                <ul class="feature-list">
+                    <li>
+                        <strong>La distinzione tra redditi di capitale e redditi diversi perde importanza:</strong>
+                        tutti i proventi, positivi o negativi, confluiscono in un unico risultato di gestione.
+                    </li>
+                    <li>
+                        <strong>Le imposte sono versate annualmente</strong> sul risultato netto maturato
+                        durante l'anno (non solo al momento della vendita).
+                    </li>
+                    <li>
+                        Se il risultato di gestione è negativo, la perdita viene riportata agli anni
+                        successivi all'interno della stessa posizione gestita.
+                    </li>
+                    <li>
+                        I proventi da OICR (fondi comuni, ETF) sono classificati come <em>redditi di
+                        capitale</em> nel regime amministrato, ma se compresi in una gestione patrimoniale
+                        rientrano nel risultato complessivo gestito e possono sfruttare le minusvalenze.
+                    </li>
+                </ul>
+            </section>
+
+        </main>
+
+        <!-- Disclaimer -->
+        <section class="card panel info-card">
+            <h2>Disclaimer</h2>
+            <p class="disclaimer-text">
+                <strong>Disclaimer:</strong> I contenuti proposti hanno finalit&agrave; esclusivamente
+                informative e costituiscono una semplificazione della normativa fiscale vigente.
+                La disciplina dei redditi di natura finanziaria presenta numerose particolarit&agrave;
+                che possono variare in base alla situazione individuale. I risultati degli strumenti
+                di calcolo devono essere considerati indicativi e non sostituiscono una consulenza
+                personalizzata.
+            </p>
+        </section>
+
+        <!-- Footer informazioni (layout comune NavTools) -->
+        <section class="card panel info-card">
+            <h2>Informazioni</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Versione</td>
+                        <td>1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>Ultimo aggiornamento</td>
+                        <td>01/07/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Autore</td>
+                        <td>Alessandro Navarini</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script src="../../assets/js/common.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

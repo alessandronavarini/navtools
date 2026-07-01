@@ -3,58 +3,68 @@
 // ================================
 
 const elements = {
-    // Mode
-    incomeModeRAL: document.querySelector('input[name="incomeMode"][value="RAL"]'),
-    incomeModeIRPEF: document.querySelector('input[name="incomeMode"][value="IRPEF"]'),
-    ralInputs: document.getElementById("ralInputs"),
-    irpefInputs: document.getElementById("irpefInputs"),
+    // Mode selectors
+    incomeModeRAL:    document.querySelector('input[name="incomeMode"][value="RAL"]'),
+    incomeModeIRPEF:  document.querySelector('input[name="incomeMode"][value="IRPEF"]'),
+    ralInputs:        document.getElementById("ralInputs"),
+    irpefInputs:      document.getElementById("irpefInputs"),
 
-    // Inputs
-    ral: document.getElementById("ral"),
-    inpsRate: document.getElementById("inpsRate"),
-    taxableIrpef: document.getElementById("taxableIrpef"),
-    annualContribution: document.getElementById("annualContribution"),
+    // Inputs – base imponibile
+    ral:              document.getElementById("ral"),
+    inpsRate:         document.getElementById("inpsRate"),
+    taxableIrpef:     document.getElementById("taxableIrpef"),
+
+    // Inputs – versamento
+    annualContribution:      document.getElementById("annualContribution"),
     contributionWarningBadge: document.getElementById("contributionWarningBadge"),
 
     paymentModeBustaPaga: document.querySelector('input[name="paymentMode"][value="busta_paga"]'),
-    paymentModeBonifico: document.querySelector('input[name="paymentMode"][value="bonifico"]'),
-    paymentModeNote: document.getElementById("paymentModeNote"),
+    paymentModeBonifico:  document.querySelector('input[name="paymentMode"][value="bonifico"]'),
+    paymentModeNote:      document.getElementById("paymentModeNote"),
 
+    // Nota detrazione (visibile solo per busta paga)
+    deductionNote: document.getElementById("deductionNote"),
+
+    // Inputs – addizionali
     regionalTax: document.getElementById("regionalTax"),
     municipalTax: document.getElementById("municipalTax"),
 
-    // Outputs Card
-    resultValue: document.getElementById("resultValue"),
-    resultMessage: document.getElementById("resultMessage"),
+    // Output – card risultato
+    resultValue:       document.getElementById("resultValue"),
+    resultMessage:     document.getElementById("resultMessage"),
     effectiveCostValue: document.getElementById("effectiveCostValue"),
     taxReturnRateText: document.getElementById("taxReturnRateText"),
-    monthlyBenefitRow: document.getElementById("monthlyBenefitRow"),
-    monthlyBenefitValue: document.getElementById("monthlyBenefitValue"),
 
-    // Output Details
-    taxableWithoutValue: document.getElementById("taxableWithoutValue"),
-    taxableWithValue: document.getElementById("taxableWithValue"),
-    grossWithoutValue: document.getElementById("grossWithoutValue"),
-    grossWithValue: document.getElementById("grossWithValue"),
+    // Output – tabella dettaglio: riga detrazione (nascosta in modalità bonifico)
+    deductionRow:          document.getElementById("deductionRow"),
+    taxableWithoutValue:   document.getElementById("taxableWithoutValue"),
+    taxableWithValue:      document.getElementById("taxableWithValue"),
+    grossWithoutValue:     document.getElementById("grossWithoutValue"),
+    grossWithValue:        document.getElementById("grossWithValue"),
     deductionWithoutValue: document.getElementById("deductionWithoutValue"),
-    deductionWithValue: document.getElementById("deductionWithValue"),
-    netWithoutValue: document.getElementById("netWithoutValue"),
-    netWithValue: document.getElementById("netWithValue"),
-    regWithoutValue: document.getElementById("regWithoutValue"),
-    regWithValue: document.getElementById("regWithValue"),
-    comWithoutValue: document.getElementById("comWithoutValue"),
-    comWithValue: document.getElementById("comWithValue"),
-    totalTaxWithoutValue: document.getElementById("totalTaxWithoutValue"),
-    totalTaxWithValue: document.getElementById("totalTaxWithValue"),
+    deductionWithValue:    document.getElementById("deductionWithValue"),
+    netWithoutValue:       document.getElementById("netWithoutValue"),
+    netWithValue:          document.getElementById("netWithValue"),
+    regWithoutValue:       document.getElementById("regWithoutValue"),
+    regWithValue:          document.getElementById("regWithValue"),
+    comWithoutValue:       document.getElementById("comWithoutValue"),
+    comWithValue:          document.getElementById("comWithValue"),
+    totalTaxWithoutValue:  document.getElementById("totalTaxWithoutValue"),
+    totalTaxWithValue:     document.getElementById("totalTaxWithValue"),
 
-    // Output Summary
-    savingIrpefValue: document.getElementById("savingIrpefValue"),
+    // Output – riepilogo risparmi
+    savingIrpefValue:     document.getElementById("savingIrpefValue"),
     savingAdditionsValue: document.getElementById("savingAdditionsValue"),
-    savingTotalValue: document.getElementById("savingTotalValue"),
+    savingTotalValue:     document.getElementById("savingTotalValue"),
 
+    // Avvisi eccedenza
     excessWarningBlock: document.getElementById("excessWarningBlock"),
-    excessWarningText: document.getElementById("excessWarningText")
+    excessWarningText:  document.getElementById("excessWarningText")
 };
+
+// ================================
+// Inizializzazione
+// ================================
 
 function init() {
     bindEvents();
@@ -69,31 +79,41 @@ function bindEvents() {
     });
 }
 
-function updateInputVisibility() {
-    const isRAL = elements.incomeModeRAL.checked;
-    if (isRAL) {
-        elements.ralInputs.hidden = false;
-        elements.irpefInputs.hidden = true;
-        elements.ral.disabled = false;
-        elements.inpsRate.disabled = false;
-        elements.taxableIrpef.disabled = true;
-    } else {
-        elements.ralInputs.hidden = true;
-        elements.irpefInputs.hidden = false;
-        elements.ral.disabled = true;
-        elements.inpsRate.disabled = true;
-        elements.taxableIrpef.disabled = false;
-    }
+// ================================
+// Gestione visibilità elementi UI
+// ================================
 
+function updateInputVisibility() {
+    // --- Modalità di inserimento reddito ---
+    const isRAL = elements.incomeModeRAL.checked;
+    elements.ralInputs.hidden   = !isRAL;
+    elements.irpefInputs.hidden = isRAL;
+    elements.ral.disabled          = !isRAL;
+    elements.inpsRate.disabled     = !isRAL;
+    elements.taxableIrpef.disabled = isRAL;
+
+    // --- Modalità di versamento ---
     const isBustaPaga = elements.paymentModeBustaPaga.checked;
+
     if (isBustaPaga) {
-        elements.paymentModeNote.textContent = "Il beneficio fiscale si distribuisce mensilmente nel cedolino.";
-        elements.monthlyBenefitRow.hidden = false;
+        elements.paymentModeNote.textContent =
+            "Il beneficio fiscale si distribuisce mensilmente nel cedolino.";
+        // Mostra la nota sulla detrazione teorica
+        elements.deductionNote.hidden = false;
+        // Mostra la riga della detrazione nella tabella
+        elements.deductionRow.hidden = false;
     } else {
-        elements.paymentModeNote.textContent = "Il beneficio fiscale è recuperato in sede di dichiarazione dei redditi (Modello 730).";
-        elements.monthlyBenefitRow.hidden = true;
+        elements.paymentModeNote.textContent =
+            "Il beneficio fiscale è recuperato in sede di dichiarazione dei redditi (Modello 730).";
+        // Nascondi nota detrazione e riga tabella
+        elements.deductionNote.hidden = true;
+        elements.deductionRow.hidden  = true;
     }
 }
+
+// ================================
+// Ciclo principale di aggiornamento
+// ================================
 
 function updatePage() {
     updateInputVisibility();
@@ -109,21 +129,29 @@ function updatePage() {
     renderResult(result);
 }
 
+// ================================
+// Lettura input
+// ================================
+
 function readValues() {
-    const inputMode = elements.incomeModeRAL.checked ? "RAL" : "IRPEF";
+    const inputMode   = elements.incomeModeRAL.checked ? "RAL" : "IRPEF";
     const paymentMode = elements.paymentModeBustaPaga.checked ? "busta_paga" : "bonifico";
 
     return {
         inputMode,
-        ral: readNumber(elements.ral),
-        aliquotaINPS: readNumber(elements.inpsRate),
-        imponibileIRPEFInput: readNumber(elements.taxableIrpef),
-        importoVersamento: readNumber(elements.annualContribution),
-        addRegionale: readNumber(elements.regionalTax),
-        addComunale: readNumber(elements.municipalTax),
-        modalitaVersamento: paymentMode
+        ral:                   readNumber(elements.ral),
+        aliquotaINPS:          readNumber(elements.inpsRate),
+        imponibileIRPEFInput:  readNumber(elements.taxableIrpef),
+        importoVersamento:     readNumber(elements.annualContribution),
+        addRegionale:          readNumber(elements.regionalTax),
+        addComunale:           readNumber(elements.municipalTax),
+        modalitaVersamento:    paymentMode
     };
 }
+
+// ================================
+// Validazione
+// ================================
 
 function validate(values) {
     if (values.inputMode === "RAL") {
@@ -154,103 +182,113 @@ function validate(values) {
     return "";
 }
 
+// ================================
+// Rendering risultato
+// ================================
+
 function renderResult(result) {
     if (elements.resultMessage) {
         elements.resultMessage.textContent = "";
-        elements.resultMessage.className = "";
+        elements.resultMessage.className   = "";
     }
 
-    // Badge di avviso input > 5300
+    // --- Badge e avviso eccedenza ---
     if (result.contributoEccedente > 0) {
         elements.contributionWarningBadge.hidden = false;
         elements.contributionWarningBadge.textContent = "Supera limite deducibile";
 
         elements.excessWarningBlock.hidden = false;
-        elements.excessWarningText.innerHTML = `&nbsp;&#9888;&nbsp; <strong>${formatEuro(result.contributoEccedente)}</strong> del versamento superano il limite deducibile di €5.300,00 e non generano risparmio fiscale.`;
+        elements.excessWarningText.innerHTML =
+            `&nbsp;&#9888;&nbsp; <strong>${formatEuro(result.contributoEccedente)}</strong> ` +
+            `del versamento superano il limite deducibile di €5.300,00 e non generano risparmio fiscale.`;
     } else {
         elements.contributionWarningBadge.hidden = true;
-        elements.excessWarningBlock.hidden = true;
+        elements.excessWarningBlock.hidden       = true;
     }
 
-    // Card dei risultati
-    elements.resultValue.textContent = formatEuro(result.risparmioTotale);
+    // --- Card dei risultati ---
+    elements.resultValue.textContent       = formatEuro(result.risparmioTotale);
     elements.effectiveCostValue.textContent = formatEuro(result.costoEffettivo);
 
-    // Formattazione rendimento implicito ad 1 decimale
     const rendImplicitoFormatted = new Intl.NumberFormat("it-IT", {
         minimumFractionDigits: 1,
         maximumFractionDigits: 1
     }).format(result.rendimentoImplicito);
-    elements.taxReturnRateText.innerHTML = `Ogni &euro;100 versati, <strong>&euro;${rendImplicitoFormatted}</strong> tornano come risparmio fiscale`;
 
-    if (result.modalitaVersamento === 'busta_paga') {
-        elements.monthlyBenefitValue.textContent = formatEuro(result.beneficioMensile);
-    }
+    elements.taxReturnRateText.innerHTML =
+        `Ogni &euro;100 versati, <strong>&euro;${rendImplicitoFormatted}</strong> tornano come risparmio fiscale`;
 
-    // Tabella di dettaglio
+    // --- Tabella di dettaglio ---
     elements.taxableWithoutValue.textContent = formatEuro(result.imponibileSenza);
-    elements.taxableWithValue.textContent = formatEuro(result.imponibileCon);
+    elements.taxableWithValue.textContent    = formatEuro(result.imponibileCon);
 
-    elements.grossWithoutValue.textContent = formatEuro(result.irpefLordaSenza);
-    elements.grossWithValue.textContent = formatEuro(result.irpefLordaCon);
+    elements.grossWithoutValue.textContent   = formatEuro(result.irpefLordaSenza);
+    elements.grossWithValue.textContent      = formatEuro(result.irpefLordaCon);
 
+    // Riga detrazione (visibile solo per busta paga, già gestita da updateInputVisibility)
     elements.deductionWithoutValue.textContent = formatEuro(result.detrazioneSenza);
-    elements.deductionWithValue.textContent = formatEuro(result.detrazioneCon);
+    elements.deductionWithValue.textContent    = formatEuro(result.detrazioneCon);
 
-    elements.netWithoutValue.textContent = formatEuro(result.irpefNettaSenza);
-    elements.netWithValue.textContent = formatEuro(result.irpefNettaCon);
+    elements.netWithoutValue.textContent     = formatEuro(result.irpefNettaSenza);
+    elements.netWithValue.textContent        = formatEuro(result.irpefNettaCon);
 
-    elements.regWithoutValue.textContent = formatEuro(result.addRegionaleSenza);
-    elements.regWithValue.textContent = formatEuro(result.addRegionaleCon);
+    elements.regWithoutValue.textContent     = formatEuro(result.addRegionaleSenza);
+    elements.regWithValue.textContent        = formatEuro(result.addRegionaleCon);
 
-    elements.comWithoutValue.textContent = formatEuro(result.addComunaleSenza);
-    elements.comWithValue.textContent = formatEuro(result.addComunaleCon);
+    elements.comWithoutValue.textContent     = formatEuro(result.addComunaleSenza);
+    elements.comWithValue.textContent        = formatEuro(result.addComunaleCon);
 
     elements.totalTaxWithoutValue.textContent = formatEuro(result.totaleImposteSenza);
-    elements.totalTaxWithValue.textContent = formatEuro(result.totaleImposteCon);
+    elements.totalTaxWithValue.textContent    = formatEuro(result.totaleImposteCon);
 
-    // Riepilogo risparmi
-    elements.savingIrpefValue.textContent = formatEuro(result.risparmioIrpef);
+    // --- Riepilogo risparmi ---
+    elements.savingIrpefValue.textContent     = formatEuro(result.risparmioIrpef);
     elements.savingAdditionsValue.textContent = formatEuro(result.risparmioAddReg + result.risparmioAddCom);
-    elements.savingTotalValue.textContent = formatEuro(result.risparmioTotale);
+    elements.savingTotalValue.textContent     = formatEuro(result.risparmioTotale);
 }
+
+// ================================
+// Rendering errore
+// ================================
 
 function renderError(message) {
     if (elements.resultMessage) {
         elements.resultMessage.textContent = message;
-        elements.resultMessage.className = "error";
+        elements.resultMessage.className   = "error";
     }
 
     elements.contributionWarningBadge.hidden = true;
-    elements.excessWarningBlock.hidden = true;
+    elements.excessWarningBlock.hidden       = true;
 
-    // Usiamo il trattino em dash "–" come richiesto
     const placeholder = "–";
 
-    elements.resultValue.textContent = placeholder;
+    elements.resultValue.textContent        = placeholder;
     elements.effectiveCostValue.textContent = placeholder;
-    elements.taxReturnRateText.textContent = placeholder;
-    elements.monthlyBenefitValue.textContent = placeholder;
+    elements.taxReturnRateText.textContent  = placeholder;
 
-    elements.taxableWithoutValue.textContent = placeholder;
-    elements.taxableWithValue.textContent = placeholder;
-    elements.grossWithoutValue.textContent = placeholder;
-    elements.grossWithValue.textContent = placeholder;
+    elements.taxableWithoutValue.textContent   = placeholder;
+    elements.taxableWithValue.textContent      = placeholder;
+    elements.grossWithoutValue.textContent     = placeholder;
+    elements.grossWithValue.textContent        = placeholder;
     elements.deductionWithoutValue.textContent = placeholder;
-    elements.deductionWithValue.textContent = placeholder;
-    elements.netWithoutValue.textContent = placeholder;
-    elements.netWithValue.textContent = placeholder;
-    elements.regWithoutValue.textContent = placeholder;
-    elements.regWithValue.textContent = placeholder;
-    elements.comWithoutValue.textContent = placeholder;
-    elements.comWithValue.textContent = placeholder;
-    elements.totalTaxWithoutValue.textContent = placeholder;
-    elements.totalTaxWithValue.textContent = placeholder;
+    elements.deductionWithValue.textContent    = placeholder;
+    elements.netWithoutValue.textContent       = placeholder;
+    elements.netWithValue.textContent          = placeholder;
+    elements.regWithoutValue.textContent       = placeholder;
+    elements.regWithValue.textContent          = placeholder;
+    elements.comWithoutValue.textContent       = placeholder;
+    elements.comWithValue.textContent          = placeholder;
+    elements.totalTaxWithoutValue.textContent  = placeholder;
+    elements.totalTaxWithValue.textContent     = placeholder;
 
-    elements.savingIrpefValue.textContent = placeholder;
+    elements.savingIrpefValue.textContent     = placeholder;
     elements.savingAdditionsValue.textContent = placeholder;
-    elements.savingTotalValue.textContent = placeholder;
+    elements.savingTotalValue.textContent     = placeholder;
 }
+
+// ================================
+// Utility
+// ================================
 
 function readNumber(input) {
     if (!input || !input.value) return 0;
@@ -258,13 +296,14 @@ function readNumber(input) {
 }
 
 function formatEuro(value) {
-    if (!Number.isFinite(value)) {
-        return "–";
-    }
-    return "€ " + value.toLocaleString('it-IT', {
+    if (!Number.isFinite(value)) return "–";
+    return "€ " + value.toLocaleString("it-IT", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     });
 }
 
+// ================================
+// Avvio
+// ================================
 init();

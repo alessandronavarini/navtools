@@ -95,7 +95,7 @@
                     <p id="resultTitle">Risparmio fiscale annuo</p>
                     <div id="resultValue">-</div>
                     <p id="resultMessage"></p>
-                    
+
                     <div class="result-details">
                         <div class="result-detail-line">
                             <span class="detail-label">Costo effettivo del versamento:</span>
@@ -104,15 +104,19 @@
                         <div class="result-detail-line highlight-line">
                             <span id="taxReturnRateText">-</span>
                         </div>
-                        <div id="monthlyBenefitRow" class="result-detail-line">
-                            <span class="detail-label">Beneficio mensile in cedolino:</span>
-                            <span id="monthlyBenefitValue" class="detail-val">-</span>
-                        </div>
                     </div>
                 </section>
 
                 <section class="card panel">
                     <h2>Dettaglio calcoli</h2>
+
+                    <!-- Nota visibile solo per versamento in busta paga -->
+                    <p id="deductionNote" class="info-note-inline">
+                        <span class="info-icon">&#9432;</span>
+                        La detrazione per lavoro dipendente calcolata è il beneficio massimo teorico
+                        e può risultare inferiore in presenza di altri redditi o situazioni fiscali differenti.
+                    </p>
+
                     <table class="detail-table">
                         <thead>
                             <tr>
@@ -132,7 +136,8 @@
                                 <td id="grossWithoutValue">-</td>
                                 <td id="grossWithValue">-</td>
                             </tr>
-                            <tr>
+                            <!-- Riga detrazione: nascosta in modalità bonifico -->
+                            <tr id="deductionRow">
                                 <td>Detrazione lav. dipendente</td>
                                 <td id="deductionWithoutValue">-</td>
                                 <td id="deductionWithValue">-</td>
@@ -187,17 +192,28 @@
             Il TFR destinato al fondo pensione ha un regime fiscale separato e non concorre al limite annuo di deducibilit&agrave; di &euro;5.300,00.
         </p>
 
+        <!-- Disclaimer -->
+        <section class="card panel info-card">
+            <h2>Disclaimer</h2>
+            <p class="disclaimer-text">
+                <strong>Disclaimer:</strong> I calcoli proposti hanno finalit&agrave; esclusivamente informative e costituiscono una semplificazione della normativa fiscale vigente.
+                La disciplina delle imposte sui redditi presenta numerose particolarit&agrave; che non possono essere considerate senza richiedere molti dati all&rsquo;utente.
+                I risultati ottenuti devono pertanto essere considerati indicativi e non sostituiscono una consulenza personalizzata.
+            </p>
+        </section>
+
+        <!-- Informazioni (footer comune) -->
         <section class="card panel info-card">
             <h2>Informazioni</h2>
             <table>
                 <tbody>
                     <tr>
                         <td>Versione</td>
-                        <td>1.0.0</td>
+                        <td>1.1.0</td>
                     </tr>
                     <tr>
                         <td>Ultimo aggiornamento</td>
-                        <td>29/06/2026</td>
+                        <td>01/07/2026</td>
                     </tr>
                     <tr>
                         <td>Autore</td>
