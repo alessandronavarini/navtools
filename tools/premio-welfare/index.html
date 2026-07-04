@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavTools - Premi Aziendali e Welfare</title>
+    <meta name="description" content="Simula la scelta di allocazione del premio aziendale tra busta paga e welfare: confronta il netto percepito e il valore del credito welfare.">
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container tool-container">
+        <a href="../../index.html" class="back-link">&larr; Home</a>
+
+        <header class="tool-header">
+            <a href="../../index.html" class="logo-link" aria-label="Vai alla home di NavTools">
+                <img src="../../images/logo.svg" class="logo" alt="Logo NavTools">
+            </a>
+            <h1>Premi Aziendali e Welfare</h1>
+            <p class="description">
+                Simula la scelta di allocazione del premio tra busta paga e welfare:
+                confronta il netto percepito con il valore del credito welfare maggiorato.
+            </p>
+        </header>
+
+        <main class="calculator-layout">
+
+            <!-- ============================================================
+                 COLONNA INPUT
+                 ============================================================ -->
+            <form class="input-column" aria-label="Dati del calcolo premio" onsubmit="return false;">
+
+                <!-- Sezione: dati del premio -->
+                <section class="card panel">
+                    <h2>Premio aziendale</h2>
+
+                    <label for="importoPremio">Importo premio lordo (EUR)</label>
+                    <input id="importoPremio" type="number" value="8120" min="0" step="0.01" inputmode="decimal">
+
+                    <label for="sogliaMassima">Soglia massima agevolata (EUR)</label>
+                    <input id="sogliaMassima" type="number" value="5000" min="0" step="0.01" inputmode="decimal">
+                    <p class="field-note">
+                        Importo massimo soggetto a fiscalità agevolata. Per il 2026 il limite di legge è
+                        &euro;5.000,00 (elevato a &euro;5.000,00 con welfare).
+                    </p>
+
+                    <label for="importoWelfare">Importo destinato al welfare (EUR)</label>
+                    <input id="importoWelfare" type="number" value="5000" min="0" step="0.01" inputmode="decimal">
+                    <p class="field-note">
+                        Non può superare la soglia massima agevolata né l'importo del premio.
+                    </p>
+                    <div id="welfareWarningBadge" class="warning-badge" hidden>Importo non valido</div>
+                </section>
+
+                <!-- Sezione: parametri fiscali -->
+                <section class="card panel">
+                    <h2>Parametri fiscali</h2>
+
+                    <label for="aliquotaIRPEF">Aliquota marginale IRPEF (%)</label>
+                    <input id="aliquotaIRPEF" type="number" value="33" min="0" max="100" step="0.01" inputmode="decimal">
+                    <p class="field-note">
+                        Aliquota applicata alla parte di premio eccedente la soglia o soggetta a IRPEF ordinaria.
+                        Lo strumento non considera il possibile salto di scaglione causato dal premio stesso.
+                    </p>
+
+                    <label for="addizionaliIRPEF">Addizionali IRPEF (%)</label>
+                    <input id="addizionaliIRPEF" type="number" value="1.23" min="0" max="100" step="0.01" inputmode="decimal">
+                    <p class="field-note">Somma di addizionale regionale e comunale applicabile.</p>
+
+                    <label for="aliquotaINPS">Aliquota INPS lavoratore (%)</label>
+                    <input id="aliquotaINPS" type="number" value="9.19" min="0" max="100" step="0.01" inputmode="decimal">
+                    <p class="field-note">Contributo previdenziale a carico del lavoratore.</p>
+
+                    <label for="impostaSostitutiva">Imposta sostitutiva premio (%)</label>
+                    <input id="impostaSostitutiva" type="number" value="1" min="0" max="100" step="0.01" inputmode="decimal">
+                    <p class="field-note">
+                        Aliquota agevolata applicata alla parte di premio entro la soglia destinata in busta paga
+                        (in sostituzione di IRPEF e addizionali).
+                    </p>
+                </section>
+
+                <!-- Sezione: parametri welfare -->
+                <section class="card panel">
+                    <h2>Parametri welfare</h2>
+
+                    <label for="maggiorazioneWelfare">Maggiorazione welfare (%)</label>
+                    <input id="maggiorazioneWelfare" type="number" value="17" min="0" max="100" step="0.01" inputmode="decimal">
+                    <p class="field-note">
+                        Percentuale aggiuntiva riconosciuta dal datore di lavoro sull'importo destinato al
+                        welfare, a titolo di incentivo alla conversione.
+                    </p>
+                </section>
+
+            </form>
+
+            <!-- ============================================================
+                 COLONNA OUTPUT
+                 ============================================================ -->
+            <aside class="result-column" aria-live="polite">
+
+                <!-- Card principale: valore totale percepito -->
+                <section class="card result-card">
+                    <p id="resultTitle">Valore totale percepito</p>
+                    <div id="resultValue">-</div>
+                    <p id="resultMessage"></p>
+                    <div class="result-details">
+                        <div class="result-detail-line">
+                            <span class="detail-label">Netto in busta paga:</span>
+                            <span id="netBustaPagaValue" class="detail-val">-</span>
+                        </div>
+                        <div class="result-detail-line">
+                            <span class="detail-label">Credito welfare (con maggiorazione):</span>
+                            <span id="netWelfareValue" class="detail-val">-</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Card: dettaglio busta paga -->
+                <section class="card panel">
+                    <h2>Dettaglio busta paga</h2>
+                    <table class="detail-table">
+                        <thead>
+                            <tr>
+                                <th>Voce</th>
+                                <th style="text-align:right;">Importo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Quota agevolata (entro soglia, in busta) -->
+                            <tr>
+                                <td>Premio lordo in busta paga</td>
+                                <td id="lordoBustaValue" style="text-align:right; font-weight:700;">-</td>
+                            </tr>
+                            <tr class="sub-row">
+                                <td>&nbsp;&nbsp;di cui quota agevolata (entro soglia)</td>
+                                <td id="quotaAgevolataValue" style="text-align:right;">-</td>
+                            </tr>
+                            <tr class="sub-row">
+                                <td>&nbsp;&nbsp;di cui quota ordinaria (eccedente soglia)</td>
+                                <td id="quotaOrdinariaValue" style="text-align:right;">-</td>
+                            </tr>
+                            <tr>
+                                <td>Contributi INPS</td>
+                                <td id="inpsValue" style="text-align:right;">-</td>
+                            </tr>
+                            <tr>
+                                <td>Imposta sostitutiva (quota agevolata)</td>
+                                <td id="impostaSostValue" style="text-align:right;">-</td>
+                            </tr>
+                            <tr>
+                                <td>IRPEF + Addizionali (quota ordinaria)</td>
+                                <td id="irpefValue" style="text-align:right;">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="summary-block">
+                        <div class="summary-line highlight">
+                            <span>Netto in busta paga:</span>
+                            <span id="netBustaSummary">-</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Card: dettaglio welfare -->
+                <section class="card panel">
+                    <h2>Dettaglio welfare</h2>
+                    <table class="detail-table">
+                        <thead>
+                            <tr>
+                                <th>Voce</th>
+                                <th style="text-align:right;">Importo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Premio destinato al welfare</td>
+                                <td id="premioWelfareValue" style="text-align:right; font-weight:700;">-</td>
+                            </tr>
+                            <tr>
+                                <td>Maggiorazione datore di lavoro</td>
+                                <td id="maggiorazioneValue" style="text-align:right; color: var(--accent); font-weight:700;">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="summary-block">
+                        <div class="summary-line highlight">
+                            <span>Credito welfare disponibile:</span>
+                            <span id="netWelfareSummary">-</span>
+                        </div>
+                    </div>
+
+                    <p class="info-note-inline" style="margin-top:16px;">
+                        <span class="info-icon">&#9432;</span>
+                        Il credito welfare è esente da imposte sia per il lavoratore sia per il datore di lavoro,
+                        nei limiti della soglia agevolata.
+                    </p>
+                </section>
+
+            </aside>
+        </main>
+
+        <!-- ================================================================
+             NOTE SUL WELFARE
+             ================================================================ -->
+        <section class="card panel welfare-notes-card">
+            <h2>Note sul welfare aziendale</h2>
+            <p class="section-intro">
+                Il welfare aziendale consente di convertire parte del premio in beni e servizi esenti da
+                tassazione, aumentando il valore netto percepito rispetto alla sola busta paga.
+                Di seguito i principali utilizzi e opportunità.
+            </p>
+
+            <div class="welfare-options-grid">
+
+                <div class="welfare-option-card previdenza">
+                    <div class="welfare-option-icon">&#128176;</div>
+                    <h3>Previdenza complementare</h3>
+                    <p>
+                        Versare il premio al fondo pensione entro la soglia agevolata (&euro;5.000 per il 2026)
+                        garantisce la <strong>doppia esenzione fiscale</strong>: nessuna imposta in entrata
+                        (detassazione) e completa esenzione dall'imposta sostitutiva al momento della richiesta di prestazione al fondo pensione.
+                        Il versamento della maggiorazione del welfare è invece analogo ad un contributo a carico del lavoratore.
+                    </p>
+                </div>
+
+                <div class="welfare-option-card spese">
+                    <div class="welfare-option-icon">&#9992;</div>
+                    <h3>Tempo libero e viaggi</h3>
+                    <p>
+                        Il credito welfare può essere utilizzato per concerti, eventi sportivi, palestre,
+                        biglietti aerei, strutture alberghiere e pacchetti vacanze.
+                        Il valore percepito è pari all'importo welfare maggiorato, interamente esente da imposte.
+                    </p>
+                </div>
+
+                <div class="welfare-option-card fringe">
+                    <div class="welfare-option-icon">&#127873;</div>
+                    <h3>Fringe benefit</h3>
+                    <p>
+                        Una sotto-soglia del credito welfare può essere destinata a fringe benefit
+                        (gift card, buoni acquisto, buoni carburante).
+                        <strong>È necessario verificare con l'Ufficio Risorse Umane</strong> la quota di
+                        fringe benefit residua disponibile, in quanto è soggetta a un limite annuo separato
+                        (attualmente &euro;1.000 o &euro;2.000 per dipendenti con figli a carico).
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Disclaimer -->
+        <section class="card panel info-card">
+            <h2>Disclaimer</h2>
+            <p class="disclaimer-text">
+                <strong>Disclaimer:</strong> I calcoli proposti hanno finalità esclusivamente informative.
+                Il calcolo della fiscalità del premio aziendale è <strong>semplificato</strong>: lo strumento non considera
+                le detrazioni per lavoro dipendente, il possibile salto di scaglione IRPEF causato dal premio,
+                né eventuali altre particolarità del cedolino individuale. I risultati devono essere considerati
+                indicativi e non sostituiscono una verifica con il proprio ufficio Risorse Umane o una
+                consulenza personalizzata.
+            </p>
+        </section>
+
+        <!-- Informazioni (footer comune NavTools) -->
+        <section class="card panel info-card">
+            <h2>Informazioni</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Versione</td>
+                        <td>1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>Ultimo aggiornamento</td>
+                        <td>04/07/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Autore</td>
+                        <td>Alessandro Navarini</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+
+    <script src="../../assets/js/common.js"></script>
+    <script src="calculator.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
