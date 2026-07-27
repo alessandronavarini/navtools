@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavTools - Interessi Conto deposito / Certificato di deposito</title>
+    <meta name="description" content="Calcola gli interessi lordi e netti del tuo conto deposito o certificato di deposito alle varie scadenze cedolari e stima l'imposta di bollo dovuta.">
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container tool-container">
+        <a href="../../index.html" class="back-link">&larr; Home</a>
+
+        <header class="tool-header">
+            <a href="../../index.html" class="logo-link" aria-label="Vai alla home di NavTools">
+                <img src="../../images/logo.svg" class="logo" alt="Logo NavTools">
+            </a>
+            <h1>Interessi Conto deposito / Certificato di deposito</h1>
+            <p class="description">
+                Strumento per calcolare le cedole nette e l'imposta di bollo dovuta su conti deposito e certificati di deposito.
+            </p>
+        </header>
+
+        <main class="calculator-layout">
+            <!-- ============================================================
+                 COLONNA INPUT
+                 ============================================================ -->
+            <form class="input-column" aria-label="Dati dell'investimento" onsubmit="return false;">
+                <section class="card panel">
+                    <h2>Dati dell'investimento</h2>
+
+                    <label for="importoInvestito">Importo investito (EUR)</label>
+                    <input id="importoInvestito" type="number" value="10000" min="0" step="100" inputmode="decimal">
+
+                    <label for="tassoAnnuo">Tasso di interesse lordo annuo (%)</label>
+                    <input id="tassoAnnuo" type="number" value="2.00" min="0" step="0.01" inputmode="decimal">
+
+                    <label for="durataMesi">Durata dell'investimento</label>
+                    <select id="durataMesi">
+                        <option value="3">3 mesi</option>
+                        <option value="6">6 mesi</option>
+                        <option value="12">1 anno</option>
+                        <option value="18">18 mesi</option>
+                        <option value="24">2 anni</option>
+                        <option value="36" selected>3 anni</option>
+                        <option value="48">4 anni</option>
+                        <option value="60">5 anni</option>
+                    </select>
+                </section>
+            </form>
+
+            <!-- ============================================================
+                 COLONNA OUTPUT
+                 ============================================================ -->
+            <aside class="result-column" aria-live="polite">
+                <!-- Card: Tabella delle Frequenze Cedolari -->
+                <section class="card panel">
+                    <h2>Simulazione singola cedola</h2>
+                    <p class="field-note" style="margin-bottom: 12px;">
+                        A quanto ammonterebbe la <strong>singola cedola</strong> in base alla frequenza di liquidazione:
+                    </p>
+                    <table class="detail-table">
+                        <thead>
+                            <tr>
+                                <th>Frequenza cedola</th>
+                                <th>Tasso Lordo</th>
+                                <th>Cedola Lorda</th>
+                                <th>Tasso Netto</th>
+                                <th>Cedola Netta</th>
+                            </tr>
+                        </thead>
+                        <tbody id="couponTableBody">
+                            <!-- Righe generate dinamicamente da JS -->
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Card: Totale Interessi Complessivi -->
+                <section class="card result-card">
+                    <p id="resultTitle">Cedole totali nette percepite</p>
+                    <div id="resultValue">-</div>
+                    <p id="resultMessage"></p>
+                    
+                    <div class="result-details">
+                        <div class="result-detail-line">
+                            <span class="detail-label">Interessi lordi complessivi:</span>
+                            <span id="totaleLordoValue" class="detail-val">-</span>
+                        </div>
+                        <div class="result-detail-line">
+                            <span class="detail-label">Ritenuta fiscale (26%):</span>
+                            <span id="ritenutaFiscaleValue" class="detail-val" style="color: var(--danger);">-</span>
+                        </div>
+                        <div class="result-detail-line highlight-line">
+                            <span id="totaleNettoText">Rendimento cedolare complessivo al netto delle imposte</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Card: Imposta di Bollo -->
+                <section class="card panel">
+                    <h2>Imposta di Bollo</h2>
+                    <div class="summary-line">
+                        <span>Aliquota di legge:</span>
+                        <span>0,20% (2 per mille)</span>
+                    </div>
+                    <div class="summary-line highlight">
+                        <span>Importo massimo annuale:</span>
+                        <span id="bolloMassimoValue" style="color: var(--danger);">-</span>
+                    </div>
+                    
+                    <p class="info-note-inline warning-style" style="margin-top: 14px;">
+                        <span class="info-icon">&#9888;</span>
+                        <span>
+                            L'effettiva applicazione del bollo dipende da vari fattori, come ad esempio se l'investimento è a cavallo di più anni civili o se è contenuto interamente in un unico anno, oltre che dal tipo di strumento (conto deposito o certificato di deposito).
+                        </span>
+                    </p>
+                </section>
+            </aside>
+        </main>
+
+        <!-- ================================================================
+             BOX DI GUIDA E INFORMAZIONI FISCALI/TUTELA
+             ================================================================ -->
+        <section class="card panel info-card" style="margin-top: 24px;">
+            <h2>Fiscalità e tutela dei depositi</h2>
+            <p>
+                La sottoscrizione di conti deposito e certificati di deposito comporta specifici trattamenti fiscali:
+            </p>
+            <ul>
+                <li>
+                    <strong>Tassazione delle rendite:</strong> Gli interessi maturati su conti deposito e certificati di deposito sono considerati <strong>redditi di capitale</strong> e non possono mai compensare minusvalenze. La ritenuta fiscale è fissa al <strong>26%</strong> e viene trattenuta direttamente dall'intermediario finanziario al momento della liquidazione.
+                </li>
+                <li>
+                    <strong>Imposta di bollo (0,2%):</strong> L'imposta di bollo è applicata sulle comunicazioni alla clientela relative a prodotti finanziari. L'aliquota annua è dello <strong>0,20%</strong> (2 per mille) calcolato sul saldo di fine periodo o sul valore nominale del titolo. L'importo minimo è pari a 1€.
+                </li>
+                <li>
+                    <strong>Tutela dei depositi (Bail-In):</strong> I conti deposito e i certificati di deposito beneficiano della copertura del <strong>Fondo di Garanzia dei Depositanti (FGD)</strong> per le BCC o del Fondo Interbancario di Tutela dei Depositi (FITD) per le altre banche. Questa protezione copre un importo massimo di <strong>&euro;100.000 per singolo cliente</strong> per ciascun istituto di credito. Nel limite dei 100.000 &euro; concorrono anche i saldi di conti correnti e libretti di risparmio intestati o cointestati (per la quota spettante) ed in essere presso la stessa banca.
+                </li>
+            </ul>
+        </section>
+
+        <!-- Disclaimer -->
+        <section class="card panel info-card">
+            <h2>Disclaimer</h2>
+            <p class="disclaimer-text">
+                <strong>Disclaimer:</strong> I calcoli proposti hanno finalità esclusivamente informative.
+                La fiscalità calcolata da questo strumento è semplificata e deve essere adattata ad ogni caso specifico. I risultati devono essere considerati indicativi e non sostituiscono una consulenza personalizzata.
+            </p>
+        </section>
+
+        <!-- Informazioni (footer comune NavTools) -->
+        <section class="card panel info-card">
+            <h2>Informazioni</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Versione</td>
+                        <td>1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>Ultimo aggiornamento</td>
+                        <td>27/07/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Autore</td>
+                        <td>Alessandro Navarini</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script src="../../assets/js/common.js"></script>
+    <script src="calculator.js"></script>
+    <script src="script.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dc1d00b0089c4eeca4080d07199d8ad7"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
