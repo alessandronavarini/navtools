@@ -3,10 +3,12 @@ function formatEuro(value) {
         return "-";
     }
 
-    return new Intl.NumberFormat("it-IT", {
-        style: "currency",
-        currency: "EUR"
-    }).format(value);
+    const sign = value < 0 ? "-" : "";
+    const parts = Math.abs(value).toFixed(2).split(".");
+    const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    const decimalPart = parts[1];
+
+    return sign + "€\u00a0" + integerPart + "," + decimalPart;
 }
 
 function formatPercent(value) {
@@ -14,10 +16,12 @@ function formatPercent(value) {
         return "-";
     }
 
-    return new Intl.NumberFormat("it-IT", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    }).format(value) + "%";
+    const sign = value < 0 ? "-" : "";
+    const parts = Math.abs(value).toFixed(2).split(".");
+    const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    const decimalPart = parts[1];
+
+    return sign + integerPart + "," + decimalPart + "%";
 }
 
 function round2(value) {

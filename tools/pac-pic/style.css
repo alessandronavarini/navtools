@@ -1,0 +1,480 @@
+/* =======================================================
+   NavTools - Calcolatore PAC / PIC Style
+   Stile coerente con l'architettura visiva di NavTools
+   ======================================================= */
+
+.tool-container {
+    padding-top: 24px;
+    padding-bottom: 48px;
+}
+
+.back-link {
+    display: inline-flex;
+    margin-bottom: 20px;
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+.tool-header {
+    max-width: 760px;
+    margin: 0 auto 28px;
+    text-align: center;
+}
+
+.tool-header .logo {
+    width: 96px;
+    max-width: 30vw;
+    margin: 0 auto 14px;
+}
+
+h1 {
+    margin: 0 0 8px;
+    color: var(--primary);
+    font-size: clamp(2rem, 4vw, 2.7rem);
+    letter-spacing: 0;
+}
+
+.description {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.55;
+}
+
+/* -------------------------------------------------------
+   Grid layout calcolatore
+   ------------------------------------------------------- */
+
+.calculator-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 1.2fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.input-column,
+.result-column {
+    display: grid;
+    gap: 20px;
+}
+
+/* -------------------------------------------------------
+   Pannelli e Form
+   ------------------------------------------------------- */
+
+.panel,
+.result-card {
+    padding: 24px;
+}
+
+.panel h2 {
+    margin: 0 0 18px;
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+label,
+legend {
+    display: block;
+    margin: 16px 0 6px;
+    color: #263846;
+    font-weight: 700;
+}
+
+label:first-child,
+legend:first-child {
+    margin-top: 0;
+}
+
+fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 22px;
+    margin-top: 8px;
+}
+
+.radio-group label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.radio-group input {
+    width: auto;
+    min-height: auto;
+    cursor: pointer;
+}
+
+input[type="number"],
+select {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid #cddbd6;
+    border-radius: 6px;
+    background: #ffffff;
+    color: var(--text);
+    font: inherit;
+}
+
+input[type="number"]:focus,
+select:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.15);
+}
+
+.field-note {
+    margin: 6px 0 0;
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.4;
+}
+
+/* -------------------------------------------------------
+   Card Risultati
+   ------------------------------------------------------- */
+
+.result-card {
+    text-align: center;
+    border-top: 5px solid var(--accent);
+}
+
+#resultTitle {
+    margin: 0 0 10px;
+    color: var(--muted);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+#resultValue {
+    min-height: 58px;
+    color: var(--primary);
+    font-size: clamp(2.1rem, 5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 6px;
+}
+
+#resultMessage {
+    margin: 0;
+    font-size: 0.9rem;
+    min-height: 1.2em;
+}
+
+#resultMessage.error {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+.result-details {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid #edf2f0;
+    text-align: left;
+}
+
+.result-detail-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    color: var(--text);
+}
+
+.result-detail-line:last-child {
+    margin-bottom: 0;
+}
+
+.detail-label {
+    color: var(--muted);
+}
+
+.detail-val {
+    font-weight: 700;
+}
+
+/* -------------------------------------------------------
+   Stile del Grafico SVG
+   ------------------------------------------------------- */
+
+.chart-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-container {
+    width: 100%;
+    background: #fcfdfe;
+    border: 1px solid #e2eaf0;
+    border-radius: 8px;
+    padding: 12px 8px 8px;
+    box-sizing: border-box;
+}
+
+#simulationChart {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+}
+
+.chart-legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #edf2f0;
+    font-size: 0.85rem;
+    color: var(--text);
+    font-weight: 600;
+}
+
+.legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-color {
+    width: 14px;
+    height: 4px;
+    border-radius: 2px;
+}
+
+.legend-invested {
+    background-color: #0f4c81; /* primary */
+}
+
+.legend-gross {
+    background-color: #237a4b; /* accent */
+}
+
+.legend-net {
+    background-color: #f59e0b; /* warning/amber */
+}
+
+/* Elementi interni SVG */
+.chart-grid-line {
+    stroke: #e6edf2;
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+}
+
+.chart-axis-line {
+    stroke: #b0c4de;
+    stroke-width: 1.5;
+}
+
+.chart-axis-label {
+    fill: var(--muted);
+    font-size: 11px;
+    font-family: inherit;
+}
+
+.chart-axis-title {
+    fill: var(--primary);
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.chart-path-invested {
+    fill: none;
+    stroke: #0f4c81;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+}
+
+.chart-path-gross {
+    fill: none;
+    stroke: #237a4b;
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+.chart-path-net {
+    fill: none;
+    stroke: #f59e0b;
+    stroke-width: 2.5;
+    stroke-dasharray: 6 4;
+    stroke-linecap: round;
+}
+
+.chart-point {
+    transition: r 0.15s ease;
+    cursor: pointer;
+}
+
+.chart-point:hover {
+    r: 6;
+}
+
+/* -------------------------------------------------------
+   Sezione Confronto PIC vs PAC
+   ------------------------------------------------------- */
+
+.comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 16px;
+}
+
+.comparison-box {
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.comparison-box h3 {
+    margin: 0 0 12px;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.comparison-box ul {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.comparison-box li {
+    margin-bottom: 8px;
+}
+
+.comparison-box li:last-child {
+    margin-bottom: 0;
+}
+
+.pic-box {
+    background: #f0f4fa;
+    border-color: #b3cae0;
+}
+
+.pic-box h3 {
+    color: var(--primary);
+}
+
+.pac-box {
+    background: #eef7f2;
+    border-color: #b3d9c5;
+}
+
+.pac-box h3 {
+    color: var(--accent);
+}
+
+/* -------------------------------------------------------
+   Info e Disclaimer
+   ------------------------------------------------------- */
+
+.info-card {
+    margin-top: 20px;
+    padding: 24px;
+    color: var(--muted);
+}
+
+.info-card h2 {
+    margin: 0 0 16px;
+    color: var(--primary);
+    font-size: 1.1rem;
+}
+
+.info-card p {
+    margin: 0 0 12px;
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.info-card ul {
+    margin: 0 0 12px;
+    padding-left: 20px;
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.info-card li {
+    margin-bottom: 8px;
+}
+
+.info-card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.info-card td {
+    padding: 11px 0;
+    vertical-align: top;
+    font-size: 0.93rem;
+}
+
+.info-card td:first-child {
+    color: var(--muted);
+}
+
+.info-card td:last-child {
+    text-align: right;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.info-card tr:not(:last-child) {
+    border-bottom: 1px solid #edf2f0;
+}
+
+.disclaimer-text {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+}
+
+/* -------------------------------------------------------
+   Responsività
+   ------------------------------------------------------- */
+
+@media (max-width: 840px) {
+    .calculator-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .comparison-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tool-container {
+        width: min(100% - 28px, 680px);
+        padding-top: 18px;
+    }
+}
+
+@media (max-width: 560px) {
+    .panel,
+    .result-card,
+    .info-card {
+        padding: 18px;
+    }
+}

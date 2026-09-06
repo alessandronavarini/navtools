@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavTools - Simulatore PAC / PIC</title>
+    <meta name="description" content="Simulatore per piani di accumulo di capitale (PAC) e piani di investimento di capitale (PIC): analizza la crescita del capitale, il rendimento netto e la fiscalità nel tempo.">
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container tool-container">
+        <a href="../../index.html" class="back-link">&larr; Home</a>
+
+        <header class="tool-header">
+            <a href="../../index.html" class="logo-link" aria-label="Vai alla home di NavTools">
+                <img src="../../images/logo.svg" class="logo" alt="Logo NavTools">
+            </a>
+            <h1>Calcolatore PAC / PIC</h1>
+            <p class="description">
+                Simula e confronta l'evoluzione nel tempo di un Piano di Accumulo di Capitale (PAC)
+                o di un Piano di Investimento di Capitale (PIC), analizzando rendimenti e imposte.
+            </p>
+        </header>
+
+        <main class="calculator-layout">
+
+            <!-- ============================================================
+                 COLONNA INPUT
+                 ============================================================ -->
+            <form class="input-column" aria-label="Dati della simulazione" onsubmit="return false;">
+
+                <!-- Sezione: Scelta Modalità -->
+                <section class="card panel">
+                    <h2>Modalit&agrave; di investimento</h2>
+
+                    <fieldset>
+                        <legend>Seleziona tipologia di piano</legend>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="simulationMode" value="PAC" checked>
+                                PAC (Piano di Accumulo)
+                            </label>
+                            <label>
+                                <input type="radio" name="simulationMode" value="PIC">
+                                PIC (Unica Soluzione)
+                            </label>
+                        </div>
+                    </fieldset>
+                </section>
+
+                <!-- Sezione: Parametri di Investimento -->
+                <section class="card panel">
+                    <h2>Parametri di investimento</h2>
+
+                    <label for="durataAnni">Durata del piano (anni)</label>
+                    <input id="durataAnni" type="number" value="10" min="1" max="50" step="1" inputmode="numeric">
+                    <p class="field-note">Orizzonte temporale complessivo della simulazione.</p>
+
+                    <div id="versamentoMensileBox">
+                        <label for="versamentoMensile">Importo versamenti mensili (EUR)</label>
+                        <input id="versamentoMensile" type="number" value="100" min="0" step="10" inputmode="decimal">
+                        <p class="field-note">Quota periodica accantonata ogni mese nel PAC.</p>
+                    </div>
+
+                    <label for="versamentoIniziale">Versamento iniziale (EUR)</label>
+                    <input id="versamentoIniziale" type="number" value="1000" min="0" step="100" inputmode="decimal">
+                    <p class="field-note" id="versamentoInizialeNote">Capitale iniziale versato al tempo zero.</p>
+                </section>
+
+                <!-- Sezione: Parametri Economici e Fiscali -->
+                <section class="card panel">
+                    <h2>Rendimento e Fiscalit&agrave;</h2>
+
+                    <label for="rendimentoAnnuoLordo">Rendimento annuo lordo ipotizzato (%)</label>
+                    <input id="rendimentoAnnuoLordo" type="number" value="7.00" step="0.1" inputmode="decimal">
+                    <p class="field-note">Tasso di crescita medio annuo del portafoglio.</p>
+
+                    <label for="aliquotaTasse">Aliquota sulle plusvalenze (%)</label>
+                    <input id="aliquotaTasse" type="number" value="26.00" min="0" max="100" step="0.1" inputmode="decimal">
+                    <p class="field-note">Tassazione sui rendimenti (12,5% per Titoli di Stato o in whitelist, 26% per gli altri strumenti).</p>
+                </section>
+
+            </form>
+
+            <!-- ============================================================
+                 COLONNA OUTPUT
+                 ============================================================ -->
+            <aside class="result-column" aria-live="polite">
+
+                <!-- Card Principale: Controvalore Netto Finale -->
+                <section class="card result-card">
+                    <p id="resultTitle">Controvalore Netto Finale</p>
+                    <div id="resultValue">-</div>
+                    <p id="resultMessage"></p>
+
+                    <div class="result-details">
+                        <div class="result-detail-line">
+                            <span class="detail-label">Capitale investito totale:</span>
+                            <span id="capitaleInvestitoSummary" class="detail-val">-</span>
+                        </div>
+                        <div class="result-detail-line">
+                            <span class="detail-label">Controvalore lordo finale:</span>
+                            <span id="controvaloreLordoSummary" class="detail-val">-</span>
+                        </div>
+                        <div class="result-detail-line">
+                            <span class="detail-label">Guadagno netto maturato:</span>
+                            <span id="guadagnoNettoSummary" class="detail-val" style="color: var(--accent);">-</span>
+                        </div>
+                        <div class="result-detail-line">
+                            <span class="detail-label">Imposte stimate (liquidazione):</span>
+                            <span id="imposteSummary" class="detail-val" style="color: var(--danger);">-</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Card Grafico: Linea del tempo e controvalore -->
+                <section class="card panel chart-panel">
+                    <h2>Evoluzione del capitale nel tempo</h2>
+                    <p class="field-note" style="margin-bottom: 12px;">
+                        Confronto dinamico tra capitale investito e crescita del portafoglio (lordo e netto).
+                    </p>
+
+                    <!-- Grafico SVG Dinamico -->
+                    <div class="chart-container">
+                        <svg id="simulationChart" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Grafico evoluzione capitale">
+                            <!-- Il contenuto SVG verrà inserito da script.js -->
+                        </svg>
+                    </div>
+
+                    <!-- Legenda Grafico -->
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color legend-invested"></span>
+                            <span>Capitale Investito</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color legend-gross"></span>
+                            <span>Controvalore Lordo</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color legend-net"></span>
+                            <span>Controvalore Netto</span>
+                        </div>
+                    </div>
+                </section>
+
+            </aside>
+        </main>
+
+        <!-- ================================================================
+             NOTE E APPROFONDIMENTI
+             ================================================================ -->
+
+        <!-- Sezione: Note sulla Fiscalità -->
+        <section class="card panel info-card" style="margin-top: 24px;">
+            <h2>Note sulla Fiscalit&agrave;</h2>
+            <p>
+                Nella simulazione sopra proposta è stato adottato il modello di tassazione tipico del <strong>Regime amministrato</strong>:
+            </p>
+            <ul>
+                <li>
+                    <strong>Differimento delle imposte alla liquidazione:</strong> I rendimenti e le plusvalenze maturano al lordo delle imposte durante tutta la durata del piano. La ritenuta fiscale (es. 26%) viene calcolata ed esatta esclusivamente al momento del disinvestimento o della vendita.
+                </li>
+                <li>
+                    <strong>Imposta di Bollo (0,2% annuo):</strong> Ai fini della semplificazione del calcolo, la simulazione <em>non include l'imposta di bollo</em> (pari allo 0,20% annuo sul controvalore di ogni estratto conto titoli). L'imposta di bollo viene addebitata periodicamente (trimestralmente o annualmente) sul conto dall'intermediario.
+                </li>
+                <li>
+                    Questa simulazione <em>non è applicabile</em> al Regime gestito (tipico delle gestioni patrimoniali) o alla previdenza complementare, poiché in tali regimi le imposte sui rendimenti vengono prelevate con cadenza annuale sul maturato. Il prelievo fiscale annuo riduce la base capitale su cui maturano rendimenti nei periodi successivi (cosiddetto <em>drag fiscale</em>).
+                </li>
+            </ul>
+        </section>
+
+        <!-- Sezione: Confronto Strategico PIC vs PAC -->
+        <section class="card panel info-card">
+            <h2>Confronto Strategico: PIC vs PAC</h2>
+            <p>
+                La scelta tra investire in un'unica soluzione (<strong>PIC</strong>) o mediante versamenti periodici (<strong>PAC</strong>) risponde a logiche finanziarie ed emotive differenti:
+            </p>
+            <div class="comparison-grid">
+                <div class="comparison-box pic-box">
+                    <h3>PIC (Piano di Investimento Capitale)</h3>
+                    <ul>
+                        <li>
+                            <strong>Maggiore rendimento atteso su lunghi orizzonti:</strong> Storicamente, poich&eacute; i mercati finanziari tendono a crescere nel lungo periodo, investire subito l'intero capitale consente di esporlo da subito a rendimenti attesi positivi.
+                        </li>
+                        <li>
+                            <strong>Rischio di Market Timing:</strong> Richiede una maggiore tolleranza alla volatilità, poiché l'intero patrimonio è esposto da subito alle oscillazioni di mercato.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="comparison-box pac-box">
+                    <h3>PAC (Piano di Accumulo Capitale)</h3>
+                    <ul>
+                        <li>
+                            <strong>Minimizzazione del drawdown e della volatilità:</strong> Frazionando i versamenti nel tempo, si acquistano più quote quando i prezzi scendono e meno quando salgono, riducendo l'impatto di eventuali ribassi iniziali di mercato.
+                        </li>
+                        <li>
+                            <strong>Ottimale su orizzonti brevi o per investimenti di capitale non ancora disponibile:</strong> Risulta vincente su periodi più brevi, nonché in mercati laterali o ribassisti ed è lo strumento ideale per chi costruisce il patrimonio mese per mese attingendo dal reddito da lavoro.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Disclaimer -->
+        <section class="card panel info-card">
+            <h2>Disclaimer</h2>
+            <p class="disclaimer-text">
+                <strong>Disclaimer:</strong> I calcoli e i grafici prodotti da questo strumento hanno finalit&agrave; puramente illustrative ed educative.
+                I rendimenti ipotizzati sono di natura teorica e non costituiscono garanzia di performance future. I mercati finanziari sono soggetti a volatilit&agrave; (non applicata da questo modello) e rischi di perdita del capitale. La simulazione costituisce una semplificazione che non considera commissioni di gestione, costi di transazione e imposte di bollo.
+            </p>
+        </section>
+
+        <!-- Informazioni (footer comune NavTools) -->
+        <section class="card panel info-card">
+            <h2>Informazioni</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Versione</td>
+                        <td>1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>Ultimo aggiornamento</td>
+                        <td>01/09/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Autore</td>
+                        <td>Alessandro Navarini</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+
+    <script src="../../assets/js/common.js"></script>
+    <script src="calculator.js"></script>
+    <script src="script.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dc1d00b0089c4eeca4080d07199d8ad7"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
