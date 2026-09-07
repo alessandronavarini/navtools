@@ -147,9 +147,11 @@ function runMonteCarloSection2() {
         const end = Math.min(totalRuns, start + batchSize);
 
         for (let i = start; i < end; i++) {
-            const { picFinal, pacFinal } = PicPacAvanzatoCalculator.simulaSingoloMonteCarloNormale(simParams);
+            const { picFinal, pacFinal, picDrawdown, pacDrawdown } = PicPacAvanzatoCalculator.simulaSingoloMonteCarloNormale(simParams);
             picResults[i] = picFinal;
             pacResults[i] = pacFinal;
+            picDrawdowns[i] = picDrawdown;
+            pacDrawdowns[i] = pacDrawdown;
         }
 
         runsCompleted = end;
@@ -164,7 +166,7 @@ function runMonteCarloSection2() {
                 elements.progressBarBox2.hidden = true;
                 elements.btnRunMonteCarlo2.disabled = false;
 
-                const stats = PicPacAvanzatoCalculator.elaboraStatisticheMonteCarlo(picResults, pacResults);
+                const stats = PicPacAvanzatoCalculator.elaboraStatisticheMonteCarlo(picResults, pacResults, picDrawdowns, pacDrawdowns);
                 renderResultsSection2(stats, picResults, pacResults);
             }, 60);
         }
@@ -193,7 +195,34 @@ function renderResultsSection2(stats, picArray, pacArray) {
     elements.pacP90Val.textContent = formatEuro(stats.pacP90);
     elements.diffP90Val.textContent = (stats.diffP90 >= 0 ? "+" : "") + formatEuro(stats.diffP90);
 
-    renderMCDensityChart(picArray, pacArray);
+    // Popola tabella draw‑down
+    const fmtDD = v => (Number.isFinite(v) ? v.toFixed(2) + "%" : "–");
+
+    const elMaxDDPic    = document.getElementById("maxDDPic");
+    const elMedianDDPic = document.getElementById("medianDDPic");
+    const elMeanDDPic   = document.getElementById("meanDDPic");
+    const elMaxDDPac    = document.getElementById("maxDDPac");
+    const elMedianDDPac = document.getElementById("medianDDPac");
+    const elMeanDDPac   = document.getElementById("meanDDPac");
+
+    if (elMaxDDPic)    elMaxDDPic.textContent    = fmtDD(stats.maxDDPic);
+    if (elMedianDDPic) elMedianDDPic.textContent = fmtDD(stats.medianDDPic);
+    if (elMeanDDPic)   elMeanDDPic.textContent   = fmtDD(stats.meanDDPic);
+    if (elMaxDDPac)    elMaxDDPac.textContent    = fmtDD(stats.maxDDPac);
+    if (elMedianDDPac) elMedianDDPac.textContent = fmtDD(stats.medianDDPac);
+    if (elMeanDDPac)   elMeanDDPac.textContent   = fmtDD(stats.meanDDPac);
+
+    // Evidenzia la strategia con draw‑down medio minore
+    [elMeanDDPic, elMeanDDPac].forEach(el => el && el.classList.remove("better"));
+    if (Number.isFinite(stats.meanDDPic) && Number.isFinite(stats.meanDDPac)) {
+        if (stats.meanDDPic <= stats.meanDDPac) {
+            elMeanDDPic && elMeanDDPic.classList.add("better");
+        } else {
+            elMeanDDPac && elMeanDDPac.classList.add("better");
+        }
+    }
+
+    renderMCDensityChart(picArray, pacArray, stats);
 }
 
 // -------------------------------------------------------
@@ -243,7 +272,7 @@ function calculateNiceYAxis(maxDataVal) {
     return { yMax, step, ticks };
 }
 
-function renderMCDensityChart(picArray, pacArray) {
+function renderMCDensityChart(picArray, pacArray, stats) {
     const svg = elements.mcDensityChart;
     svg.innerHTML = "";
 
@@ -401,7 +430,30 @@ function renderMCDensityChart(picArray, pacArray) {
     pathPacArea.setAttribute("d", createAreaD(pacSmooth));
     pathPacArea.setAttribute("class", "density-area-pac");
     svg.appendChild(pathPacArea);
+
+    // Linee verticali tratteggiate sulle mediane
+    if (stats) {
+        const makeMedianLine = (medianVal, color) => {
+            const x = getX(medianVal);
+            if (x < paddingLeft || x > width - paddingRight) return;
+
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line.setAttribute("x1", x);
+            line.setAttribute("y1", paddingTop);
+            line.setAttribute("x2", x);
+            line.setAttribute("y2", height - paddingBottom);
+            line.setAttribute("stroke", color);
+            line.setAttribute("stroke-dasharray", "5 4");
+            line.setAttribute("stroke-width", "2.5");
+            line.setAttribute("opacity", "0.9");
+            svg.appendChild(line);
+        };
+
+        makeMedianLine(stats.picMediana, "var(--primary)");
+        makeMedianLine(stats.pacMediana, "var(--accent)");
+    }
 }
+
 
 function readNumber(input) {
     if (!input || input.value === "") return NaN;

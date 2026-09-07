@@ -765,3 +765,30 @@ input[type="number"]:focus {
         font-size: 1.15rem;
     }
 }
+
+/* -------------------------------------------------------
+   Draw‑down summary table
+   ------------------------------------------------------- */
+#drawdown-summary .detail-table th,
+#drawdown-summary .detail-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-color, #e0e0e0);
+    font-size: 0.92rem;
+}
+
+#drawdown-summary .detail-table th {
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+}
+
+/* Evidenzia la cella migliore (draw‑down medio minore) */
+td.better {
+    background-color: rgba(34, 150, 60, 0.12);
+    color: #1a7a38;
+    font-weight: 700;
+    border-radius: 4px;
+}
+
