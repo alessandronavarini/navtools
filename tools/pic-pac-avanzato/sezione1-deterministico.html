@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavTools - Modulo 1: Confronto Deterministico PIC vs PAC</title>
+    <meta name="description" content="Simulazione deterministica a rendimento costante per confrontare l'evoluzione patrimoniale tra PIC e PAC a pari capitale finale allocato.">
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container tool-container">
+        <a href="index.html" class="back-link">&larr; Indice Modellazione Avanzata</a>
+
+        <header class="tool-header">
+            <a href="../../index.html" class="logo-link" aria-label="Vai alla home di NavTools">
+                <img src="../../images/logo.svg" class="logo" alt="Logo NavTools">
+            </a>
+            <h1>Modulo 1 — Confronto Deterministico PIC vs PAC</h1>
+            <p class="description">
+                Confronto deterministico dell'evoluzione patrimoniale a pari capitale totale investito.
+            </p>
+        </header>
+
+        <main class="calculator-layout">
+
+            <!-- Colonna Input -->
+            <form class="input-column" aria-label="Parametri del confronto deterministico" onsubmit="return false;">
+                <section class="card panel inner-panel">
+                    <h3>Parametri di simulazione</h3>
+
+                    <label for="capitaleInvestire">Capitale totale da investire (EUR)</label>
+                    <input id="capitaleInvestire" type="number" value="12000" min="100" step="500" inputmode="decimal">
+                    <p class="field-note">Capitale complessivo destinato alla strategia.</p>
+
+                    <label for="orizzonteTemporale">Orizzonte temporale dell'investimento (anni)</label>
+                    <input id="orizzonteTemporale" type="number" value="10" min="1" max="50" step="1" inputmode="numeric">
+                    <p class="field-note">Durata totale dell'investimento.</p>
+
+                    <label for="durataPAC">Durata del PAC (numero di rate mensili)</label>
+                    <input id="durataPAC" type="number" value="24" min="1" max="600" step="1" inputmode="numeric">
+                    <p class="field-note">Numero di rate mensili per completare il PAC.</p>
+
+                    <div class="calculated-info-box">
+                        <span class="calc-label">Rata mensile del PAC:</span>
+                        <span id="rataMensileCalculated" class="calc-val">–</span>
+                    </div>
+
+                    <label for="rendimentoAnnuale">Rendimento annuo lordo ipotizzato (%)</label>
+                    <input id="rendimentoAnnuale" type="number" value="7.00" step="0.1" inputmode="decimal">
+                    <p class="field-note">Tasso stimato di crescita annua del mercato.</p>
+                </section>
+            </form>
+
+            <!-- Colonna Output -->
+            <aside class="result-column" aria-live="polite">
+
+                <!-- Card Risultato Principale (Righe Ingrandite) -->
+                <section class="card result-card">
+                    <p id="resultTitle">Montante Finale Deterministico</p>
+                    <p id="resultMessage"></p>
+
+                    <div class="result-details-prominent">
+                        <div class="summary-line-large pic-line">
+                            <span class="detail-label-large">Montante Finale PIC:</span>
+                            <span id="montantePicSummary" class="detail-val-large" style="color: var(--primary);">-</span>
+                        </div>
+                        <div class="summary-line-large pac-line">
+                            <span class="detail-label-large">Montante Finale PAC:</span>
+                            <span id="montantePacSummary" class="detail-val-large" style="color: var(--accent);">-</span>
+                        </div>
+                        <div class="result-detail-line highlight-line">
+                            <span id="differenzaSummaryText">Differenza PIC vs PAC: –</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Card Grafico -->
+                <section class="card panel inner-panel chart-panel">
+                    <h3>Andamento del capitale nel tempo</h3>
+                    <p class="field-note" style="margin-bottom: 12px;">
+                        Evoluzione del patrimonio complessivo nei due regimi.
+                    </p>
+
+                    <div class="chart-container">
+                        <svg id="picPacChart" viewBox="0 0 600 340" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Grafico confronto PIC e PAC">
+                            <!-- Generato dinamicamente via script-sezione1.js -->
+                        </svg>
+                    </div>
+
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color legend-pic"></span>
+                            <span>Montante PIC</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color legend-pac"></span>
+                            <span>Montante PAC (Totale)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color legend-pac-port"></span>
+                            <span>Portafoglio PAC</span>
+                        </div>
+                    </div>
+                </section>
+
+            </aside>
+        </main>
+
+        <!-- Sezione Approfondimento Teorico -->
+        <section class="card panel info-card" style="margin-top: 28px;">
+            <h2>Approfondimento Teorico: Il Modello Deterministico</h2>
+            <p>
+                Il modello deterministico rappresenta la base di partenza della modellizzazione finanziaria. Assume un tasso di rendimento annuo costante durante l'intero orizzonte dell'investimento.
+            </p>
+            <div class="theory-grid">
+                <div class="theory-item">
+                    <h4>Come funziona il confronto a pari capitale?</h4>
+                    <p>
+                        Se un risparmiatore dispone di una somma prefissata (es. € 12.000), nell'investimento in unica soluzione (<strong>PIC</strong>) l'intero importo entra nel mercato al mese 0 e beneficia dell'interesse composto per tutti i 120 mesi dell'orizzonte temporale. Nel piano di accumulo (<strong>PAC</strong>), l'importo viene suddiviso in $K$ rate mensili (es. 24 rate da € 500/mese); la quota non ancora versata viene mantenuta in cassa prima di entrare nel mercato.
+                    </p>
+                </div>
+                <div class="theory-item">
+                    <h4>Perché il PIC vince in un regime deterministico positivo?</h4>
+                    <p>
+                        Quando il rendimento atteso è positivo ($r > 0$), l'interesse composto premia la massima esposizione temporale del capitale. Poiché nel PIC l'intero capitale è investito al tempo zero, produce rendimento fin dal primo giorno, mentre nel PAC la liquidità in attesa di versamento produce zero rendimenti nei primi mesi.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Disclaimer -->
+        <section class="card panel info-card">
+            <h2>Disclaimer</h2>
+            <p class="disclaimer-text">
+                <strong>Disclaimer:</strong> I calcoli e i grafici generati da questa applicazione hanno finalit&agrave; esclusivamente didattiche e teoriche.
+                Le simulazioni deterministiche assumono tassi di rendimento costanti che non si verificano mai nella realt&agrave; dei mercati finanziari.
+            </p>
+        </section>
+
+        <!-- Informazioni (footer comune NavTools) -->
+        <section class="card panel info-card">
+            <h2>Informazioni</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Versione</td>
+                        <td>1.2.0 (Modulo 1)</td>
+                    </tr>
+                    <tr>
+                        <td>Ultimo aggiornamento</td>
+                        <td>07/09/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Autore</td>
+                        <td>Alessandro Navarini</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+
+    <script src="../../assets/js/common.js"></script>
+    <script src="calculator.js"></script>
+    <script src="script-sezione1.js"></script>
+</body>
+</html>

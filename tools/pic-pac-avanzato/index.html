@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavTools - Modellazione Avanzata PIC vs PAC</title>
+    <meta name="description" content="Piattaforma di analisi quantitativa e stocastica per il confronto dettagliato tra Investimento in Unica Soluzione (PIC) e Piano di Accumulo (PAC).">
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container tool-container">
+        <a href="../../index.html" class="back-link">&larr; Home</a>
+
+        <header class="tool-header">
+            <a href="../../index.html" class="logo-link" aria-label="Vai alla home di NavTools">
+                <img src="../../images/logo.svg" class="logo" alt="Logo NavTools">
+            </a>
+            <h1>Modellazione avanzata PIC vs PAC</h1>
+            <p class="description">
+                Piattaforma quantitativa per l'analisi comparativa tra un Investimento in Unica Soluzione (PIC)
+                e un Piano di Accumulo (PAC) a pari capitale complessivo allocato.
+            </p>
+        </header>
+
+        <main>
+            <!-- ============================================================
+                 PANNELLO INDICE DEI MODULI
+                 ============================================================ -->
+            <section class="card panel section-container">
+                <h2>Seleziona il modulo di analisi</h2>
+                <p class="section-intro">
+                    Scegli la tipologia di analisi desiderata: dal confronto deterministico di base alle simulazioni stocastiche Monte Carlo.
+                </p>
+
+                <div class="module-hub-grid">
+
+                    <!-- Modulo 1 -->
+                    <div class="module-hub-card active-hub-card">
+                        <div class="module-status-badge available-badge">Disponibile</div>
+                        <h3>Modulo 1 — Confronto Deterministico PIC vs PAC</h3>
+                        <p>
+                            Simulazione deterministica a rendimento annuo costante. Confronta l'evoluzione temporale del patrimonio a pari capitale totale investito.
+                        </p>
+                        <a href="sezione1-deterministico.html" class="button button-secondary" style="margin-top:auto;">Apri Modulo 1 &rarr;</a>
+                    </div>
+
+                    <!-- Modulo 2 -->
+                    <div class="module-hub-card active-hub-card">
+                        <div class="module-status-badge available-badge">Disponibile</div>
+                        <h3>Modulo 2 — Monte Carlo (Distribuzione Normale)</h3>
+                        <p>
+                            Simulazione stocastica personalizzata (da 10.000+ scenari) basata su rendimento atteso e volatilità annua con distribuzione gaussiana.
+                        </p>
+                        <a href="sezione2-montecarlo-normale.html" class="button button-secondary" style="margin-top:auto;">Apri Modulo 2 &rarr;</a>
+                    </div>
+
+                    <!-- Modulo 3 -->
+                    <div class="module-hub-card disabled-hub-card">
+                        <div class="module-status-badge draft-badge">In sviluppo</div>
+                        <h3>Modulo 3 — Monte Carlo (Distribuzione t di Student)</h3>
+                        <p>
+                            Modellazione stocastica avanzata per considerare le <em>"code grasse"</em> (fat tails) e l'asimmetria dei rendimenti nei crolli di borsa.
+                        </p>
+                    </div>
+
+                    <!-- Modulo 4 -->
+                    <div class="module-hub-card disabled-hub-card">
+                        <div class="module-status-badge draft-badge">In sviluppo</div>
+                        <h3>Modulo 4 — Monte Carlo (Processo Autoregressivo AR(1))</h3>
+                        <p>
+                            Simulazione con processo stocastico AR(1) per incorporare la regressione verso la media (<em>mean reversion</em>) e l'effetto <em>momentum</em>.
+                        </p>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+
+        <!-- Disclaimer -->
+        <section class="card panel info-card">
+            <h2>Disclaimer</h2>
+            <p class="disclaimer-text">
+                <strong>Disclaimer:</strong> I calcoli e i grafici generati da questa applicazione hanno finalit&agrave; esclusivamente didattiche e teoriche.
+                Le simulazioni non costituiscono in alcun modo consulenza finanziaria o sollecitazione all'investimento.
+            </p>
+        </section>
+
+        <!-- Informazioni (footer comune NavTools) -->
+        <section class="card panel info-card">
+            <h2>Informazioni</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Versione</td>
+                        <td>1.2.0 (Hub Moduli)</td>
+                    </tr>
+                    <tr>
+                        <td>Ultimo aggiornamento</td>
+                        <td>07/09/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Autore</td>
+                        <td>Alessandro Navarini</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</body>
+</html>

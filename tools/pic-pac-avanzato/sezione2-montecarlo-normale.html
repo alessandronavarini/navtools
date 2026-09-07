@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavTools - Modulo 2: Monte Carlo (Distribuzione Normale)</title>
+    <meta name="description" content="Simulazione Monte Carlo a 10.000+ scenari basata su distribuzione normale dei rendimenti per il confronto probabilistico tra PIC e PAC.">
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container tool-container">
+        <a href="index.html" class="back-link">&larr; Indice Modellazione Avanzata</a>
+
+        <header class="tool-header">
+            <a href="../../index.html" class="logo-link" aria-label="Vai alla home di NavTools">
+                <img src="../../images/logo.svg" class="logo" alt="Logo NavTools">
+            </a>
+            <h1>Modulo 2 — Monte Carlo (Distribuzione Normale)</h1>
+            <p class="description">
+                Analisi probabilistica e stocastica con simulazione gaussiana dei rendimenti su migliaia di scenari indipendenti.
+            </p>
+        </header>
+
+        <main class="calculator-layout">
+
+            <!-- Colonna Input Sezione 2 -->
+            <form class="input-column" aria-label="Parametri della simulazione Monte Carlo Normale" onsubmit="return false;">
+                <section class="card panel inner-panel">
+                    <h3>Parametri stocastici</h3>
+
+                    <label for="capitaleInvestireMC2">Capitale totale da investire (EUR)</label>
+                    <input id="capitaleInvestireMC2" type="number" value="12000" min="100" step="500" inputmode="decimal">
+
+                    <label for="orizzonteTemporaleMC2">Orizzonte temporale (anni)</label>
+                    <input id="orizzonteTemporaleMC2" type="number" value="10" min="1" max="50" step="1" inputmode="numeric">
+
+                    <label for="durataPACMC2">Durata del PAC (numero rate mensili)</label>
+                    <input id="durataPACMC2" type="number" value="24" min="1" max="600" step="1" inputmode="numeric">
+
+                    <div class="calculated-info-box">
+                        <span class="calc-label">Rata mensile del PAC:</span>
+                        <span id="rataMensileCalculatedMC2" class="calc-val">–</span>
+                    </div>
+
+                    <label for="rendimentoAttesoMC2">Rendimento atteso annuo (%)</label>
+                    <input id="rendimentoAttesoMC2" type="number" value="7.00" step="0.1" inputmode="decimal">
+
+                    <label for="volatilitaAnnuaMC2">Volatilit&agrave; annua / Deviazione Standard (%)</label>
+                    <input id="volatilitaAnnuaMC2" type="number" value="15.00" min="0.1" max="100" step="0.5" inputmode="decimal">
+
+                    <label for="numeroSimulazioniMC2">Numero di simulazioni Monte Carlo</label>
+                    <input id="numeroSimulazioniMC2" type="number" value="10000" min="10000" step="5000" inputmode="numeric">
+                    <p class="field-note">
+                        Valore minimo: 10.000. Un numero molto elevato (es. &gt; 100.000) potrebbe causare rallentamenti nei calcoli.
+                    </p>
+
+                    <!-- Tasto Avvio Simulazione -->
+                    <button type="button" id="btnRunMonteCarlo2" class="button mc-run-button">
+                        &#9654; Avvia Simulazione Monte Carlo
+                    </button>
+
+                    <!-- Barra di Avanzamento -->
+                    <div id="progressBarBox2" class="progress-bar-box" hidden>
+                        <div class="progress-bar-track">
+                            <div id="progressBarFill2" class="progress-bar-fill" style="width: 0%;"></div>
+                        </div>
+                        <p id="progressBarText2" class="progress-bar-text">Pronto per la simulazione</p>
+                    </div>
+                </section>
+            </form>
+
+            <!-- Colonna Output Sezione 2 -->
+            <aside class="result-column" aria-live="polite">
+
+                <!-- Card Probabilità di Vittoria -->
+                <section class="card result-card mc-result-card">
+                    <p class="mc-result-title" id="mcResultTitle">Esito Simulazioni Monte Carlo</p>
+
+                    <div class="win-prob-grid">
+                        <div class="win-badge-box pic-win-box">
+                            <span class="win-label">Vittoria PIC</span>
+                            <span id="probPicWinValue" class="win-val">–</span>
+                            <span class="win-subtext">scenari con montante superiore</span>
+                        </div>
+                        <div class="win-badge-box pac-win-box">
+                            <span class="win-label">Vittoria PAC</span>
+                            <span id="probPacWinValue" class="win-val">–</span>
+                            <span class="win-subtext">scenari con montante superiore</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tabella Dati Statistici e Percentili -->
+                <section class="card panel inner-panel">
+                    <h3>Confronto percentili dei montanti finali</h3>
+                    <table class="detail-table mc-table">
+                        <thead>
+                            <tr>
+                                <th>Indicatore</th>
+                                <th style="text-align:right;">PIC</th>
+                                <th style="text-align:right;">PAC</th>
+                                <th style="text-align:right;">Diff. (PIC vs PAC)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Mediana (50&deg; Percentile)</strong></td>
+                                <td id="picP50Val" style="text-align:right; font-weight:700; color: var(--primary);">–</td>
+                                <td id="pacP50Val" style="text-align:right; font-weight:700; color: var(--accent);">–</td>
+                                <td id="diffP50Val" style="text-align:right; font-weight:700;">–</td>
+                            </tr>
+                            <tr>
+                                <td>Scenario Sfavorevole (10&deg; Percentile)</td>
+                                <td id="picP10Val" style="text-align:right;">–</td>
+                                <td id="pacP10Val" style="text-align:right;">–</td>
+                                <td id="diffP10Val" style="text-align:right;">–</td>
+                            </tr>
+                            <tr>
+                                <td>Scenario Favorevole (90&deg; Percentile)</td>
+                                <td id="picP90Val" style="text-align:right;">–</td>
+                                <td id="pacP90Val" style="text-align:right;">–</td>
+                                <td id="diffP90Val" style="text-align:right;">–</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+<!-- Draw‑down Summary (new) -->
+<section class="card panel inner-panel" id="drawdown-summary">
+  <h3>Riepilogo Draw‑down (percentuale)</h3>
+  <table class="detail-table mc-table">
+    <thead>
+      <tr>
+        <th></th>
+        <th style="text-align:right;">PIC</th>
+        <th style="text-align:right;">PAC</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Massimo</td>
+        <td id="maxDDPic" style="text-align:right;">–</td>
+        <td id="maxDDPac" style="text-align:right;">–</td>
+      </tr>
+      <tr>
+        <td>Mediana</td>
+        <td id="medianDDPic" style="text-align:right;">–</td>
+        <td id="medianDDPac" style="text-align:right;">–</td>
+      </tr>
+      <tr>
+        <td>Media</td>
+        <td id="meanDDPic" style="text-align:right;">–</td>
+        <td id="meanDDPac" style="text-align:right;">–</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+                <!-- Grafico Densità di Probabilità -->
+                <section class="card panel inner-panel chart-panel">
+                    <h3>Distribuzione di probabilit&agrave; dei montanti finali</h3>
+                    <p class="field-note" style="margin-bottom: 12px;">
+                        Densità di probabilità dei montanti finali calcolata sugli scenari stocastici.
+                    </p>
+
+                    <div class="chart-container">
+                        <svg id="mcDensityChart" viewBox="0 0 600 340" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Grafico densità di probabilità Monte Carlo">
+                            <!-- Generato via script-sezione2.js -->
+                        </svg>
+                    </div>
+
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color legend-pic"></span>
+                            <span>Distribuzione PIC</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color legend-pac"></span>
+                            <span>Distribuzione PAC</span>
+                        </div>
+                    </div>
+                </section>
+
+            </aside>
+        </main>
+
+        <!-- Sezione Approfondimento Teorico per Monte Carlo Normale -->
+        <section class="card panel info-card" style="margin-top: 28px;">
+            <h2>Approfondimento Teorico: Il Metodo Monte Carlo e la Distribuzione Normale</h2>
+            <div class="theory-grid">
+                <div class="theory-item">
+                    <h4>1. Perch&eacute; va considerata la volatilit&agrave;?</h4>
+                    <p>
+                        Nei mercati reali i rendimenti non sono mai costanti. Conoscerne il valore medio non basta: l'ordine cronologico con cui si susseguono anni positivi e negativi (<em>Sequence of Returns Risk</em>) altera drasticamente il risultato del PAC. Un PAC trae grande beneficio da crolli di mercato nei primi anni (compra a sconto), mentre un PIC ne soffre di pi&ugrave;.
+                    </p>
+                </div>
+                <div class="theory-item">
+                    <h4>2. Come funziona il Metodo Monte Carlo?</h4>
+                    <p>
+                        Il metodo genera <strong>migliaia di traiettorie finanziarie indipendenti</strong>. Ogni mese viene sorteggiato un rendimento casuale basato su media e volatilit&agrave;. Al termine delle simulazioni non si ottiene un singolo numero, ma l'intera <em>mappa di probabilit&agrave;</em> dei possibili montanti finali.
+                    </p>
+                </div>
+                <div class="theory-item">
+                    <h4>3. La Distribuzione Normale (Gaussiana)</h4>
+                    <p>
+                        Il modello assume che i rendimenti logaritmici mensili si distribuiscano secondo la classica curva a campana di Gauss, definita unicamente dal rendimento atteso ($\mu$) e dalla deviazione standard ($\sigma$). L'algoritmo di <em>Box-Muller</em> trasforma numeri casuali uniformi in variabili gaussiane.
+                    </p>
+                </div>
+                <div class="theory-item">
+                    <h4>4. Pro e Contro delle assunzioni del modello</h4>
+                    <p>
+                        <strong>Pro:</strong> Modello intuitivo, matematicamente elegante e molto efficace per quantificare la probabilit&agrave; di vittoria e i percentili di rischio (10&deg; e 90&deg; percentile).<br>
+                        <strong>Contro:</strong> Sottostima gli eventi estremi di mercato (non considera le <em>"code grasse"</em>), assume volatilit&agrave; costante nel tempo e ignora la memoria storica del mercato (autocorrelazione).
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Disclaimer -->
+        <section class="card panel info-card">
+            <h2>Disclaimer</h2>
+            <p class="disclaimer-text">
+                <strong>Disclaimer:</strong> I calcoli e i grafici generati da questa applicazione hanno finalit&agrave; esclusivamente didattiche e teoriche.
+                Le simulazioni stocastiche si basano su parametri ipotetici indicati dall'utente che non costituiscono garanzia di performance future.
+            </p>
+        </section>
+
+        <!-- Informazioni (footer comune NavTools) -->
+        <section class="card panel info-card">
+            <h2>Informazioni</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Versione</td>
+                        <td>1.2.0 (Modulo 2)</td>
+                    </tr>
+                    <tr>
+                        <td>Ultimo aggiornamento</td>
+                        <td>07/09/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Autore</td>
+                        <td>Alessandro Navarini</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+
+    <script src="../../assets/js/common.js"></script>
+    <script src="calculator.js"></script>
+    <script src="script-sezione2.js"></script>
+</body>
+</html>
