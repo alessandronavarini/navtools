@@ -132,11 +132,12 @@ const PicPacAvanzatoCalculator = {
             // Generazione rendimento casuale normale Z ~ N(0, 1) tramite Box-Muller
             const z = randomNormal();
             const rMensile = muMensile + sigmaMensile * z;
+            const fattoreCrescita = Math.max(0.0001, 1 + rMensile);
 
             // Crescita durante il mese m
-            montantePIC = montantePIC * (1 + rMensile);
+            montantePIC = montantePIC * fattoreCrescita;
             if (montantePIC > peakPic) peakPic = montantePIC;
-            portafoglioPAC = portafoglioPAC * (1 + rMensile);
+            portafoglioPAC = portafoglioPAC * fattoreCrescita;
             if (portafoglioPAC > peakPac) peakPac = portafoglioPAC;
 
             // Calcola draw‑down percentuale corrente e aggiorna il massimo
@@ -235,6 +236,67 @@ const PicPacAvanzatoCalculator = {
             medianDDPac: round2(medianDDPac),
             meanDDPac: round2(meanDDPac)
         };
+    },
+
+    /**
+     * SEZIONE 3: Esegue una singola simulazione Monte Carlo con distribuzione t di Student (code grasse / fat tails).
+     * I versamenti PAC avvengono all'INIZIO di ciascun mese m.
+     */
+    simulaSingoloMonteCarloStudentT(p) {
+        const {
+            cTot,
+            totaleMesi,
+            ratePAC,
+            rataMensilePAC,
+            muMensile,
+            sigmaMensile,
+            gradiLiberta
+        } = p;
+
+        let montantePIC = cTot;
+        let portafoglioPAC = 0;
+        let peakPic = montantePIC;
+        let peakPac = 0;
+        let maxDDPic = 0;
+        let maxDDPac = 0;
+
+        const nu = Math.max(3, Math.round(gradiLiberta || 5));
+
+        for (let m = 1; m <= totaleMesi; m++) {
+            // Versamento all'INIZIO del mese m per il PAC
+            if (m <= ratePAC) {
+                portafoglioPAC += rataMensilePAC;
+                if (portafoglioPAC > peakPac) peakPac = portafoglioPAC;
+            }
+
+            // Generazione rendimento casuale t di Student con varianza unitaria
+            const z = randomStudentT(nu);
+            const rMensile = muMensile + sigmaMensile * z;
+            const fattoreCrescita = Math.max(0.0001, 1 + rMensile);
+
+            // Crescita durante il mese m
+            montantePIC = montantePIC * fattoreCrescita;
+            if (montantePIC > peakPic) peakPic = montantePIC;
+            portafoglioPAC = portafoglioPAC * fattoreCrescita;
+            if (portafoglioPAC > peakPac) peakPac = portafoglioPAC;
+
+            // Calcola draw‑down percentuale corrente e aggiorna il massimo
+            if (peakPic > 0) {
+                const ddPic = ((peakPic - montantePIC) / peakPic) * 100;
+                if (ddPic > maxDDPic) maxDDPic = ddPic;
+            }
+            if (peakPac > 0) {
+                const ddPac = ((peakPac - portafoglioPAC) / peakPac) * 100;
+                if (ddPac > maxDDPac) maxDDPac = ddPac;
+            }
+        }
+
+        return {
+            picFinal: montantePIC,
+            pacFinal: portafoglioPAC,
+            picDrawdown: maxDDPic,
+            pacDrawdown: maxDDPac
+        };
     }
 };
 
@@ -246,6 +308,24 @@ function randomNormal() {
     while (u === 0) u = Math.random();
     while (v === 0) v = Math.random();
     return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+}
+
+/**
+ * Genera un numero casuale con distribuzione t di Student con ν gradi di libertà (ν > 2),
+ * scalato in modo che la varianza teorica del fattore di disturbo sia esattamente pari a 1.
+ */
+function randomStudentT(nu) {
+    const z = randomNormal();
+    const intNu = Math.max(3, Math.round(nu));
+    let v = 0;
+    for (let i = 0; i < intNu; i++) {
+        const x = randomNormal();
+        v += x * x;
+    }
+    const t = z / Math.sqrt(v / intNu);
+    // Varianza teorica di t_ν è ν / (ν - 2). Moltiplichiamo per sqrt((ν - 2) / ν)
+    const scaleFactor = Math.sqrt((intNu - 2) / intNu);
+    return t * scaleFactor;
 }
 
 /**
