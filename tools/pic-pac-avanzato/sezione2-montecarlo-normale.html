@@ -30,7 +30,7 @@
                     <h3>Parametri stocastici</h3>
 
                     <label for="capitaleInvestireMC2">Capitale totale da investire (EUR)</label>
-                    <input id="capitaleInvestireMC2" type="number" value="12000" min="100" step="500" inputmode="decimal">
+                    <input id="capitaleInvestireMC2" type="number" value="12000" min="100" step="any" inputmode="decimal">
 
                     <label for="orizzonteTemporaleMC2">Orizzonte temporale (anni)</label>
                     <input id="orizzonteTemporaleMC2" type="number" value="10" min="1" max="50" step="1" inputmode="numeric">
@@ -44,10 +44,10 @@
                     </div>
 
                     <label for="rendimentoAttesoMC2">Rendimento atteso annuo (%)</label>
-                    <input id="rendimentoAttesoMC2" type="number" value="7.00" step="0.1" inputmode="decimal">
+                    <input id="rendimentoAttesoMC2" type="number" value="7.00" step="any" inputmode="decimal">
 
                     <label for="volatilitaAnnuaMC2">Volatilit&agrave; annua / Deviazione Standard (%)</label>
-                    <input id="volatilitaAnnuaMC2" type="number" value="15.00" min="0.1" max="100" step="0.5" inputmode="decimal">
+                    <input id="volatilitaAnnuaMC2" type="number" value="15.00" min="0.1" max="100" step="any" inputmode="decimal">
 
                     <label for="numeroSimulazioniMC2">Numero di simulazioni Monte Carlo</label>
                     <input id="numeroSimulazioniMC2" type="number" value="10000" min="10000" step="5000" inputmode="numeric">
@@ -98,9 +98,9 @@
                         <thead>
                             <tr>
                                 <th>Indicatore</th>
-                                <th style="text-align:right;">PIC</th>
-                                <th style="text-align:right;">PAC</th>
-                                <th style="text-align:right;">Diff. (PIC vs PAC)</th>
+                                <th>PIC</th>
+                                <th>PAC</th>
+                                <th>Diff. (PIC vs PAC)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -133,20 +133,25 @@
                         <thead>
                             <tr>
                                 <th>Indicatore</th>
-                                <th style="text-align:right;">PIC</th>
-                                <th style="text-align:right;">PAC</th>
+                                <th>PIC</th>
+                                <th>PAC</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Draw-down Massimo (Caso peggiore)</td>
-                                <td id="maxDDPic" style="text-align:right;">–</td>
-                                <td id="maxDDPac" style="text-align:right;">–</td>
+                                <td><strong>Mediana Draw-down (50&deg; Percentile)</strong></td>
+                                <td id="medianDDPic" style="text-align:right; font-weight:700; color: var(--primary);">–</td>
+                                <td id="medianDDPac" style="text-align:right; font-weight:700; color: var(--accent);">–</td>
                             </tr>
                             <tr>
-                                <td><strong>Mediana Draw-down</strong></td>
-                                <td id="medianDDPic" style="text-align:right; font-weight:700;">–</td>
-                                <td id="medianDDPac" style="text-align:right; font-weight:700;">–</td>
+                                <td>Scenario Contenuto (10&deg; Percentile Draw-down)</td>
+                                <td id="p10DDPic" style="text-align:right;">–</td>
+                                <td id="p10DDPac" style="text-align:right;">–</td>
+                            </tr>
+                            <tr>
+                                <td>Scenario Severo (90&deg; Percentile Draw-down)</td>
+                                <td id="p90DDPic" style="text-align:right;">–</td>
+                                <td id="p90DDPac" style="text-align:right;">–</td>
                             </tr>
                             <tr>
                                 <td>Media Draw-down</td>
@@ -241,11 +246,11 @@
                 <tbody>
                     <tr>
                         <td>Versione</td>
-                        <td>1.2.0 (Modulo 2)</td>
+                        <td>1.0.1</td>
                     </tr>
                     <tr>
                         <td>Ultimo aggiornamento</td>
-                        <td>07/09/2026</td>
+                        <td>09/09/2026</td>
                     </tr>
                     <tr>
                         <td>Autore</td>

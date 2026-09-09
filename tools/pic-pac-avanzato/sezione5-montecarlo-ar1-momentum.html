@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NavTools - Modulo 3: Monte Carlo (Distribuzione t di Student)</title>
-    <meta name="description" content="Simulazione Monte Carlo avanzata basata sulla distribuzione t di Student a code grasse (fat tails) per modellare gli eventi estremi di mercato tra PIC e PAC.">
+    <title>NavTools - Modulo 5: Monte Carlo (Processo Autoregressivo AR(1) - Momentum)</title>
+    <meta name="description" content="Simulazione Monte Carlo avanzata basata su un processo autoregressivo AR(1) per modellare l'autocorrelazione dei rendimenti (effetto Momentum) tra PIC e PAC.">
     <link rel="stylesheet" href="../../assets/css/common.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -16,82 +16,82 @@
             <a href="../../index.html" class="logo-link" aria-label="Vai alla home di NavTools">
                 <img src="../../images/logo.svg" class="logo" alt="Logo NavTools">
             </a>
-            <h1>Modulo 3 — Monte Carlo (Distribuzione t di Student)</h1>
+            <h1>Modulo 5 — Monte Carlo (Processo AR(1) - Momentum)</h1>
             <p class="description">
-                Analisi probabilistica e stocastica con distribuzione t di Student a code grasse (<em>fat tails</em>) per catturare gli shock e le anomalie di mercato.
+                Analisi probabilistica con processo autoregressivo AR(1) per incorporare l'autocorrelazione positiva dei rendimenti (effetto <em>momentum</em>) e la persistenza dei trend.
             </p>
         </header>
 
         <main class="calculator-layout">
 
-            <!-- Colonna Input Sezione 3 -->
-            <form class="input-column" aria-label="Parametri della simulazione Monte Carlo Student-t" onsubmit="return false;">
+            <!-- Colonna Input Sezione 5 -->
+            <form class="input-column" aria-label="Parametri della simulazione Monte Carlo AR(1)" onsubmit="return false;">
                 <section class="card panel inner-panel">
                     <h3>Parametri stocastici</h3>
 
-                    <label for="capitaleInvestireMC3">Capitale totale da investire (EUR)</label>
-                    <input id="capitaleInvestireMC3" type="number" value="12000" min="100" step="any" inputmode="decimal">
+                    <label for="capitaleInvestireMC5">Capitale totale da investire (EUR)</label>
+                    <input id="capitaleInvestireMC5" type="number" value="12000" min="100" step="any" inputmode="decimal">
 
-                    <label for="orizzonteTemporaleMC3">Orizzonte temporale (anni)</label>
-                    <input id="orizzonteTemporaleMC3" type="number" value="10" min="1" max="50" step="1" inputmode="numeric">
+                    <label for="orizzonteTemporaleMC5">Orizzonte temporale (anni)</label>
+                    <input id="orizzonteTemporaleMC5" type="number" value="10" min="1" max="50" step="1" inputmode="numeric">
 
-                    <label for="durataPACMC3">Durata del PAC (numero rate mensili)</label>
-                    <input id="durataPACMC3" type="number" value="24" min="1" max="600" step="1" inputmode="numeric">
+                    <label for="durataPACMC5">Durata del PAC (numero rate mensili)</label>
+                    <input id="durataPACMC5" type="number" value="24" min="1" max="600" step="1" inputmode="numeric">
 
                     <div class="calculated-info-box">
                         <span class="calc-label">Rata mensile del PAC:</span>
-                        <span id="rataMensileCalculatedMC3" class="calc-val">–</span>
+                        <span id="rataMensileCalculatedMC5" class="calc-val">–</span>
                     </div>
 
-                    <label for="rendimentoAttesoMC3">Rendimento atteso annuo (%)</label>
-                    <input id="rendimentoAttesoMC3" type="number" value="7.00" step="any" inputmode="decimal">
+                    <label for="rendimentoAttesoMC5">Rendimento atteso annuo (%)</label>
+                    <input id="rendimentoAttesoMC5" type="number" value="7.00" step="any" inputmode="decimal">
 
-                    <label for="volatilitaAnnuaMC3">Volatilit&agrave; annua / Deviazione Standard (%)</label>
-                    <input id="volatilitaAnnuaMC3" type="number" value="15.00" min="0.1" max="100" step="any" inputmode="decimal">
+                    <label for="volatilitaAnnuaMC5">Volatilit&agrave; annua / Deviazione Standard (%)</label>
+                    <input id="volatilitaAnnuaMC5" type="number" value="15.00" min="0.1" max="100" step="any" inputmode="decimal">
 
-                    <label for="gradiLibertaMC3">Gradi di libert&agrave; (&nu; - Fat Tails)</label>
-                    <input id="gradiLibertaMC3" type="number" value="5" min="3" max="30" step="1" inputmode="numeric">
+                    <label for="phiMomentumMC5">Coefficiente AR(1) - Momentum (&phi;)</label>
+                    <input id="phiMomentumMC5" type="number" value="0.10" min="-0.5" max="0.5" step="any" inputmode="decimal">
                     <p class="field-note">
-                        Precompilato a &nu; = 5 in base agli studi empirici (Blattberg &amp; Gonedes 1974, Cont 2001). Valori bassi (es. 3&ndash;5) generano code pi&ugrave; pesanti e shock estremi pi&ugrave; frequenti.
+                        Precompilato a &phi; = 0.10 (Jegadeesh &amp; Titman 1993, Lo &amp; MacKinlay 1988). Valori positivi (&phi; &gt; 0) generano persistenza nei trend dei rendimenti mensili.
                     </p>
 
-                    <label for="numeroSimulazioniMC3">Numero di simulazioni Monte Carlo</label>
-                    <input id="numeroSimulazioniMC3" type="number" value="10000" min="10000" step="5000" inputmode="numeric">
+                    <label for="numeroSimulazioniMC5">Numero di simulazioni Monte Carlo</label>
+                    <input id="numeroSimulazioniMC5" type="number" value="10000" min="10000" step="5000" inputmode="numeric">
                     <p class="field-note">
                         Valore minimo: 10.000. Un numero molto elevato (es. &gt; 100.000) potrebbe causare rallentamenti nei calcoli.
                     </p>
 
                     <!-- Tasto Avvio Simulazione -->
-                    <button type="button" id="btnRunMonteCarlo3" class="button mc-run-button">
+                    <button type="button" id="btnRunMonteCarlo5" class="button mc-run-button">
                         &#9654; Avvia Simulazione Monte Carlo
                     </button>
 
                     <!-- Barra di Avanzamento -->
-                    <div id="progressBarBox3" class="progress-bar-box" hidden>
+                    <div id="progressBarBox5" class="progress-bar-box" hidden>
                         <div class="progress-bar-track">
-                            <div id="progressBarFill3" class="progress-bar-fill" style="width: 0%;"></div>
+                            <div id="progressBarFill5" class="progress-bar-fill" style="width: 0%;"></div>
                         </div>
-                        <p id="progressBarText3" class="progress-bar-text">Pronto per la simulazione</p>
+                        <p id="progressBarText5" class="progress-bar-text">Pronto per la simulazione</p>
                     </div>
                 </section>
             </form>
 
-            <!-- Colonna Output Sezione 3 -->
+            <!-- Colonna Output Sezione 5 -->
             <aside class="result-column" aria-live="polite">
 
                 <!-- Card Probabilità di Vittoria -->
                 <section class="card result-card mc-result-card">
-                    <p class="mc-result-title" id="mcResultTitle3">Esito Simulazioni Monte Carlo (t di Student)</p>
+                    <p class="mc-result-title" id="mcResultTitle5">Esito Simulazioni Monte Carlo (AR(1) - Momentum)</p>
 
                     <div class="win-prob-grid">
                         <div class="win-badge-box pic-win-box">
                             <span class="win-label">Vittoria PIC</span>
-                            <span id="probPicWinValue3" class="win-val">–</span>
+                            <span id="probPicWinValue5" class="win-val">–</span>
                             <span class="win-subtext">scenari con montante superiore</span>
                         </div>
                         <div class="win-badge-box pac-win-box">
                             <span class="win-label">Vittoria PAC</span>
-                            <span id="probPacWinValue3" class="win-val">–</span>
+                            <span id="probPacWinValue5" class="win-val">–</span>
                             <span class="win-subtext">scenari con montante superiore</span>
                         </div>
                     </div>
@@ -112,28 +112,28 @@
                         <tbody>
                             <tr>
                                 <td><strong>Mediana (50&deg; Percentile)</strong></td>
-                                <td id="picP50Val3" style="text-align:right; font-weight:700; color: var(--primary);">–</td>
-                                <td id="pacP50Val3" style="text-align:right; font-weight:700; color: var(--accent);">–</td>
-                                <td id="diffP50Val3" style="text-align:right; font-weight:700;">–</td>
+                                <td id="picP50Val5" style="text-align:right; font-weight:700; color: var(--primary);">–</td>
+                                <td id="pacP50Val5" style="text-align:right; font-weight:700; color: var(--accent);">–</td>
+                                <td id="diffP50Val5" style="text-align:right; font-weight:700;">–</td>
                             </tr>
                             <tr>
                                 <td>Scenario Sfavorevole (10&deg; Percentile)</td>
-                                <td id="picP10Val3" style="text-align:right;">–</td>
-                                <td id="pacP10Val3" style="text-align:right;">–</td>
-                                <td id="diffP10Val3" style="text-align:right;">–</td>
+                                <td id="picP10Val5" style="text-align:right;">–</td>
+                                <td id="pacP10Val5" style="text-align:right;">–</td>
+                                <td id="diffP10Val5" style="text-align:right;">–</td>
                             </tr>
                             <tr>
                                 <td>Scenario Favorevole (90&deg; Percentile)</td>
-                                <td id="picP90Val3" style="text-align:right;">–</td>
-                                <td id="pacP90Val3" style="text-align:right;">–</td>
-                                <td id="diffP90Val3" style="text-align:right;">–</td>
+                                <td id="picP90Val5" style="text-align:right;">–</td>
+                                <td id="pacP90Val5" style="text-align:right;">–</td>
+                                <td id="diffP90Val5" style="text-align:right;">–</td>
                             </tr>
                         </tbody>
                     </table>
                 </section>
 
                 <!-- Tabella Riepilogo Draw‑down -->
-                <section class="card panel inner-panel" id="drawdown-summary3">
+                <section class="card panel inner-panel" id="drawdown-summary5">
                     <h3>Riepilogo Draw‑down (percentuale)</h3>
                     <table class="detail-table mc-table">
                         <thead>
@@ -146,23 +146,23 @@
                         <tbody>
                             <tr>
                                 <td><strong>Mediana Draw-down (50&deg; Percentile)</strong></td>
-                                <td id="medianDDPic3" style="text-align:right; font-weight:700; color: var(--primary);">–</td>
-                                <td id="medianDDPac3" style="text-align:right; font-weight:700; color: var(--accent);">–</td>
+                                <td id="medianDDPic5" style="text-align:right; font-weight:700; color: var(--primary);">–</td>
+                                <td id="medianDDPac5" style="text-align:right; font-weight:700; color: var(--accent);">–</td>
                             </tr>
                             <tr>
                                 <td>Scenario Contenuto (10&deg; Percentile Draw-down)</td>
-                                <td id="p10DDPic3" style="text-align:right;">–</td>
-                                <td id="p10DDPac3" style="text-align:right;">–</td>
+                                <td id="p10DDPic5" style="text-align:right;">–</td>
+                                <td id="p10DDPac5" style="text-align:right;">–</td>
                             </tr>
                             <tr>
                                 <td>Scenario Severo (90&deg; Percentile Draw-down)</td>
-                                <td id="p90DDPic3" style="text-align:right;">–</td>
-                                <td id="p90DDPac3" style="text-align:right;">–</td>
+                                <td id="p90DDPic5" style="text-align:right;">–</td>
+                                <td id="p90DDPac5" style="text-align:right;">–</td>
                             </tr>
                             <tr>
                                 <td>Media Draw-down</td>
-                                <td id="meanDDPic3" style="text-align:right;">–</td>
-                                <td id="meanDDPac3" style="text-align:right;">–</td>
+                                <td id="meanDDPic5" style="text-align:right;">–</td>
+                                <td id="meanDDPac5" style="text-align:right;">–</td>
                             </tr>
                         </tbody>
                     </table>
@@ -172,12 +172,12 @@
                 <section class="card panel inner-panel chart-panel">
                     <h3>Distribuzione di probabilit&agrave; dei montanti finali</h3>
                     <p class="field-note" style="margin-bottom: 12px;">
-                        Densità di probabilità dei montanti finali calcolata sugli scenari stocastici t di Student.
+                        Densità di probabilità dei montanti finali calcolata sugli scenari stocastici AR(1).
                     </p>
 
                     <div class="chart-container">
-                        <svg id="mcDensityChart3" viewBox="0 0 600 340" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Grafico densità di probabilità Monte Carlo t di Student">
-                            <!-- Generato via script-sezione3.js -->
+                        <svg id="mcDensityChart5" viewBox="0 0 600 340" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Grafico densità di probabilità Monte Carlo AR(1)">
+                            <!-- Generato via script-sezione5.js -->
                         </svg>
                     </div>
 
@@ -204,32 +204,32 @@
             </aside>
         </main>
 
-        <!-- Sezione Approfondimento Teorico per Monte Carlo Student-t -->
+        <!-- Sezione Approfondimento Teorico per Monte Carlo AR(1) -->
         <section class="card panel info-card" style="margin-top: 28px;">
-            <h2>Approfondimento Teorico: Modellizzazione con Distribuzione t di Student e Code Grasse</h2>
+            <h2>Approfondimento Teorico: Il Modello Autoregressivo AR(1) e l'Effetto Momentum</h2>
             <div class="theory-grid">
                 <div class="theory-item">
-                    <h4>1. Oltre la Distribuzione Normale: la Leptocurtosi</h4>
+                    <h4>1. Che cos'&egrave; l'Autocorrelazione dei Rendimenti?</h4>
                     <p>
-                        Nei mercati finanziari reali, i rendimenti azionari non seguono perfettamente una curva a campana gaussiana. Gli eventi estremi (crolli improvvisi di borsa o rialzi straordinari) si verificano con una frequenza molto pi&ugrave; elevata di quanto predetto dal modello normale. Questo fenomeno &egrave; noto come <strong>leptocurtosi</strong> o presenza di <strong>"code grasse" (fat tails)</strong>.
+                        Nei modelli tradizionali i rendimenti mensili sono assunti indipendenti ed identicamente distribuiti (i.i.d.). Tuttavia, la ricerca empirica dimostra l'esistenza di un'<strong>autocorrelazione positiva a breve termine</strong> (&phi; &gt; 0), nota in finanza quantitativa come <strong>effetto Momentum</strong>: mesi positivi tendono a essere seguiti da ulteriori rialzi, e le fasi di contrazione tendono a persistere per qualche mese.
                     </p>
                 </div>
                 <div class="theory-item">
-                    <h4>2. Come funziona la Distribuzione t di Student?</h4>
+                    <h4>2. Formulazione Matematica del Modello AR(1)</h4>
                     <p>
-                        La distribuzione $t$ di Student introduce un parametro fondamentale: i <strong>gradi di libert&agrave; (&nu;)</strong>. Quando &nu; &egrave; piccolo (es. &nu; = 4 o 5), la distribuzione ha una cuspide centrale pi&ugrave; accentuata e code molto pi&ugrave; spesse, catturando la presenza di shock di mercato. Al crescere di &nu; (&nu; &rarr; &infty;), la distribuzione $t$ di Student converge esattamente alla distribuzione Normale standard.
+                        Il processo $AR(1)$ modella lo shock del rendimento al mese $m$ come: $X_m = \phi \cdot X_{m-1} + \sqrt{1 - \phi^2} \cdot Z_m$. Il fattore di scala $\sqrt{1 - \phi^2}$ assicura la stazionariet&agrave; della varianza, garantendo che la volatilit&agrave; annua complessiva impostata dall'utente rimanga inalterata.
                     </p>
                 </div>
                 <div class="theory-item">
                     <h4>3. Evidenze empiriche e letteratura accademica</h4>
                     <p>
-                        Studi empirici fondamentali quali <strong>Blattberg &amp; Gonedes (1974)</strong> (<em>"A Comparison of the Stable and Student Distributions as Statistical Models for Stock Prices"</em>, <em>Journal of Business</em>) e la celebre rassegna di <strong>Rama Cont (2001)</strong> (<em>"Empirical properties of asset returns: stylized facts and statistical collocations"</em>, <em>Quantitative Finance</em>) dimostrano che i rendimenti dei mercati azionari sono modellati con estrema precisione da una distribuzione $t$ di Student con gradi di libert&agrave; <strong>&nu; compresi tra 4 e 5</strong>. Per questo motivo il valore precompilato nel calcolatore &egrave; impostato a <strong>&nu; = 5</strong>.
+                        Studi fondamentali sul momentum azionario quali <strong>Jegadeesh &amp; Titman (1993)</strong> (<em>"Returns to Buying Winners and Selling Losers"</em>, <em>Journal of Finance</em>) e le verifiche sull'ipotesi di passeggiata aleatoria di <strong>Lo &amp; MacKinlay (1988)</strong> (<em>"Stock Market Prices Do Not Follow Random Walks"</u>, <em>Review of Financial Studies</em>) confermano per i rendimenti azionari mensili un coefficiente di autocorrelazione positiva <strong>&phi; &approx; 0.10 &divide; 0.15</strong>. Nel calcolatore il parametro &egrave; precompilato a <strong>&phi; = 0.10</strong>.
                     </p>
                 </div>
                 <div class="theory-item">
                     <h4>4. Impatto sul confronto PIC vs PAC</h4>
                     <p>
-                        La presenza di code grasse aumenta sia l'entit&agrave; dei draw-down sia la probabilit&agrave; per il PAC di beneficiare di importanti acquisti a forte sconto durante le fasi di crollo di mercato. L'accumulo graduale delle quote in presenza di rendimenti leptocurtici offre spesso una mitigazione del rischio di sequenza dei rendimenti (<em>Sequence of Returns Risk</em>) superiore rispetto al modello gaussiano classico.
+                        La presenza di persistenza nei trend (&phi; &gt; 0) accentua le fasi prolungate di trend. Nei trend rialzisti persistenti, il PIC sfrutta al massimo l'esposizione anticipata; nei trend ribassisti persistenti, il PAC beneficia della diluizione del capitale, acquistando quote a prezzi progressivamente pi&ugrave; vantaggiosi durante la discesa prolungata del mercato.
                     </p>
                 </div>
             </div>
@@ -251,7 +251,7 @@
                 <tbody>
                     <tr>
                         <td>Versione</td>
-                        <td>1.0.1</td>
+                        <td>1.0.0</td>
                     </tr>
                     <tr>
                         <td>Ultimo aggiornamento</td>
@@ -269,7 +269,7 @@
 
     <script src="../../assets/js/common.js"></script>
     <script src="calculator.js"></script>
-    <script src="script-sezione3.js"></script>
-    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dc1d00b0089c4eeca4080d07199d8ad7"}'></script><!-- End Cloudflare Web Analytics -->
+    <script src="script-sezione5.js"></script>
+            <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dc1d00b0089c4eeca4080d07199d8ad7"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

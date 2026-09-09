@@ -1,92 +1,99 @@
 // =======================================================
-// NavTools - Modulo 3: Monte Carlo (Distribuzione t di Student)
+// NavTools - Modulo 4: Monte Carlo (t di Student Asimmetrica - Bruce Hansen)
 // Logica di interazione e rendering dell'interfaccia utente
-// Versione 1.3.0
+// Versione 1.4.0
 // =======================================================
 
 const elements = {
-    capitaleInvestireMC3: document.getElementById("capitaleInvestireMC3"),
-    orizzonteTemporaleMC3: document.getElementById("orizzonteTemporaleMC3"),
-    durataPACMC3: document.getElementById("durataPACMC3"),
-    rataMensileCalculatedMC3: document.getElementById("rataMensileCalculatedMC3"),
-    rendimentoAttesoMC3: document.getElementById("rendimentoAttesoMC3"),
-    volatilitaAnnuaMC3: document.getElementById("volatilitaAnnuaMC3"),
-    gradiLibertaMC3: document.getElementById("gradiLibertaMC3"),
-    numeroSimulazioniMC3: document.getElementById("numeroSimulazioniMC3"),
+    capitaleInvestireMC4: document.getElementById("capitaleInvestireMC4"),
+    orizzonteTemporaleMC4: document.getElementById("orizzonteTemporaleMC4"),
+    durataPACMC4: document.getElementById("durataPACMC4"),
+    rataMensileCalculatedMC4: document.getElementById("rataMensileCalculatedMC4"),
+    rendimentoAttesoMC4: document.getElementById("rendimentoAttesoMC4"),
+    volatilitaAnnuaMC4: document.getElementById("volatilitaAnnuaMC4"),
+    gradiLibertaMC4: document.getElementById("gradiLibertaMC4"),
+    lambdaAsimmetriaMC4: document.getElementById("lambdaAsimmetriaMC4"),
+    numeroSimulazioniMC4: document.getElementById("numeroSimulazioniMC4"),
 
-    btnRunMonteCarlo3: document.getElementById("btnRunMonteCarlo3"),
-    progressBarBox3: document.getElementById("progressBarBox3"),
-    progressBarFill3: document.getElementById("progressBarFill3"),
-    progressBarText3: document.getElementById("progressBarText3"),
+    btnRunMonteCarlo4: document.getElementById("btnRunMonteCarlo4"),
+    progressBarBox4: document.getElementById("progressBarBox4"),
+    progressBarFill4: document.getElementById("progressBarFill4"),
+    progressBarText4: document.getElementById("progressBarText4"),
 
-    mcResultTitle3: document.getElementById("mcResultTitle3"),
-    probPicWinValue3: document.getElementById("probPicWinValue3"),
-    probPacWinValue3: document.getElementById("probPacWinValue3"),
-    picP50Val3: document.getElementById("picP50Val3"),
-    pacP50Val3: document.getElementById("pacP50Val3"),
-    diffP50Val3: document.getElementById("diffP50Val3"),
-    picP10Val3: document.getElementById("picP10Val3"),
-    pacP10Val3: document.getElementById("pacP10Val3"),
-    diffP10Val3: document.getElementById("diffP10Val3"),
-    picP90Val3: document.getElementById("picP90Val3"),
-    pacP90Val3: document.getElementById("pacP90Val3"),
-    diffP90Val3: document.getElementById("diffP90Val3"),
-    mcDensityChart3: document.getElementById("mcDensityChart3")
+    mcResultTitle4: document.getElementById("mcResultTitle4"),
+    probPicWinValue4: document.getElementById("probPicWinValue4"),
+    probPacWinValue4: document.getElementById("probPacWinValue4"),
+    picP50Val4: document.getElementById("picP50Val4"),
+    pacP50Val4: document.getElementById("pacP50Val4"),
+    diffP50Val4: document.getElementById("diffP50Val4"),
+    picP10Val4: document.getElementById("picP10Val4"),
+    pacP10Val4: document.getElementById("pacP10Val4"),
+    diffP10Val4: document.getElementById("diffP10Val4"),
+    picP90Val4: document.getElementById("picP90Val4"),
+    pacP90Val4: document.getElementById("pacP90Val4"),
+    diffP90Val4: document.getElementById("diffP90Val4"),
+    mcDensityChart4: document.getElementById("mcDensityChart4")
 };
 
 function init() {
     bindEvents();
-    updateRataMC3UI();
+    updateRataMC4UI();
 }
 
 function bindEvents() {
-    [elements.capitaleInvestireMC3, elements.orizzonteTemporaleMC3, elements.durataPACMC3, elements.rendimentoAttesoMC3, elements.volatilitaAnnuaMC3, elements.gradiLibertaMC3, elements.numeroSimulazioniMC3].forEach(input => {
+    [elements.capitaleInvestireMC4, elements.orizzonteTemporaleMC4, elements.durataPACMC4, elements.rendimentoAttesoMC4, elements.volatilitaAnnuaMC4, elements.gradiLibertaMC4, elements.lambdaAsimmetriaMC4, elements.numeroSimulazioniMC4].forEach(input => {
         if (input) {
-            input.addEventListener("input", updateRataMC3UI);
-            input.addEventListener("change", updateRataMC3UI);
+            input.addEventListener("input", updateRataMC4UI);
+            input.addEventListener("change", updateRataMC4UI);
         }
     });
 
-    if (elements.btnRunMonteCarlo3) {
-        elements.btnRunMonteCarlo3.addEventListener("click", runMonteCarloSection3);
+    if (elements.btnRunMonteCarlo4) {
+        elements.btnRunMonteCarlo4.addEventListener("click", runMonteCarloSection4);
     }
 }
 
-function updateRataMC3UI() {
-    const cTot = readNumber(elements.capitaleInvestireMC3);
-    const ratePAC = readNumber(elements.durataPACMC3);
+function updateRataMC4UI() {
+    const cTot = readNumber(elements.capitaleInvestireMC4);
+    const ratePAC = readNumber(elements.durataPACMC4);
 
     if (Number.isFinite(cTot) && Number.isFinite(ratePAC) && ratePAC > 0) {
         const rata = cTot / ratePAC;
-        elements.rataMensileCalculatedMC3.textContent = formatEuro(rata) + " / mese";
+        elements.rataMensileCalculatedMC4.textContent = formatEuro(rata) + " / mese";
     } else {
-        elements.rataMensileCalculatedMC3.textContent = "–";
+        elements.rataMensileCalculatedMC4.textContent = "–";
     }
 }
 
-function readValuesSection3() {
-    let numSim = readNumber(elements.numeroSimulazioniMC3);
+function readValuesSection4() {
+    let numSim = readNumber(elements.numeroSimulazioniMC4);
     if (!Number.isFinite(numSim) || numSim < 10000) {
         numSim = 10000;
     }
 
-    let nu = readNumber(elements.gradiLibertaMC3);
+    let nu = readNumber(elements.gradiLibertaMC4);
     if (!Number.isFinite(nu) || nu < 3) {
         nu = 5;
     }
 
+    let lam = readNumber(elements.lambdaAsimmetriaMC4);
+    if (!Number.isFinite(lam)) {
+        lam = -0.15;
+    }
+
     return {
-        capitaleInvestire: readNumber(elements.capitaleInvestireMC3),
-        orizzonteTemporale: readNumber(elements.orizzonteTemporaleMC3),
-        durataPAC: readNumber(elements.durataPACMC3),
-        rendimentoAtteso: readNumber(elements.rendimentoAttesoMC3),
-        volatilitaAnnua: readNumber(elements.volatilitaAnnuaMC3),
+        capitaleInvestire: readNumber(elements.capitaleInvestireMC4),
+        orizzonteTemporale: readNumber(elements.orizzonteTemporaleMC4),
+        durataPAC: readNumber(elements.durataPACMC4),
+        rendimentoAtteso: readNumber(elements.rendimentoAttesoMC4),
+        volatilitaAnnua: readNumber(elements.volatilitaAnnuaMC4),
         gradiLiberta: nu,
+        lambdaAsimmetria: lam,
         numeroSimulazioni: numSim
     };
 }
 
-function validateSection3(v) {
+function validateSection4(v) {
     if (!Number.isFinite(v.capitaleInvestire) || v.capitaleInvestire <= 0) {
         alert("Inserisci un capitale totale da investire valido (> 0 €).");
         return false;
@@ -111,17 +118,21 @@ function validateSection3(v) {
         alert("Inserisci dei gradi di libertà validi (minimo 3).");
         return false;
     }
+    if (!Number.isFinite(v.lambdaAsimmetria) || v.lambdaAsimmetria <= -1 || v.lambdaAsimmetria >= 1) {
+        alert("Inserisci un parametro di asimmetria lambda valido compreso tra -0.99 e 0.99.");
+        return false;
+    }
     return true;
 }
 
-function runMonteCarloSection3() {
-    const v = readValuesSection3();
-    if (!validateSection3(v)) return;
+function runMonteCarloSection4() {
+    const v = readValuesSection4();
+    if (!validateSection4(v)) return;
 
-    elements.btnRunMonteCarlo3.disabled = true;
-    elements.progressBarBox3.hidden = false;
-    elements.progressBarFill3.style.width = "0%";
-    elements.progressBarText3.textContent = "Preparazione simulazione Monte Carlo t di Student...";
+    elements.btnRunMonteCarlo4.disabled = true;
+    elements.progressBarBox4.hidden = false;
+    elements.progressBarFill4.style.width = "0%";
+    elements.progressBarText4.textContent = "Preparazione simulazione Monte Carlo Skewed t...";
 
     const totalRuns = v.numeroSimulazioni;
     const batchSize = Math.max(1000, Math.floor(totalRuns / 20));
@@ -144,6 +155,7 @@ function runMonteCarloSection3() {
     const muMensile = Math.pow(1 + muAnnuo, 1 / 12) - 1;
     const sigmaMensile = sigmaAnnua / Math.sqrt(12);
     const gradiLiberta = v.gradiLiberta;
+    const lambdaAsimmetria = v.lambdaAsimmetria;
 
     const simParams = {
         cTot,
@@ -152,7 +164,8 @@ function runMonteCarloSection3() {
         rataMensilePAC,
         muMensile,
         sigmaMensile,
-        gradiLiberta
+        gradiLiberta,
+        lambdaAsimmetria
     };
 
     function processBatch() {
@@ -160,7 +173,7 @@ function runMonteCarloSection3() {
         const end = Math.min(totalRuns, start + batchSize);
 
         for (let i = start; i < end; i++) {
-            const { picFinal, pacFinal, picDrawdown, pacDrawdown } = PicPacAvanzatoCalculator.simulaSingoloMonteCarloStudentT(simParams);
+            const { picFinal, pacFinal, picDrawdown, pacDrawdown } = PicPacAvanzatoCalculator.simulaSingoloMonteCarloHansenSkewedT(simParams);
             picResults[i] = picFinal;
             pacResults[i] = pacFinal;
             picDrawdowns[i] = picDrawdown;
@@ -169,18 +182,18 @@ function runMonteCarloSection3() {
 
         runsCompleted = end;
         const progressPct = (runsCompleted / totalRuns) * 100;
-        elements.progressBarFill3.style.width = progressPct + "%";
-        elements.progressBarText3.textContent = `Calcolo t di Student in corso... ${runsCompleted.toLocaleString("it-IT")} / ${totalRuns.toLocaleString("it-IT")} simulazioni (${Math.round(progressPct)}%)`;
+        elements.progressBarFill4.style.width = progressPct + "%";
+        elements.progressBarText4.textContent = `Calcolo Skewed t in corso... ${runsCompleted.toLocaleString("it-IT")} / ${totalRuns.toLocaleString("it-IT")} simulazioni (${Math.round(progressPct)}%)`;
 
         if (runsCompleted < totalRuns) {
             setTimeout(processBatch, 0);
         } else {
             setTimeout(() => {
-                elements.progressBarBox3.hidden = true;
-                elements.btnRunMonteCarlo3.disabled = false;
+                elements.progressBarBox4.hidden = true;
+                elements.btnRunMonteCarlo4.disabled = false;
 
                 const stats = PicPacAvanzatoCalculator.elaboraStatisticheMonteCarlo(picResults, pacResults, picDrawdowns, pacDrawdowns);
-                renderResultsSection3(stats, picResults, pacResults);
+                renderResultsSection4(stats, picResults, pacResults);
             }, 60);
         }
     }
@@ -188,38 +201,38 @@ function runMonteCarloSection3() {
     setTimeout(processBatch, 20);
 }
 
-function renderResultsSection3(stats, picArray, pacArray) {
-    if (elements.mcResultTitle3) {
-        elements.mcResultTitle3.textContent = `Esito ${stats.totalRuns.toLocaleString("it-IT")} Simulazioni Monte Carlo (t di Student)`;
+function renderResultsSection4(stats, picArray, pacArray) {
+    if (elements.mcResultTitle4) {
+        elements.mcResultTitle4.textContent = `Esito ${stats.totalRuns.toLocaleString("it-IT")} Simulazioni Monte Carlo (Skewed t di Hansen)`;
     }
 
-    elements.probPicWinValue3.textContent = stats.probVittoriaPIC.toLocaleString("it-IT", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + "%";
-    elements.probPacWinValue3.textContent = stats.probVittoriaPAC.toLocaleString("it-IT", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + "%";
+    elements.probPicWinValue4.textContent = stats.probVittoriaPIC.toLocaleString("it-IT", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + "%";
+    elements.probPacWinValue4.textContent = stats.probVittoriaPAC.toLocaleString("it-IT", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + "%";
 
-    elements.picP50Val3.textContent = formatEuro(stats.picMediana);
-    elements.pacP50Val3.textContent = formatEuro(stats.pacMediana);
-    elements.diffP50Val3.textContent = (stats.diffMediana >= 0 ? "+" : "") + formatEuro(stats.diffMediana);
+    elements.picP50Val4.textContent = formatEuro(stats.picMediana);
+    elements.pacP50Val4.textContent = formatEuro(stats.pacMediana);
+    elements.diffP50Val4.textContent = (stats.diffMediana >= 0 ? "+" : "") + formatEuro(stats.diffMediana);
 
-    elements.picP10Val3.textContent = formatEuro(stats.picP10);
-    elements.pacP10Val3.textContent = formatEuro(stats.pacP10);
-    elements.diffP10Val3.textContent = (stats.diffP10 >= 0 ? "+" : "") + formatEuro(stats.diffP10);
+    elements.picP10Val4.textContent = formatEuro(stats.picP10);
+    elements.pacP10Val4.textContent = formatEuro(stats.pacP10);
+    elements.diffP10Val4.textContent = (stats.diffP10 >= 0 ? "+" : "") + formatEuro(stats.diffP10);
 
-    elements.picP90Val3.textContent = formatEuro(stats.picP90);
-    elements.pacP90Val3.textContent = formatEuro(stats.pacP90);
-    elements.diffP90Val3.textContent = (stats.diffP90 >= 0 ? "+" : "") + formatEuro(stats.diffP90);
+    elements.picP90Val4.textContent = formatEuro(stats.picP90);
+    elements.pacP90Val4.textContent = formatEuro(stats.pacP90);
+    elements.diffP90Val4.textContent = (stats.diffP90 >= 0 ? "+" : "") + formatEuro(stats.diffP90);
 
-    // Popola tabella draw‑down Sezione 3
+    // Popola tabella draw‑down Sezione 4
     const fmtDD = v => (Number.isFinite(v) ? v.toFixed(2) + "%" : "–");
 
-    const elMedianDDPic = document.getElementById("medianDDPic3");
-    const elP10DDPic    = document.getElementById("p10DDPic3");
-    const elP90DDPic    = document.getElementById("p90DDPic3");
-    const elMeanDDPic   = document.getElementById("meanDDPic3");
+    const elMedianDDPic = document.getElementById("medianDDPic4");
+    const elP10DDPic    = document.getElementById("p10DDPic4");
+    const elP90DDPic    = document.getElementById("p90DDPic4");
+    const elMeanDDPic   = document.getElementById("meanDDPic4");
 
-    const elMedianDDPac = document.getElementById("medianDDPac3");
-    const elP10DDPac    = document.getElementById("p10DDPac3");
-    const elP90DDPac    = document.getElementById("p90DDPac3");
-    const elMeanDDPac   = document.getElementById("meanDDPac3");
+    const elMedianDDPac = document.getElementById("medianDDPac4");
+    const elP10DDPac    = document.getElementById("p10DDPac4");
+    const elP90DDPac    = document.getElementById("p90DDPac4");
+    const elMeanDDPac   = document.getElementById("meanDDPac4");
 
     if (elMedianDDPic) elMedianDDPic.textContent = fmtDD(stats.medianDDPic);
     if (elP10DDPic)    elP10DDPic.textContent    = fmtDD(stats.p10DDPic);
@@ -241,11 +254,11 @@ function renderResultsSection3(stats, picArray, pacArray) {
         }
     }
 
-    renderMCDensityChart3(picArray, pacArray, stats);
+    renderMCDensityChart4(picArray, pacArray, stats);
 }
 
 // -------------------------------------------------------
-// GRAFICO DENSITÀ DI PROBABILITÀ (MONTE CARLO SEZIONE 3)
+// GRAFICO DENSITÀ DI PROBABILITÀ (MONTE CARLO SEZIONE 4)
 // -------------------------------------------------------
 function calculateNiceYAxis(maxDataVal) {
     if (!Number.isFinite(maxDataVal) || maxDataVal <= 0) {
@@ -291,8 +304,8 @@ function calculateNiceYAxis(maxDataVal) {
     return { yMax, step, ticks };
 }
 
-function renderMCDensityChart3(picArray, pacArray, stats) {
-    const svg = elements.mcDensityChart3;
+function renderMCDensityChart4(picArray, pacArray, stats) {
+    const svg = elements.mcDensityChart4;
     if (!svg) return;
     svg.innerHTML = "";
 

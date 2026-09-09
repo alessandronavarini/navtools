@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavTools - Modulo 4: Monte Carlo (t di Student Asimmetrica - Bruce Hansen)</title>
+    <meta name="description" content="Simulazione Monte Carlo avanzata basata sulla distribuzione t di Student Asimmetrica (Skewed t di Bruce Hansen 1994) per considerare asimmetria e code grasse tra PIC e PAC.">
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container tool-container">
+        <a href="index.html" class="back-link">&larr; Indice Modellazione Avanzata</a>
+
+        <header class="tool-header">
+            <a href="../../index.html" class="logo-link" aria-label="Vai alla home di NavTools">
+                <img src="../../images/logo.svg" class="logo" alt="Logo NavTools">
+            </a>
+            <h1>Modulo 4 — Monte Carlo (t di Student Asimmetrica)</h1>
+            <p class="description">
+                Analisi probabilistica con modello Skewed t di Bruce Hansen (1994) per incorporare sia le code grasse (<em>fat tails</em>) che l'asimmetria negativa (<em>negative skewness</em>) dei crolli finanziari.
+            </p>
+        </header>
+
+        <main class="calculator-layout">
+
+            <!-- Colonna Input Sezione 4 -->
+            <form class="input-column" aria-label="Parametri della simulazione Monte Carlo Hansen Skewed-t" onsubmit="return false;">
+                <section class="card panel inner-panel">
+                    <h3>Parametri stocastici</h3>
+
+                    <label for="capitaleInvestireMC4">Capitale totale da investire (EUR)</label>
+                    <input id="capitaleInvestireMC4" type="number" value="12000" min="100" step="any" inputmode="decimal">
+
+                    <label for="orizzonteTemporaleMC4">Orizzonte temporale (anni)</label>
+                    <input id="orizzonteTemporaleMC4" type="number" value="10" min="1" max="50" step="1" inputmode="numeric">
+
+                    <label for="durataPACMC4">Durata del PAC (numero rate mensili)</label>
+                    <input id="durataPACMC4" type="number" value="24" min="1" max="600" step="1" inputmode="numeric">
+
+                    <div class="calculated-info-box">
+                        <span class="calc-label">Rata mensile del PAC:</span>
+                        <span id="rataMensileCalculatedMC4" class="calc-val">–</span>
+                    </div>
+
+                    <label for="rendimentoAttesoMC4">Rendimento atteso annuo (%)</label>
+                    <input id="rendimentoAttesoMC4" type="number" value="7.00" step="any" inputmode="decimal">
+
+                    <label for="volatilitaAnnuaMC4">Volatilit&agrave; annua / Deviazione Standard (%)</label>
+                    <input id="volatilitaAnnuaMC4" type="number" value="15.00" min="0.1" max="100" step="any" inputmode="decimal">
+
+                    <label for="gradiLibertaMC4">Gradi di libert&agrave; (&nu; - Fat Tails)</label>
+                    <input id="gradiLibertaMC4" type="number" value="5" min="3" max="30" step="1" inputmode="numeric">
+                    <p class="field-note">
+                        Precompilato a &nu; = 5. Controlla lo spessore delle code della distribuzione (code grasse).
+                    </p>
+
+                    <label for="lambdaAsimmetriaMC4">Parametro di Asimmetria (&lambda; - Skewness)</label>
+                    <input id="lambdaAsimmetriaMC4" type="number" value="-0.15" min="-0.9" max="0.9" step="any" inputmode="decimal">
+                    <p class="field-note">
+                        Precompilato a &lambda; = -0.15 (Hansen 1994, Jondeau &amp; Rockinger 2003). Valori negativi (&lambda; &lt; 0) riflettono la maggior frequenza di crolli repentini di borsa rispetto ai rialzi.
+                    </p>
+
+                    <label for="numeroSimulazioniMC4">Numero di simulazioni Monte Carlo</label>
+                    <input id="numeroSimulazioniMC4" type="number" value="10000" min="10000" step="5000" inputmode="numeric">
+                    <p class="field-note">
+                        Valore minimo: 10.000. Un numero molto elevato (es. &gt; 100.000) potrebbe causare rallentamenti nei calcoli.
+                    </p>
+
+                    <!-- Tasto Avvio Simulazione -->
+                    <button type="button" id="btnRunMonteCarlo4" class="button mc-run-button">
+                        &#9654; Avvia Simulazione Monte Carlo
+                    </button>
+
+                    <!-- Barra di Avanzamento -->
+                    <div id="progressBarBox4" class="progress-bar-box" hidden>
+                        <div class="progress-bar-track">
+                            <div id="progressBarFill4" class="progress-bar-fill" style="width: 0%;"></div>
+                        </div>
+                        <p id="progressBarText4" class="progress-bar-text">Pronto per la simulazione</p>
+                    </div>
+                </section>
+            </form>
+
+            <!-- Colonna Output Sezione 4 -->
+            <aside class="result-column" aria-live="polite">
+
+                <!-- Card Probabilità di Vittoria -->
+                <section class="card result-card mc-result-card">
+                    <p class="mc-result-title" id="mcResultTitle4">Esito Simulazioni Monte Carlo (Skewed t)</p>
+
+                    <div class="win-prob-grid">
+                        <div class="win-badge-box pic-win-box">
+                            <span class="win-label">Vittoria PIC</span>
+                            <span id="probPicWinValue4" class="win-val">–</span>
+                            <span class="win-subtext">scenari con montante superiore</span>
+                        </div>
+                        <div class="win-badge-box pac-win-box">
+                            <span class="win-label">Vittoria PAC</span>
+                            <span id="probPacWinValue4" class="win-val">–</span>
+                            <span class="win-subtext">scenari con montante superiore</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tabella Dati Statistici e Percentili -->
+                <section class="card panel inner-panel">
+                    <h3>Confronto percentili dei montanti finali</h3>
+                    <table class="detail-table mc-table">
+                        <thead>
+                            <tr>
+                                <th>Indicatore</th>
+                                <th>PIC</th>
+                                <th>PAC</th>
+                                <th>Diff. (PIC vs PAC)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Mediana (50&deg; Percentile)</strong></td>
+                                <td id="picP50Val4" style="text-align:right; font-weight:700; color: var(--primary);">–</td>
+                                <td id="pacP50Val4" style="text-align:right; font-weight:700; color: var(--accent);">–</td>
+                                <td id="diffP50Val4" style="text-align:right; font-weight:700;">–</td>
+                            </tr>
+                            <tr>
+                                <td>Scenario Sfavorevole (10&deg; Percentile)</td>
+                                <td id="picP10Val4" style="text-align:right;">–</td>
+                                <td id="pacP10Val4" style="text-align:right;">–</td>
+                                <td id="diffP10Val4" style="text-align:right;">–</td>
+                            </tr>
+                            <tr>
+                                <td>Scenario Favorevole (90&deg; Percentile)</td>
+                                <td id="picP90Val4" style="text-align:right;">–</td>
+                                <td id="pacP90Val4" style="text-align:right;">–</td>
+                                <td id="diffP90Val4" style="text-align:right;">–</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Tabella Riepilogo Draw‑down -->
+                <section class="card panel inner-panel" id="drawdown-summary4">
+                    <h3>Riepilogo Draw‑down (percentuale)</h3>
+                    <table class="detail-table mc-table">
+                        <thead>
+                            <tr>
+                                <th>Indicatore</th>
+                                <th>PIC</th>
+                                <th>PAC</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Mediana Draw-down (50&deg; Percentile)</strong></td>
+                                <td id="medianDDPic4" style="text-align:right; font-weight:700; color: var(--primary);">–</td>
+                                <td id="medianDDPac4" style="text-align:right; font-weight:700; color: var(--accent);">–</td>
+                            </tr>
+                            <tr>
+                                <td>Scenario Contenuto (10&deg; Percentile Draw-down)</td>
+                                <td id="p10DDPic4" style="text-align:right;">–</td>
+                                <td id="p10DDPac4" style="text-align:right;">–</td>
+                            </tr>
+                            <tr>
+                                <td>Scenario Severo (90&deg; Percentile Draw-down)</td>
+                                <td id="p90DDPic4" style="text-align:right;">–</td>
+                                <td id="p90DDPac4" style="text-align:right;">–</td>
+                            </tr>
+                            <tr>
+                                <td>Media Draw-down</td>
+                                <td id="meanDDPic4" style="text-align:right;">–</td>
+                                <td id="meanDDPac4" style="text-align:right;">–</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Grafico Densità di Probabilità -->
+                <section class="card panel inner-panel chart-panel">
+                    <h3>Distribuzione di probabilit&agrave; dei montanti finali</h3>
+                    <p class="field-note" style="margin-bottom: 12px;">
+                        Densità di probabilità dei montanti finali calcolata sugli scenari stocastici Skewed t di Bruce Hansen.
+                    </p>
+
+                    <div class="chart-container">
+                        <svg id="mcDensityChart4" viewBox="0 0 600 340" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Grafico densità di probabilità Monte Carlo Hansen Skewed-t">
+                            <!-- Generato via script-sezione4.js -->
+                        </svg>
+                    </div>
+
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color legend-pic"></span>
+                            <span>Distribuzione PIC</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color legend-pac"></span>
+                            <span>Distribuzione PAC</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-line legend-median-pic"></span>
+                            <span>Mediana PIC</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-line legend-median-pac"></span>
+                            <span>Mediana PAC</span>
+                        </div>
+                    </div>
+                </section>
+
+            </aside>
+        </main>
+
+        <!-- Sezione Approfondimento Teorico per Monte Carlo Hansen Skewed-t -->
+        <section class="card panel info-card" style="margin-top: 28px;">
+            <h2>Approfondimento Teorico: Modellizzazione con Distribuzione Skewed t di Bruce Hansen (1994)</h2>
+            <div class="theory-grid">
+                <div class="theory-item">
+                    <h4>1. Perch&eacute; considerare l'Asimmetria (Skewness)?</h4>
+                    <p>
+                        Nei mercati finanziari reali, oltre alle code grasse (leptocurtosi), i rendimenti presentano un'importante <strong>asimmetria negativa</strong> (&lambda; &lt; 0). I crolli di borsa tendono a verificarsi in modo molto pi&ugrave; veloce e profondo rispetto alla gradualit&agrave; delle fasi rialziste (fenomeno noto come <em>leverage effect</em> o <em>crash phobia</em>).
+                    </p>
+                </div>
+                <div class="theory-item">
+                    <h4>2. Il Modello Skewed t di Bruce E. Hansen (1994)</h4>
+                    <p>
+                        Nel celebre lavoro <em>"Autoregressive Conditional Density Estimation"</em> (<em>International Economic Review</em>, 1994), econometrista <strong>Bruce E. Hansen</strong> ha formalizzato la distribuzione $t$ di Student Asimmetrica. Il parametro &lambda; &in; (&minus;1, 1) consente di flettere la distribuzione: valori &lambda; &lt; 0 allungano la coda sinistra aumentando il peso degli shock ribassisti.
+                    </p>
+                </div>
+                <div class="theory-item">
+                    <h4>3. Evidenze empiriche e parametri di letteratura</h4>
+                    <p>
+                        Ricerche econometriche sui rendimenti azionari internazionali (es. <strong>Jondeau &amp; Rockinger 2003</strong>, <em>"Conditional volatility, skewness, and kurtosis"</em>, <em>Journal of Economic Dynamics and Control</em>) dimostrano che i mercati azionari presentano gradi di libert&agrave; <strong>&nu; &approx; 4 &divide; 6</strong> e asimmetria negativa <strong>&lambda; &approx; &minus;0.15 &divide; &minus;0.20</strong>. I parametri precompilati nel calcolatore sono impostati a <strong>&nu; = 5</strong> e <strong>&lambda; = &minus;0.15</strong>.
+                    </p>
+                </div>
+                <div class="theory-item">
+                    <h4>4. Impatto sul confronto PIC vs PAC</h4>
+                    <p>
+                        L'asimmetria negativa (&lambda; &lt; 0) amplifica la severit&agrave; dei draw-down per gli investimenti in un'unica soluzione (PIC) durante le fasi di crollo di mercato. Il PAC si conferma uno strumento particolarmente efficace per attenuare il rischio di shock repentini e proteggere il capitale dal punto di vista emotivo, pur mantenendo una probabilità di successo sul montante finale inferiore rispetto al PIC a causa della ripresa immediata dei mercati.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Disclaimer -->
+        <section class="card panel info-card">
+            <h2>Disclaimer</h2>
+            <p class="disclaimer-text">
+                <strong>Disclaimer:</strong> I calcoli e i grafici generati da questa applicazione hanno finalit&agrave; esclusivamente didattiche e teoriche.
+                Le simulazioni stocastiche si basano su parametri ipotetici indicati dall'utente che non costituiscono garanzia di performance future.
+            </p>
+        </section>
+
+        <!-- Informazioni (footer comune NavTools) -->
+        <section class="card panel info-card">
+            <h2>Informazioni</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Versione</td>
+                        <td>1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>Ultimo aggiornamento</td>
+                        <td>09/09/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Autore</td>
+                        <td>Alessandro Navarini</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+
+    <script src="../../assets/js/common.js"></script>
+    <script src="calculator.js"></script>
+    <script src="script-sezione4.js"></script>
+        <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dc1d00b0089c4eeca4080d07199d8ad7"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

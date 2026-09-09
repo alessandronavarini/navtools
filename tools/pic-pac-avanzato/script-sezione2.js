@@ -198,18 +198,24 @@ function renderResultsSection2(stats, picArray, pacArray) {
     // Popola tabella draw‑down
     const fmtDD = v => (Number.isFinite(v) ? v.toFixed(2) + "%" : "–");
 
-    const elMaxDDPic    = document.getElementById("maxDDPic");
     const elMedianDDPic = document.getElementById("medianDDPic");
+    const elP10DDPic    = document.getElementById("p10DDPic");
+    const elP90DDPic    = document.getElementById("p90DDPic");
     const elMeanDDPic   = document.getElementById("meanDDPic");
-    const elMaxDDPac    = document.getElementById("maxDDPac");
+
     const elMedianDDPac = document.getElementById("medianDDPac");
+    const elP10DDPac    = document.getElementById("p10DDPac");
+    const elP90DDPac    = document.getElementById("p90DDPac");
     const elMeanDDPac   = document.getElementById("meanDDPac");
 
-    if (elMaxDDPic)    elMaxDDPic.textContent    = fmtDD(stats.maxDDPic);
     if (elMedianDDPic) elMedianDDPic.textContent = fmtDD(stats.medianDDPic);
+    if (elP10DDPic)    elP10DDPic.textContent    = fmtDD(stats.p10DDPic);
+    if (elP90DDPic)    elP90DDPic.textContent    = fmtDD(stats.p90DDPic);
     if (elMeanDDPic)   elMeanDDPic.textContent   = fmtDD(stats.meanDDPic);
-    if (elMaxDDPac)    elMaxDDPac.textContent    = fmtDD(stats.maxDDPac);
+
     if (elMedianDDPac) elMedianDDPac.textContent = fmtDD(stats.medianDDPac);
+    if (elP10DDPac)    elP10DDPac.textContent    = fmtDD(stats.p10DDPac);
+    if (elP90DDPac)    elP90DDPac.textContent    = fmtDD(stats.p90DDPac);
     if (elMeanDDPac)   elMeanDDPac.textContent   = fmtDD(stats.meanDDPac);
 
     // Evidenzia la strategia con draw‑down medio minore
