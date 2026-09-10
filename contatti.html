@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contatti — NavTools</title>
+    <meta name="description" content="Contatta Alessandro Navarini per informazioni, suggerimenti o segnalazioni relative agli strumenti di NavTools.">
+    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Barra di Navigazione Fissa in Alto -->
+    <header class="site-navbar">
+        <nav class="nav-container" aria-label="Navigazione principale">
+            <a href="index.html" class="nav-brand">
+                <img src="images/logo.svg" alt="Logo NavTools" class="nav-logo">
+                <span>NavTools</span>
+            </a>
+            <button class="nav-toggle" aria-label="Menu di navigazione">&#9776;</button>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Tools</a></li>
+                <li><a href="chi-sono.html" class="nav-link">Chi sono</a></li>
+                <li><a href="contatti.html" class="nav-link active">Contatti</a></li>
+                <li><a href="https://blog.navtools.app" target="_blank" rel="noopener" class="nav-btn-blog">Blog &rarr;</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container tool-container">
+        <header class="page-header">
+            <h1>Contatti</h1>
+            <p class="subtitle">
+                Puoi contattarmi compilando il form sottostante per qualsiasi informazione, suggerimento o richiesta.
+            </p>
+        </header>
+
+        <main>
+            <article class="card contact-card">
+                <p style="font-size: 1.05rem; line-height: 1.6; margin-top: 0; color: var(--text);">
+                    Hai domande su uno degli strumenti disponibili, suggerimenti per migliorarli o idee per nuovi calcolatori da sviluppare?
+                    Compila il modulo di contatto sottostante per inviarmi direttamente un messaggio.
+                </p>
+
+                <!-- Form Contatti -->
+                    <form action="https://api.web3forms.com/submit" method="POST" class="navtools-contact-form">
+                    <!-- Access Key di Web3Forms -->
+                    <input type="hidden" name="access_key" value="534c210d-04d7-473f-87b9-1f8d7c9bdb3c">
+
+                    <div class="form-group">
+                        <label for="name">Nome</label>
+                        <input type="text" id="name" name="name" placeholder="Il tuo nome" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="nome@esempio.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Messaggio</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Scrivi qui il tuo messaggio..." required></textarea>
+                    </div>
+
+                    <!-- Campo Antispam Honeypot di Web3Forms -->
+                    <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
+                    <button type="submit" class="submit-btn">Invia Messaggio</button>
+                    </form>
+
+                    <style>
+                    .navtools-contact-form {
+                        width: 100%;
+                        max-width: 650px;
+                        margin: 0 auto;
+                        background: var(--card);
+                        border: 1px solid var(--border);
+                        border-radius: 8px;
+                        box-shadow: var(--shadow);
+                        padding: clamp(20px, 4vw, 36px);
+                        box-sizing: border-box;
+                        font-family: Segoe UI, Arial, sans-serif;
+                    }
+
+                    .form-group {
+                        margin-bottom: 20px;
+                        display: flex;
+                        flex-direction: column;
+                        width: 100%;
+                    }
+
+                    .navtools-contact-form label {
+                        font-size: 0.95rem;
+                        font-weight: 600;
+                        color: var(--text);
+                        margin-bottom: 8px;
+                    }
+
+                    .navtools-contact-form input[type="text"],
+                    .navtools-contact-form input[type="email"],
+                    .navtools-contact-form textarea {
+                        width: 100%;
+                        padding: 12px 16px;
+                        border: 1px solid var(--border);
+                        border-radius: 6px;
+                        font-size: 0.95rem;
+                        color: var(--text);
+                        background-color: var(--background);
+                        transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+                        box-sizing: border-box;
+                        font-family: inherit;
+                    }
+
+                    .navtools-contact-form input[type="text"]:focus,
+                    .navtools-contact-form input[type="email"]:focus,
+                    .navtools-contact-form textarea:focus {
+                        outline: none;
+                        border-color: var(--primary);
+                        background-color: var(--card);
+                        box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.15);
+                    }
+
+                    .navtools-contact-form textarea {
+                        resize: vertical;
+                        min-height: 140px;
+                    }
+
+                    .submit-btn {
+                        width: 100%;
+                        padding: 12px 20px;
+                        background: var(--primary);
+                        color: #ffffff;
+                        border: none;
+                        border-radius: 6px;
+                        font-size: 1rem;
+                        font-weight: 700;
+                        cursor: pointer;
+                        transition: background-color 0.15s ease;
+                        box-sizing: border-box;
+                    }
+
+                    .submit-btn:hover {
+                        background: var(--primary-dark);
+                    }
+
+                    .submit-btn:active {
+                        transform: scale(0.99);
+                    }
+                    </style>
+                </div>
+            </article>
+        </main>
+
+        <p class="subtitle" style="text-align: center; margin-top: 32px;">
+            By Alessandro Navarini
+        </p>
+    </div>
+
+    <script src="assets/js/common.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dc1d00b0089c4eeca4080d07199d8ad7"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
