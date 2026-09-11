@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavTools - Modulo 6: Monte Carlo (Modello a 2 componenti: Momentum & Mean Reversion)</title>
+    <meta name="description" content="Simulazione Monte Carlo avanzata basata su un modello a due componenti che integra l'effetto Momentum a breve termine e la Mean Reversion a lungo termine tra PIC e PAC.">
+    <link rel="stylesheet" href="../../assets/css/common.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Barra di Navigazione Fissa in Alto -->
+    <header class="site-navbar">
+        <nav class="nav-container" aria-label="Navigazione principale">
+            <a href="../../index.html" class="nav-brand">
+                <img src="../../images/logo.svg" alt="Logo NavTools" class="nav-logo">
+                <span>NavTools</span>
+            </a>
+            <button class="nav-toggle" aria-label="Menu di navigazione">&#9776;</button>
+            <ul class="nav-menu">
+                <li><a href="../../index.html" class="nav-link">Tools</a></li>
+                <li><a href="../../chi-sono.html" class="nav-link">Chi sono</a></li>
+                <li><a href="../../contatti.html" class="nav-link">Contatti</a></li>
+                <li><a href="https://blog.navtools.app" target="_blank" rel="noopener" class="nav-btn-blog">Blog &rarr;</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container tool-container">
+        <a href="index.html" class="back-link">&larr; Indice Modellazione Avanzata</a>
+
+        <header class="tool-header">
+            <a href="../../index.html" class="logo-link" aria-label="Vai alla home di NavTools">
+                <img src="../../images/logo.svg" class="logo" alt="Logo NavTools">
+            </a>
+            <h1>Modulo 6 — Monte Carlo (Momentum &amp; Mean Reversion)</h1>
+            <p class="description">
+                Modellazione stocastica avanzata a due componenti: combina l'effetto <em>momentum</em> (persistenza dei trend a breve termine) con la <em>mean reversion</em> (regressione verso la media fondamentale a lungo termine).
+            </p>
+        </header>
+
+        <main class="calculator-layout">
+
+            <!-- Colonna Input Sezione 6 -->
+            <form class="input-column" aria-label="Parametri della simulazione Monte Carlo a due componenti" onsubmit="return false;">
+                <section class="card panel inner-panel">
+                    <h3>Parametri stocastici</h3>
+
+                    <label for="capitaleInvestireMC6">Capitale totale da investire (EUR)</label>
+                    <input id="capitaleInvestireMC6" type="number" value="12000" min="100" step="any" inputmode="decimal">
+
+                    <label for="orizzonteTemporaleMC6">Orizzonte temporale (anni)</label>
+                    <input id="orizzonteTemporaleMC6" type="number" value="10" min="1" max="50" step="1" inputmode="numeric">
+
+                    <label for="durataPACMC6">Durata del PAC (numero rate mensili)</label>
+                    <input id="durataPACMC6" type="number" value="24" min="1" max="600" step="1" inputmode="numeric">
+
+                    <div class="calculated-info-box">
+                        <span class="calc-label">Rata mensile del PAC:</span>
+                        <span id="rataMensileCalculatedMC6" class="calc-val">–</span>
+                    </div>
+
+                    <label for="rendimentoAttesoMC6">Rendimento atteso annuo (%)</label>
+                    <input id="rendimentoAttesoMC6" type="number" value="7.00" step="any" inputmode="decimal">
+
+                    <label for="volatilitaAnnuaMC6">Volatilit&agrave; annua / Deviazione Standard (%)</label>
+                    <input id="volatilitaAnnuaMC6" type="number" value="15.00" min="0.1" max="100" step="any" inputmode="decimal">
+
+                    <label for="phiMomentumMC6">Coefficiente Momentum (&phi;)</label>
+                    <input id="phiMomentumMC6" type="number" value="0.10" min="-0.5" max="0.5" step="any" inputmode="decimal">
+                    <p class="field-note">
+                        Precompilato a &phi; = 0.10 (Jegadeesh &amp; Titman 1993, Lo &amp; MacKinlay 1988). Modella l'autocorrelazione positiva a breve termine.
+                    </p>
+
+                    <label for="thetaMeanReversionMC6">Velocit&agrave; Mean Reversion (&theta;)</label>
+                    <input id="thetaMeanReversionMC6" type="number" value="0.02" min="0.00" max="0.20" step="any" inputmode="decimal">
+                    <p class="field-note">
+                        Precompilato a &theta; = 0.02 (Poterba &amp; Summers 1988, Spierdijk et al. 2012). Modella la forza di richiamo verso il trend fondamentale di lungo periodo.
+                    </p>
+
+                    <label for="numeroSimulazioniMC6">Numero di simulazioni Monte Carlo</label>
+                    <input id="numeroSimulazioniMC6" type="number" value="10000" min="10000" step="5000" inputmode="numeric">
+                    <p class="field-note">
+                        Valore minimo: 10.000. Un numero molto elevato (es. &gt; 100.000) potrebbe causare rallentamenti nei calcoli.
+                    </p>
+
+                    <!-- Tasto Avvio Simulazione -->
+                    <button type="button" id="btnRunMonteCarlo6" class="button mc-run-button">
+                        &#9654; Avvia Simulazione Monte Carlo
+                    </button>
+
+                    <!-- Barra di Avanzamento -->
+                    <div id="progressBarBox6" class="progress-bar-box" hidden>
+                        <div class="progress-bar-track">
+                            <div id="progressBarFill6" class="progress-bar-fill" style="width: 0%;"></div>
+                        </div>
+                        <p id="progressBarText6" class="progress-bar-text">Pronto per la simulazione</p>
+                    </div>
+                </section>
+            </form>
+
+            <!-- Colonna Output Sezione 6 -->
+            <aside class="result-column" aria-live="polite">
+
+                <!-- Card Probabilità di Vittoria -->
+                <section class="card result-card mc-result-card">
+                    <p class="mc-result-title" id="mcResultTitle6">Esito Simulazioni Monte Carlo (2 Componenti: Momentum &amp; Mean Reversion)</p>
+
+                    <div class="win-prob-grid">
+                        <div class="win-badge-box pic-win-box">
+                            <span class="win-label">Vittoria PIC</span>
+                            <span id="probPicWinValue6" class="win-val">–</span>
+                            <span class="win-subtext">scenari con montante superiore</span>
+                        </div>
+                        <div class="win-badge-box pac-win-box">
+                            <span class="win-label">Vittoria PAC</span>
+                            <span id="probPacWinValue6" class="win-val">–</span>
+                            <span class="win-subtext">scenari con montante superiore</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tabella Dati Statistici e Percentili -->
+                <section class="card panel inner-panel">
+                    <h3>Confronto percentili dei montanti finali</h3>
+                    <table class="detail-table mc-table">
+                        <thead>
+                            <tr>
+                                <th>Indicatore</th>
+                                <th>PIC</th>
+                                <th>PAC</th>
+                                <th>Diff. (PIC vs PAC)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Mediana (50&deg; Percentile)</strong></td>
+                                <td id="picP50Val6" style="text-align:right; font-weight:700; color: var(--primary);">–</td>
+                                <td id="pacP50Val6" style="text-align:right; font-weight:700; color: var(--accent);">–</td>
+                                <td id="diffP50Val6" style="text-align:right; font-weight:700;">–</td>
+                            </tr>
+                            <tr>
+                                <td>Scenario Sfavorevole (10&deg; Percentile)</td>
+                                <td id="picP10Val6" style="text-align:right;">–</td>
+                                <td id="pacP10Val6" style="text-align:right;">–</td>
+                                <td id="diffP10Val6" style="text-align:right;">–</td>
+                            </tr>
+                            <tr>
+                                <td>Scenario Favorevole (90&deg; Percentile)</td>
+                                <td id="picP90Val6" style="text-align:right;">–</td>
+                                <td id="pacP90Val6" style="text-align:right;">–</td>
+                                <td id="diffP90Val6" style="text-align:right;">–</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Tabella Riepilogo Draw‑down -->
+                <section class="card panel inner-panel" id="drawdown-summary6">
+                    <h3>Riepilogo Draw‑down (percentuale)</h3>
+                    <table class="detail-table mc-table">
+                        <thead>
+                            <tr>
+                                <th>Indicatore</th>
+                                <th>PIC</th>
+                                <th>PAC</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Mediana Draw-down (50&deg; Percentile)</strong></td>
+                                <td id="medianDDPic6" style="text-align:right; font-weight:700; color: var(--primary);">–</td>
+                                <td id="medianDDPac6" style="text-align:right; font-weight:700; color: var(--accent);">–</td>
+                            </tr>
+                            <tr>
+                                <td>Scenario Contenuto (10&deg; Percentile Draw-down)</td>
+                                <td id="p10DDPic6" style="text-align:right;">–</td>
+                                <td id="p10DDPac6" style="text-align:right;">–</td>
+                            </tr>
+                            <tr>
+                                <td>Scenario Severo (90&deg; Percentile Draw-down)</td>
+                                <td id="p90DDPic6" style="text-align:right;">–</td>
+                                <td id="p90DDPac6" style="text-align:right;">–</td>
+                            </tr>
+                            <tr>
+                                <td>Media Draw-down</td>
+                                <td id="meanDDPic6" style="text-align:right;">–</td>
+                                <td id="meanDDPac6" style="text-align:right;">–</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Grafico Densità di Probabilità -->
+                <section class="card panel inner-panel chart-panel">
+                    <h3>Distribuzione di probabilit&agrave; dei montanti finali</h3>
+                    <p class="field-note" style="margin-bottom: 12px;">
+                        Densità di probabilità dei montanti finali calcolata sugli scenari stocastici a due componenti (Momentum &amp; Mean Reversion).
+                    </p>
+
+                    <div class="chart-container">
+                        <svg id="mcDensityChart6" viewBox="0 0 600 340" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Grafico densità di probabilità Monte Carlo Due Componenti">
+                            <!-- Generato via script-sezione6.js -->
+                        </svg>
+                    </div>
+
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color legend-pic"></span>
+                            <span>Distribuzione PIC</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color legend-pac"></span>
+                            <span>Distribuzione PAC</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-line legend-median-pic"></span>
+                            <span>Mediana PIC</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-line legend-median-pac"></span>
+                            <span>Mediana PAC</span>
+                        </div>
+                    </div>
+                </section>
+
+            </aside>
+        </main>
+
+        <!-- Sezione Approfondimento Teorico per Monte Carlo 2 Componenti -->
+        <section class="card panel info-card" style="margin-top: 28px;">
+            <h2>Approfondimento Teorico: Il Modello a Due Componenti (Momentum &amp; Mean Reversion)</h2>
+            <div class="theory-grid">
+                <div class="theory-item">
+                    <h4>1. La Dualit&agrave; delle Dinamiche di Mercato</h4>
+                    <p>
+                        I prezzi dei mercati finanziari manifestano due fenomeni distinti a seconda dell'orizzonte temporale: l'<strong>effetto Momentum</strong> a breve termine (persistenza nei trend mensili/annuali) e la <strong>Mean Reversion</strong> a lungo termine (tendenza dei prezzi a riassorbire le valutazioni estreme e tornare verso la linea di equilibrio fondamentale).
+                    </p>
+                </div>
+                <div class="theory-item">
+                    <h4>2. Formulazione Matematica e Log-Rendimenti</h4>
+                    <p>
+                        Il modello calcola il log-rendimento mensile $r_{log, m} = \mu_{log} + \sigma_{mensile} \cdot S_m$, dove lo shock combinato $S_m = X_m - \theta \cdot (\Delta_{m-1}/\sigma_{annua})$ unisce l'autocorrelazione AR(1) ($X_m$) con il fattore di riassorbimento della deviazione cumulata dal trend ($\Delta_{m-1}$). L'evoluzione del patrimonio avviene in continuo via $e^{r_{log, m}}$, garantendo il rigore matematico delle simulazioni.
+                    </p>
+                </div>
+                <div class="theory-item">
+                    <h4>3. Letteratura Accademica e Parametri</h4>
+                    <p>
+                        Lo studio fondamentale di <strong>Poterba &amp; Summers (1988)</strong> (<em>"Mean Reversion in Stock Prices"</em>, <em>Journal of Financial Economics</em>), confermato da <strong>Campbell &amp; Shiller (1988)</strong> e <strong>Spierdijk et al. (2012)</strong>, dimostra la presenza di significativi processi di regressione verso la media su orizzonti multi-annuali (3-5 anni). Il modello integra tali evidenze con &phi; = 0.10 (momentum, <em>Jegadeesh &amp; Titman 1993</em>) e &theta; = 0.02 (velocit&agrave; di riassorbimento).
+                    </p>
+                </div>
+                <div class="theory-item">
+                    <h4>4. Implicazioni per il Confronto PIC vs PAC</h4>
+                    <p>
+                        Nelle fasi di mercato a due componenti, il PAC beneficia doppiamente della dinamica stocastica: durante i ribassi prolungati alimentati dal momentum acquista quote a prezzi via via pi&ugrave; depressi, per poi beneficiare dell'intenso rally di ripresa attivato dalla forza di <em>mean reversion</em> non appena i prezzi tornano verso il trend di valore fondamentale.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Disclaimer -->
+        <section class="card panel info-card">
+            <h2>Disclaimer</h2>
+            <p class="disclaimer-text">
+                <strong>Disclaimer:</strong> I calcoli e i grafici generati da questa applicazione hanno finalit&agrave; esclusivamente didattiche e teoriche.
+                Le simulazioni stocastiche si basano su parametri ipotetici indicati dall'utente che non costituiscono garanzia di performance future.
+            </p>
+        </section>
+
+        <!-- Informazioni (footer comune NavTools) -->
+        <section class="card panel info-card">
+            <h2>Informazioni</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Versione</td>
+                        <td>1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>Ultimo aggiornamento</td>
+                        <td>11/09/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Autore</td>
+                        <td>Alessandro Navarini</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+
+    <script src="../../assets/js/common.js"></script>
+    <script src="calculator.js"></script>
+    <script src="script-sezione6.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dc1d00b0089c4eeca4080d07199d8ad7"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

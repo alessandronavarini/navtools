@@ -122,6 +122,8 @@ const PicPacAvanzatoCalculator = {
         let maxDDPic = 0;
         let maxDDPac = 0;
 
+        const muLogMensile = Math.log(1 + muMensile);
+
         for (let m = 1; m <= totaleMesi; m++) {
             // Versamento all'INIZIO del mese m per il PAC
             if (m <= ratePAC) {
@@ -129,10 +131,10 @@ const PicPacAvanzatoCalculator = {
                 if (portafoglioPAC > peakPac) peakPac = portafoglioPAC;
             }
 
-            // Generazione rendimento casuale normale Z ~ N(0, 1) tramite Box-Muller
+            // Generazione log-rendimento casuale normale: rLog ~ N(muLog, sigma^2)
             const z = randomNormal();
-            const rMensile = muMensile + sigmaMensile * z;
-            const fattoreCrescita = Math.max(0.0001, 1 + rMensile);
+            const rLogMensile = muLogMensile + sigmaMensile * z;
+            const fattoreCrescita = Math.exp(rLogMensile);
 
             // Crescita durante il mese m
             montantePIC = montantePIC * fattoreCrescita;
@@ -270,6 +272,7 @@ const PicPacAvanzatoCalculator = {
         let maxDDPac = 0;
 
         const nu = Math.max(3, Math.round(gradiLiberta || 5));
+        const muLogMensile = Math.log(1 + muMensile);
 
         for (let m = 1; m <= totaleMesi; m++) {
             // Versamento all'INIZIO del mese m per il PAC
@@ -278,10 +281,10 @@ const PicPacAvanzatoCalculator = {
                 if (portafoglioPAC > peakPac) peakPac = portafoglioPAC;
             }
 
-            // Generazione rendimento casuale t di Student con varianza unitaria
+            // Generazione log-rendimento casuale t di Student
             const z = randomStudentT(nu);
-            const rMensile = muMensile + sigmaMensile * z;
-            const fattoreCrescita = Math.max(0.0001, 1 + rMensile);
+            const rLogMensile = muLogMensile + sigmaMensile * z;
+            const fattoreCrescita = Math.exp(rLogMensile);
 
             // Crescita durante il mese m
             montantePIC = montantePIC * fattoreCrescita;
@@ -333,6 +336,7 @@ const PicPacAvanzatoCalculator = {
 
         const nu = Math.max(3, Math.round(gradiLiberta || 5));
         const lam = Math.max(-0.99, Math.min(0.99, lambdaAsimmetria !== undefined ? lambdaAsimmetria : -0.15));
+        const muLogMensile = Math.log(1 + muMensile);
 
         for (let m = 1; m <= totaleMesi; m++) {
             // Versamento all'INIZIO del mese m per il PAC
@@ -341,10 +345,10 @@ const PicPacAvanzatoCalculator = {
                 if (portafoglioPAC > peakPac) peakPac = portafoglioPAC;
             }
 
-            // Generazione rendimento casuale Hansen Skewed t con media 0 e varianza 1
+            // Generazione log-rendimento casuale Hansen Skewed t
             const z = randomHansenSkewedT(nu, lam);
-            const rMensile = muMensile + sigmaMensile * z;
-            const fattoreCrescita = Math.max(0.0001, 1 + rMensile);
+            const rLogMensile = muLogMensile + sigmaMensile * z;
+            const fattoreCrescita = Math.exp(rLogMensile);
 
             // Crescita durante il mese m
             montantePIC = montantePIC * fattoreCrescita;
@@ -395,6 +399,7 @@ const PicPacAvanzatoCalculator = {
 
         const phi = Math.max(-0.95, Math.min(0.95, phiMomentum !== undefined ? phiMomentum : 0.10));
         const noiseScale = Math.sqrt(Math.max(0.0001, 1 - phi * phi));
+        const muLogMensile = Math.log(1 + muMensile);
 
         // Inizializza lo stato AR(1) con un'estrazione dalla distribuzione stazionaria N(0,1)
         let xPrev = randomNormal();
@@ -411,8 +416,92 @@ const PicPacAvanzatoCalculator = {
             const xCurr = phi * xPrev + noiseScale * z;
             xPrev = xCurr;
 
-            const rMensile = muMensile + sigmaMensile * xCurr;
-            const fattoreCrescita = Math.max(0.0001, 1 + rMensile);
+            const rLogMensile = muLogMensile + sigmaMensile * xCurr;
+            const fattoreCrescita = Math.exp(rLogMensile);
+
+            // Crescita durante il mese m
+            montantePIC = montantePIC * fattoreCrescita;
+            if (montantePIC > peakPic) peakPic = montantePIC;
+            portafoglioPAC = portafoglioPAC * fattoreCrescita;
+            if (portafoglioPAC > peakPac) peakPac = portafoglioPAC;
+
+            // Calcola draw‑down percentuale corrente e aggiorna il massimo
+            if (peakPic > 0) {
+                const ddPic = ((peakPic - montantePIC) / peakPic) * 100;
+                if (ddPic > maxDDPic) maxDDPic = ddPic;
+            }
+            if (peakPac > 0) {
+                const ddPac = ((peakPac - portafoglioPAC) / peakPac) * 100;
+                if (ddPac > maxDDPac) maxDDPac = ddPac;
+            }
+        }
+
+        return {
+            picFinal: montantePIC,
+            pacFinal: portafoglioPAC,
+            picDrawdown: maxDDPic,
+            pacDrawdown: maxDDPac
+        };
+    },
+
+    /**
+     * SEZIONE 6: Esegue una singola simulazione Monte Carlo con modello a 2 componenti:
+     * Momentum (AR(1) a breve termine) + Mean Reversion (regressione verso la media a lungo termine).
+     * I versamenti PAC avvengono all'INIZIO di ciascun mese m.
+     */
+    simulaSingoloMonteCarloTwoComponent(p) {
+        const {
+            cTot,
+            totaleMesi,
+            ratePAC,
+            rataMensilePAC,
+            muMensile,
+            sigmaMensile,
+            phiMomentum,
+            thetaMeanReversion
+        } = p;
+
+        let montantePIC = cTot;
+        let portafoglioPAC = 0;
+        let peakPic = montantePIC;
+        let peakPac = 0;
+        let maxDDPic = 0;
+        let maxDDPac = 0;
+
+        const phi = Math.max(-0.95, Math.min(0.95, phiMomentum !== undefined ? phiMomentum : 0.10));
+        const theta = Math.max(0, Math.min(0.20, thetaMeanReversion !== undefined ? thetaMeanReversion : 0.02));
+        const noiseScale = Math.sqrt(Math.max(0.0001, 1 - phi * phi));
+        const muLogMensile = Math.log(1 + muMensile);
+        const sigmaAnnua = sigmaMensile * Math.sqrt(12);
+
+        let xPrev = randomNormal();
+        let cumLogReturn = 0;
+
+        for (let m = 1; m <= totaleMesi; m++) {
+            // Versamento all'INIZIO del mese m per il PAC
+            if (m <= ratePAC) {
+                portafoglioPAC += rataMensilePAC;
+                if (portafoglioPAC > peakPac) peakPac = portafoglioPAC;
+            }
+
+            // Componente Momentum AR(1): X_m = phi * X_{m-1} + sqrt(1 - phi^2) * Z_m
+            const z = randomNormal();
+            const xCurr = phi * xPrev + noiseScale * z;
+            xPrev = xCurr;
+
+            // Componente Mean Reversion: deviazione accumulata rispetto al trend fondamentale atteso
+            const expectedTrend = (m - 1) * muLogMensile;
+            const deviazioneTrend = cumLogReturn - expectedTrend;
+            const scaledDev = deviazioneTrend / Math.max(0.01, sigmaAnnua);
+
+            // Shock combinato: momentum + forza di richiamo verso la media
+            const shockCombinato = xCurr - theta * scaledDev;
+
+            // Log-rendimento del mese m
+            const rLogMensile = muLogMensile + sigmaMensile * shockCombinato;
+            const fattoreCrescita = Math.exp(rLogMensile);
+
+            cumLogReturn += rLogMensile;
 
             // Crescita durante il mese m
             montantePIC = montantePIC * fattoreCrescita;
