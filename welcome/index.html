@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grazie per l'iscrizione - NavTools</title>
+    <style>
+        :root {
+            --primary-color: #237a4b;
+            --primary-hover: #237a4b;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --bg-card: #ffffff;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-main);
+            background-color: #ffffff;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-section h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: var(--text-main);
+        }
+
+        .header-section p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 650px) {
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .post-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .post-image-container {
+            width: 100%;
+            height: 220px;
+            background-color: #f3f4f6;
+            overflow: hidden;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .post-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .post-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .post-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0 0 10px 0;
+            line-height: 1.4;
+        }
+
+        .post-snippet {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin: 0 0 20px 0;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .author-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #111;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .blog-link-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .blog-link {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .blog-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer-cta {
+            border-top: 1px solid var(--border-color);
+            padding-top: 40px;
+            text-align: center;
+        }
+
+        .footer-cta p {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            line-height: 1.5;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-navtools {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            padding: 10px 28px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-navtools:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .loading-state {
+            text-align: center;
+            color: var(--text-muted);
+            grid-column: 1 / -1;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Intestazione -->
+        <div class="header-section">
+            <h1>Grazie per la tua iscrizione!</h1>
+            <p>Nell'attesa dei prossimi contenuti, potrebbero interessarti questi post:</p>
+        </div>
+
+        <!-- Griglia Articoli -->
+        <div id="posts-grid" class="posts-grid">
+            <div class="loading-state">Caricamento post in corso...</div>
+        </div>
+
+        <!-- Link al Blog -->
+        <div class="blog-link-container">
+            <a href="https://blog.navtools.app" class="blog-link" target="_blank" rel="noopener">Esplora tutti gli articoli sul blog &rarr;</a>
+        </div>
+
+        <!-- Footer CTA -->
+        <div class="footer-cta">
+            <p>Non dimenticarti di guardare anche gli strumenti di calcolo e simulazione che <strong>NavTools</strong> mette a disposizione. Li trovi a questo link:</p>
+            <a href="https://navtools.app" class="btn-navtools">NavTools</a>
+        </div>
+    </div>
+
+    <!-- Script JSON -->
+    <script>
+        const RSS_FEED_URL = 'https://rss.beehiiv.com/feeds/UgtDpHOXDq.xml';
+        const API_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_FEED_URL)}`;
+
+        async function fetchBeehiivPosts() {
+            const grid = document.getElementById('posts-grid');
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+
+                if (data.status !== 'ok' || !data.items || data.items.length === 0) {
+                    throw new Error('Nessun post trovato');
+                }
+
+                grid.innerHTML = '';
+                
+                // Prende i primi 3 articoli
+                const items = data.items.slice(0, 3);
+
+                items.forEach(item => {
+                    const title = item.title;
+                    const link = item.link;
+                    
+                    // Formattazione data
+                    const pubDate = new Date(item.pubDate);
+                    const formattedDate = pubDate.toLocaleDateString('en-US', {
+                        month: 'short', day: 'numeric', year: 'numeric'
+                    }) + ' • 1 min read';
+
+                    // Immagine (gestione thumbnail o enclosure)
+                    let imageUrl = item.thumbnail || item.enclosure?.link || '';
+                    if (!imageUrl && item.description) {
+                        const match = item.description.match(/<img[^>]+src="([^">]+)"/);
+                        if (match) imageUrl = match[1];
+                    }
+
+                    // Snippet di testo pulito
+                    let tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = item.description;
+                    let cleanSnippet = tempDiv.textContent || tempDiv.innerText || '';
+                    if (cleanSnippet.length > 120) {
+                        cleanSnippet = cleanSnippet.substring(0, 120) + '...';
+                    }
+
+                    const card = document.createElement('a');
+                    card.href = link;
+                    card.target = '_blank';
+                    card.rel = 'noopener';
+                    card.className = 'post-card';
+                    
+                    let imageHTML = imageUrl ? `<div class="post-image-container"><img src="${imageUrl}" class="post-image" alt="${title}"></div>` : '';
+
+                    card.innerHTML = `
+                        ${imageHTML}
+                        <div class="post-content">
+                            <div class="post-meta">${formattedDate}</div>
+                            <h3 class="post-title">${title}</h3>
+                            <p class="post-snippet">${cleanSnippet}</p>
+                            <div class="post-author">
+                                <div class="author-avatar">AN</div>
+                                <span>Alessandro Navarini</span>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+            } catch (error) {
+                grid.innerHTML = `<div class="loading-state">Impossibile caricare i post al momento. Puoi leggerli direttamente sul <a href="https://blog.navtools.app" target="_blank" style="color:var(--primary-color);">blog</a>.</div>`;
+            }
+        }
+
+        fetchBeehiivPosts();
+    </script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dc1d00b0089c4eeca4080d07199d8ad7"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

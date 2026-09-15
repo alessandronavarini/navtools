@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iscriviti alla Newsletter - NavTools</title>
+    <style>
+        :root {
+            --primary-color: #10b981;
+            --primary-hover: #059669;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --bg-card: #ffffff;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-main);
+            background-color: #f9f9fb;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 550px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            text-align: center;
+        }
+
+        /* Stile Navbar / Logo ridimensionato */
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--text-main);
+        }
+
+        /* Regola fondamentale per bloccare le dimensioni del logo */
+        .nav-logo {
+            height: 100px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .form-wrapper {
+            text-align: left;
+            min-height: 80px; /* Evita sbalzi di layout durante il caricamento dello script */
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--text-main);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Logo e rimando al sito principale -->
+        <nav class="nav-container" aria-label="Navigazione principale">
+            <a href="index.html" class="nav-brand">
+                <img src="../images/logo.svg" alt="Logo NavTools" class="nav-logo">
+            </a>
+        </nav>
+
+        <h1>Rimani aggiornato</h1>
+        <p>Iscriviti alla newsletter per leggere i miei pensieri a tema finanza, economia e investimenti, nonché le principali novità di NavTools.</p>
+
+        <!-- Modulo di iscrizione beehiiv completo -->
+        <div class="form-wrapper">
+            <script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="d935d3d3-1fa0-4a7b-8926-62be7e7d7f65"></script>            <script type="text/javascript" async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+        </div>
+
+        <a href="https://navtools.app" class="back-link">&larr; Torna alla home di NavTools</a>
+    </div>
+    <script type="text/javascript" async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dc1d00b0089c4eeca4080d07199d8ad7"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
+
