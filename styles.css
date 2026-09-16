@@ -100,6 +100,16 @@ h1 {
     background: #0a3c67;
 }
 
+.button-secondary {
+    background: #237a4b;
+    color: #ffffff;
+}
+
+.button-secondary:hover,
+.button-secondary:focus-visible {
+    background: #1b603a;
+}
+
 .disabled {
     opacity: 0.62;
 }
@@ -140,6 +150,98 @@ h1 {
     color: #0a3c67;
 }
 
+/* Sezioni Categorie Tool */
+.category-section {
+    margin-bottom: 38px;
+}
+
+.category-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 18px;
+    color: #0f4c81;
+    font-size: 1.35rem;
+    font-weight: 700;
+    border-bottom: 2px solid #e2ece9;
+    padding-bottom: 8px;
+}
+
+.category-icon {
+    font-size: 1.35rem;
+}
+
+/* Bottom Extra Widgets (Coming Soon & Feedback) */
+.bottom-widgets-section {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 2px dashed #dfe8e4;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.widget-card {
+    padding: 24px;
+    border-radius: 10px;
+    border: 1px solid #d0dfe6;
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(15, 76, 129, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.widget-card.coming-soon {
+    background: linear-gradient(135deg, #f8fbfd 0%, #edf5fa 100%);
+    border: 1px dashed #a5c4d4;
+}
+
+.widget-card.feedback-box {
+    background: #f4faf7;
+    border-left: 5px solid #237a4b;
+}
+
+.widget-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    width: fit-content;
+}
+
+.badge-coming {
+    background: #e1ecf4;
+    color: #0f4c81;
+}
+
+.badge-feedback {
+    background: #d8f3e5;
+    color: #237a4b;
+}
+
+.widget-card h3 {
+    margin: 0 0 8px;
+    color: #173f5f;
+    font-size: 1.2rem;
+}
+
+.widget-card p {
+    margin: 0 0 16px;
+    font-size: 0.95rem;
+    color: #4a5a67;
+    line-height: 1.5;
+}
+
+.widget-button {
+    align-self: flex-start;
+    margin-top: auto;
+}
+
 @media (max-width: 640px) {
     .home-container {
         padding: 28px 16px 36px;
@@ -157,4 +259,10 @@ h1 {
     .banner-content {
         font-size: 0.9rem;
     }
+
+    .bottom-widgets-section {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
 }
+

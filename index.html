@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
@@ -18,8 +18,8 @@
             <button class="nav-toggle" aria-label="Menu di navigazione">&#9776;</button>
             <ul class="nav-menu">
                 <li><a href="index.html" class="nav-link active">Tools</a></li>
-                <li><a href="chi-sono.html" class="nav-link">Chi sono</a></li>
-                <li><a href="contatti.html" class="nav-link">Contatti</a></li>
+                <li><a href="chi-sono/index.html" class="nav-link">Chi sono</a></li>
+                <li><a href="contatti/index.html" class="nav-link">Contatti</a></li>
                 <li><a href="https://blog.navtools.app" target="_blank" rel="noopener" class="nav-btn-blog">Blog &rarr;</a></li>
             </ul>
         </nav>
@@ -43,104 +43,144 @@
             </div>
         </div>
 
-        <main class="tool-grid" aria-label="Strumenti disponibili">
-            <article class="tool-card">
-                <div>
-                    <h2>Disinvestimento Fondi</h2>
-                    <p>
-                        Calcola il lordo necessario per ottenere un netto desiderato oppure il netto
-                        ottenibile da un importo lordo, includendo imposte e commissioni della SGR.
-                    </p>
-                </div>
-                <a class="button" href="tools/fondi/index.html">Apri strumento</a>
-            </article>
+        <main aria-label="Strumenti disponibili per categoria">
+            <!-- Categoria 1: Investimenti e fiscalità -->
+            <section class="category-section">
+                <h2 class="category-title">
+                    <span class="category-icon" aria-hidden="true">📈</span> Investimenti e fiscalità
+                </h2>
+                <div class="tool-grid">
+                    <article class="tool-card">
+                        <div>
+                            <h2>Disinvestimento Fondi</h2>
+                            <p>
+                                Calcola il lordo necessario per ottenere un netto desiderato oppure il netto
+                                ottenibile da un importo lordo, includendo imposte e commissioni della SGR.
+                            </p>
+                        </div>
+                        <a class="button" href="tools/fondi/index.html">Apri strumento</a>
+                    </article>
 
-            <article class="tool-card">
-                <div>
-                    <h2>Importo Mutuo Erogabile</h2>
-                    <p>
-                        Stima il massimo importo finanziabile partendo dal reddito netto mensile,
-                        dagli impegni gi&agrave; in corso, dal tasso fisso e dalla durata desiderata.
-                    </p>
-                </div>
-                <a class="button" href="tools/mutui/index.html">Apri strumento</a>
-            </article>
+                    <article class="tool-card">
+                        <div>
+                            <h2>Calcolatore PAC/PIC</h2>
+                            <p>Simula e confronta un Piano di Accumulo (PAC) e un Investimento in Unica Soluzione (PIC), analizzando rendimenti e imposte.</p>
+                        </div>
+                        <a class="button" href="tools/pac-pic/index.html">Apri strumento</a>
+                    </article>
 
-            <article class="tool-card">
-                <div>
-                    <h2>Previdenza Complementare</h2>
-                    <p>
-                        Calcola il risparmio fiscale annuo del versamento al fondo pensione e il costo
-                        effettivo netto del contributo, per lavoratori dipendenti.
-                    </p>
-                </div>
-                <a class="button" href="tools/previdenza/index.html">Apri strumento</a>
-            </article>
+                    <article class="tool-card">
+                        <div>
+                            <h2>Modellazione avanzata PIC vs PAC</h2>
+                            <p>Piattaforma quantitativa e stocastica avanzata per il confronto deterministico e Monte Carlo (Normale, Student-t, Hansen Skewed-t, AR(1) e 2-Componenti) tra PIC e PAC.</p>
+                        </div>
+                        <a class="button" href="tools/pic-pac-avanzato/index.html">Apri strumento</a>
+                    </article>
 
-            <article class="tool-card">
-                <div>
-                    <h2>Prestazioni Previdenza Complementare</h2>
-                    <p>Calcolo della tassazione agevolata delle prestazioni finali e delle modalità di liquidazione del montante accumulato.</p>
-                </div>
-                <a class="button" href="tools/prestazioni-previdenza/index.html">Apri strumento</a>
-            </article>
+                    <article class="tool-card">
+                        <div>
+                            <h2>Conto deposito / Certificato di deposito</h2>
+                            <p>
+                                Strumento per calcolare le cedole nette e l'imposta di bollo dovuta su questi strumenti.
+                            </p>
+                        </div>
+                        <a class="button" href="tools/conti-deposito/index.html">Apri strumento</a>
+                    </article>
 
-            <article class="tool-card">
-                <div>
-                    <h2>Redditi di Capitale e Diversi</h2>
-                    <p>
-                        Approfondimento sulla fiscalità nel regime amministrato e sulla possibilità di
-                        compensazione delle minusvalenze pregresse.
-                    </p>
+                    <article class="tool-card">
+                        <div>
+                            <h2>Redditi di Capitale e Diversi</h2>
+                            <p>
+                                Approfondimento sulla fiscalità nel regime amministrato e sulla possibilità di
+                                compensazione delle minusvalenze pregresse.
+                            </p>
+                        </div>
+                        <a class="button" href="tools/minusvalenze/index.html">Apri strumento</a>
+                    </article>
                 </div>
-                <a class="button" href="tools/minusvalenze/index.html">Apri strumento</a>
-            </article>
+            </section>
 
-            <article class="tool-card">
-                <div>
-                    <h2>Premi Aziendali e Welfare</h2>
-                    <p>
-                        Simula la scelta di allocazione del premio tra busta paga e welfare:
-                        confronta il netto percepito con il valore del credito welfare maggiorato.
-                    </p>
-                </div>
-                <a class="button" href="tools/premio-welfare/index.html">Apri strumento</a>
-            </article>
+            <!-- Categoria 2: Previdenza, lavoro e welfare -->
+            <section class="category-section">
+                <h2 class="category-title">
+                    <span class="category-icon" aria-hidden="true">🛡️</span> Previdenza, lavoro e welfare
+                </h2>
+                <div class="tool-grid">
+                    <article class="tool-card">
+                        <div>
+                            <h2>Previdenza Complementare</h2>
+                            <p>
+                                Calcola il risparmio fiscale annuo del versamento al fondo pensione e il costo
+                                effettivo netto del contributo, per lavoratori dipendenti.
+                            </p>
+                        </div>
+                        <a class="button" href="tools/previdenza/index.html">Apri strumento</a>
+                    </article>
 
-            <article class="tool-card">
-                <div>
-                    <h2>Conto deposito / Certificato di deposito</h2>
-                    <p>
-                        Strumento per calcolare le cedole nette e l'imposta di bollo dovuta su questi strumenti.
-                    </p>
-                </div>
-                <a class="button" href="tools/conti-deposito/index.html">Apri strumento</a>
-            </article>
+                    <article class="tool-card">
+                        <div>
+                            <h2>Prestazioni Previdenza Complementare</h2>
+                            <p>Calcolo della tassazione agevolata delle prestazioni finali e delle modalità di liquidazione del montante accumulato.</p>
+                        </div>
+                        <a class="button" href="tools/prestazioni-previdenza/index.html">Apri strumento</a>
+                    </article>
 
-            <article class="tool-card">
-                <div>
-                    <h2>Calcolatore PAC/PIC</h2>
-                    <p>Simula e confronta un Piano di Accumulo (PAC) e un Investimento in Unica Soluzione (PIC), analizzando rendimenti e imposte.</p>
+                    <article class="tool-card">
+                        <div>
+                            <h2>Premi Aziendali e Welfare</h2>
+                            <p>
+                                Simula la scelta di allocazione del premio tra busta paga e welfare:
+                                confronta il netto percepito con il valore del credito welfare maggiorato.
+                            </p>
+                        </div>
+                        <a class="button" href="tools/premio-welfare/index.html">Apri strumento</a>
+                    </article>
                 </div>
-                <a class="button" href="tools/pac-pic/index.html">Apri strumento</a>
-            </article>
+            </section>
 
-            <article class="tool-card disabled" aria-disabled="true">
-                <div>
-                    <p class="tool-status draft">In arrivo</p>
-                    <h2>Modellazione avanzata PIC vs PAC</h2>
-                    <p>Modellizzazione quantitativa e stocastica avanzata per il confronto deterministico e Monte Carlo tra PIC e PAC.</p>
+            <!-- Categoria 3: Mutui e finanziamenti -->
+            <section class="category-section">
+                <h2 class="category-title">
+                    <span class="category-icon" aria-hidden="true">🏠</span> Mutui e finanziamenti
+                </h2>
+                <div class="tool-grid">
+                    <article class="tool-card">
+                        <div>
+                            <h2>Importo Mutuo Erogabile</h2>
+                            <p>
+                                Stima il massimo importo finanziabile partendo dal reddito netto mensile,
+                                dagli impegni gi&agrave; in corso, dal tasso fisso e dalla durata desiderata.
+                            </p>
+                        </div>
+                        <a class="button" href="tools/mutui/index.html">Apri strumento</a>
+                    </article>
                 </div>
-            </article>
+            </section>
 
-            <article class="tool-card">
-                <div>
-                    <p class="tool-status available">Suggerimenti</p>
-                    <h2>Cosa potrebbe essere utile?</h2>
-                    <p>Segnala quali strumenti di calcolo o nuove funzionalità potrebbero essere utili nell'operatività quotidiana.</p>
+            <!-- Sezione separata per In Arrivo & Suggerimenti -->
+            <section class="bottom-widgets-section" aria-label="Prossimi sviluppi e suggerimenti">
+                <div class="widget-card coming-soon">
+                    <div>
+                        <span class="widget-badge badge-coming">🚀 In Arrivo</span>
+                        <h3>Prossimi sviluppi &amp; Roadmap</h3>
+                        <p>
+                            Stiamo lavorando a nuovi modelli quantitativi per l'ottimizzazione di portafoglio, simulatori di inflazione attesa e modelli avanzati per l'analisi della duration obbligazionaria. Resta aggiornato iscrivendoti alla newsletter!
+                        </p>
+                    </div>
+                    <a class="button widget-button button-secondary" href="https://www.blog.navtools.app/" target="_blank" rel="noopener">Iscriviti alla Newsletter &rarr;</a>
                 </div>
-                <a class="button" href="contatti.html">Invia un messaggio</a>
-            </article>
+
+                <div class="widget-card feedback-box">
+                    <div>
+                        <span class="widget-badge badge-feedback">💡 Suggerimenti</span>
+                        <h3>Cosa potrebbe esserti utile?</h3>
+                        <p>
+                            NavTools nasce per rispondere a esigenze reali. Segnala quali strumenti di calcolo o nuove funzionalità potrebbero semplificare la tua operatività quotidiana.
+                        </p>
+                    </div>
+                    <a class="button widget-button" href="contatti/index.html">Invia un messaggio</a>
+                </div>
+            </section>
         </main>
         <p class="subtitle">
                 By Alessandro Navarini
