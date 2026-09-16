@@ -1,0 +1,33 @@
+# ==========================================
+# CONFIGURAZIONE GENERALE & SEO - NAVTOOLS
+# ==========================================
+
+title: "NavTools"
+tagline: "Strumenti di Finanza Quantitativa e Simulazioni"
+description: "Piattaforma indipendente di calcolatori finanziari avanzati, simulazioni Monte Carlo e modelli di investimento quantitativo."
+url: "https://navtools.app"
+baseurl: "" # Lasciare vuoto se il sito è nella root del dominio
+
+author:
+  name: "Alessandro Navarini"
+  email: "alessandro@navtools.app"
+
+# Gestione degli URL puliti (rimuove il .html)
+permalink: pretty
+
+# ==========================================
+# PLUGIN SEO NATIVI SUPPORTATI DA GITHUB PAGES
+# ==========================================
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# ==========================================
+# ESCLUSIONI (File da non pubblicare online)
+# ==========================================
+exclude:
+  - README.md
+  - LICENSE
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
