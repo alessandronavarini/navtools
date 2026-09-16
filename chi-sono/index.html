@@ -7,6 +7,16 @@
     <meta name="description" content="Profilo di Alessandro Navarini, sviluppatore e ideatore di NavTools, piattaforma di calcolo e analisi quantitativa in ambito bancario e finanziario.">
     <link rel="stylesheet" href="../assets/css/common.css">
     <link rel="stylesheet" href="../styles.css">
+    <script>
+    (function() {
+        // Controlla se l'URL contiene .html
+        if (window.location.pathname.endsWith('.html')) {
+            // Rimuove il .html dall'URL visualizzato nella barra degli indirizzi
+            const cleanUrl = window.location.pathname.replace(/\.html$/, '') + window.location.search + window.location.hash;
+            window.history.replaceState(null, '', cleanUrl);
+        }
+    })();
+</script>
 </head>
 <body>
     <!-- Barra di Navigazione Fissa in Alto -->
