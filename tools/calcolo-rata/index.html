@@ -1,22 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-    <link rel="canonical" href="https://navtools.app/tools/mutui/">
+    <link rel="canonical" href="https://navtools.app/tools/calcolo-rata/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NavTools - Importo Mutuo Erogabile</title>
+    <title>NavTools - Calcolo Rata Finanziamento</title>
+    <meta name="description" content="Calcola la rata mensile di un prestito o finanziamento con l'ammortamento alla francese, visualizzando il totale degli interessi e il piano di ammortamento.">
     <link rel="stylesheet" href="../../assets/css/common.css">
     <link rel="stylesheet" href="style.css">
-    <script>
-    (function() {
-        // Controlla se l'URL contiene .html
-        if (window.location.pathname.endsWith('.html')) {
-            // Rimuove il .html dall'URL visualizzato nella barra degli indirizzi
-            const cleanUrl = window.location.pathname.replace(/\.html$/, '') + window.location.search + window.location.hash;
-            window.history.replaceState(null, '', cleanUrl);
-        }
-    })();
-</script>
 </head>
 <body>
     <!-- Barra di Navigazione Fissa in Alto -->
@@ -42,72 +33,62 @@
             <a href="../../index.html" class="logo-link" aria-label="Vai alla home di NavTools">
                 <img src="../../images/logo.svg" class="logo" alt="Logo NavTools">
             </a>
-            <h1>Importo Mutuo Erogabile</h1>
+            <h1>Calcolo Rata Finanziamento</h1>
             <p class="description">
-                Stima il capitale massimo finanziabile in base al reddito mensile,
-                agli impegni gi&agrave; in corso, al tasso fisso e alla durata desiderata.
+                Calcola la rata mensile costante di un prestito o finanziamento basato sull'ammortamento alla francese (rata costante con quota capitale crescente).
             </p>
         </header>
 
         <main class="calculator-layout">
-            <form class="input-column" aria-label="Dati del calcolo mutuo">
+            <form class="input-column" aria-label="Parametri del finanziamento" onsubmit="return false;">
                 <section class="card panel">
-                    <h2>Dati reddituali</h2>
+                    <h2>Parametri finanziamento</h2>
 
-                    <label for="monthlyIncome">Reddito netto mensile (EUR)</label>
-                    <input id="monthlyIncome" type="number" value="2000" min="0" step="0.01" inputmode="decimal">
+                    <label for="loanAmount">Importo desiderato (EUR)</label>
+                    <input id="loanAmount" type="number" value="20000" min="100" step="any" inputmode="decimal">
 
-                    <label for="debtRatio">Reddito destinabile a finanziamenti (%)</label>
-                    <input id="debtRatio" type="number" value="35" min="0" max="100" step="0.01" inputmode="decimal">
+                    <label for="annualRate">Tasso di interesse annuo TAN (%)</label>
+                    <input id="annualRate" type="number" value="5" min="0" max="100" step="0.01" inputmode="decimal">
 
-                    <label for="existingPayments">Rate finanziamenti gi&agrave; in corso (EUR)</label>
-                    <input id="existingPayments" type="number" value="0" min="0" step="0.01" inputmode="decimal">
-                </section>
-
-                <section class="card panel">
-                    <h2>Condizioni mutuo</h2>
-
-                    <label for="annualRate">Tasso di interesse annuo (%)</label>
-                    <input id="annualRate" type="number" value="3.5" min="0" step="0.01" inputmode="decimal">
-
-                    <label for="durationYears">Durata desiderata (anni)</label>
-                    <input id="durationYears" type="number" value="20" min="1" step="1" inputmode="numeric">
-
-                    <label for="ltv">Loan To Value – LTV (%)</label>
-                    <input id="ltv" type="number" value="80" min="1" max="100" step="1" inputmode="numeric">
+                    <label for="durationYears">Durata del finanziamento (anni)</label>
+                    <input id="durationYears" type="number" value="5" min="1" max="50" step="1" inputmode="numeric">
                 </section>
             </form>
 
             <aside class="result-column" aria-live="polite">
                 <section class="card result-card">
-                    <p id="resultTitle">Importo massimo erogabile</p>
+                    <p id="resultTitle">Rata mensile stimata</p>
                     <div id="resultValue">-</div>
                     <p id="resultMessage"></p>
                 </section>
 
                 <section class="card panel">
-                    <h2>Dettaglio calcoli</h2>
+                    <h2>Riepilogo calcoli</h2>
                     <table>
                         <tbody>
                             <tr>
-                                <td>Quota stipendio destinabile</td>
-                                <td id="availableIncomeValue">-</td>
+                                <td>Importo finanziato</td>
+                                <td id="principalValue">-</td>
                             </tr>
                             <tr>
-                                <td>Numero rate</td>
-                                <td id="installmentsValue">-</td>
+                                <td>Numero rate mensili</td>
+                                <td id="installmentsCountValue">-</td>
                             </tr>
                             <tr>
-                                <td>Rata ipotizzata</td>
-                                <td id="paymentValue">-</td>
+                                <td>Tasso applicato (TAN)</td>
+                                <td id="appliedRateValue">-</td>
                             </tr>
                             <tr>
-                                <td>Valore minimo dell'immobile</td>
-                                <td id="minPropertyValue">-</td>
+                                <td>Totale interessi dovuti</td>
+                                <td id="totalInterestValue">-</td>
                             </tr>
                             <tr>
-                                <td>Anticipo minimo necessario</td>
-                                <td id="minDepositValue">-</td>
+                                <td>Importo totale da rimborsare</td>
+                                <td id="totalRepaidValue">-</td>
+                            </tr>
+                            <tr>
+                                <td>Incidenza interessi sul totale</td>
+                                <td id="interestPercentageValue">-</td>
                             </tr>
                         </tbody>
                     </table>
@@ -115,17 +96,39 @@
             </aside>
         </main>
 
+        <!-- Piano di Ammortamento -->
+        <section class="card panel amortization-section">
+            <div class="amortization-header">
+                <h2>Piano di Ammortamento alla Francese</h2>
+            </div>
+            <div class="amortization-table-wrapper">
+                <table class="amortization-table">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Rata</th>
+                            <th>Quota Capitale</th>
+                            <th>Quota Interessi</th>
+                            <th>Debito Residuo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="amortizationTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
         <section class="card panel info-card">
             <h2>Informazioni</h2>
             <table>
                 <tbody>
                     <tr>
                         <td>Versione</td>
-                        <td>1.0.3</td>
+                        <td>1.0.0</td>
                     </tr>
                     <tr>
                         <td>Ultimo aggiornamento</td>
-                        <td>05/07/2026</td>
+                        <td>18/09/2026</td>
                     </tr>
                     <tr>
                         <td>Autore</td>
