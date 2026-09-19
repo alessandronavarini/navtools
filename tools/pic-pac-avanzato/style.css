@@ -733,6 +733,29 @@ input[type="number"]:focus {
     font-size: 1.1rem;
 }
 
+.info-card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.info-card td {
+    padding: 11px 0;
+    vertical-align: top;
+}
+
+.info-card td:first-child {
+    color: var(--muted);
+}
+
+.info-card td:last-child {
+    text-align: right;
+    font-weight: 700;
+}
+
+.info-card tr:not(:last-child) {
+    border-bottom: 1px solid #edf2f0;
+}
+
 .disclaimer-text {
     font-size: 0.88rem;
     line-height: 1.6;
