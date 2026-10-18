@@ -17,7 +17,10 @@ const elements = {
     resultMessage: document.getElementById("resultMessage"),
     taxValue: document.getElementById("taxValue"),
     commissionValue: document.getElementById("commissionValue"),
-    maxNetValue: document.getElementById("maxNetValue")
+    maxNetValue: document.getElementById("maxNetValue"),
+    chartCard: document.getElementById("chartCard"),
+    pieChart: document.getElementById("pieChart"),
+    pieLegend: document.getElementById("pieLegend")
 };
 
 function init() {
@@ -161,6 +164,12 @@ function renderResult(result, values) {
 
     elements.taxValue.textContent = formatEuro(result.imposta);
     elements.maxNetValue.textContent = formatEuro(result.nettoMassimo);
+
+    if (result.lordo > 0 && result.netto > 0) {
+        renderPieChart(result.netto, result.imposta, result.commissione, result.lordo);
+    } else if (elements.chartCard) {
+        elements.chartCard.hidden = true;
+    }
 }
 
 function renderError(message, values = {}) {
@@ -170,6 +179,147 @@ function renderError(message, values = {}) {
     elements.taxValue.textContent = "-";
     elements.commissionValue.textContent = Number.isFinite(values.commissione) ? formatEuro(values.commissione) : "-";
     elements.maxNetValue.textContent = "-";
+    if (elements.chartCard) {
+        elements.chartCard.hidden = true;
+    }
+}
+
+function renderPieChart(netto, imposta, commissione, lordo) {
+    const svg = elements.pieChart;
+    const legend = elements.pieLegend;
+    if (!svg || !legend) return;
+
+    svg.innerHTML = "";
+    legend.innerHTML = "";
+
+    const totale = netto + imposta + commissione;
+    if (!Number.isFinite(totale) || totale <= 0) {
+        if (elements.chartCard) elements.chartCard.hidden = true;
+        return;
+    }
+    if (elements.chartCard) elements.chartCard.hidden = false;
+
+    const items = [
+        { key: "netto", label: "Netto ottenuto", value: Math.max(0, netto), color: "#237a4b" },
+        { key: "imposta", label: "Tasse pagate", value: Math.max(0, imposta), color: "#c0392b" },
+        { key: "commissione", label: "Commissioni", value: Math.max(0, commissione), color: "#0f4c81" }
+    ];
+
+    items.forEach(item => {
+        item.percent = (item.value / totale) * 100;
+    });
+
+    const validItems = items.filter(item => item.value > 0);
+    const cx = 120;
+    const cy = 120;
+    const r = 85;
+
+    if (validItems.length === 1) {
+        const item = validItems[0];
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", cx);
+        circle.setAttribute("cy", cy);
+        circle.setAttribute("r", r);
+        circle.setAttribute("fill", item.color);
+        circle.setAttribute("class", "pie-slice");
+
+        const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+        title.textContent = `${item.label}: 100,0%`;
+        circle.appendChild(title);
+        svg.appendChild(circle);
+
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", cx);
+        text.setAttribute("y", cy);
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("dominant-baseline", "central");
+        text.setAttribute("class", "pie-slice-label");
+        text.textContent = "100,0%";
+        svg.appendChild(text);
+    } else if (validItems.length > 1) {
+        let currentAngle = 0;
+
+        validItems.forEach(item => {
+            const sliceAngle = (item.value / totale) * 360;
+            const startAngle = currentAngle;
+            const endAngle = currentAngle + sliceAngle;
+            currentAngle = endAngle;
+
+            const startRad = (startAngle - 90) * Math.PI / 180;
+            const endRad = (endAngle - 90) * Math.PI / 180;
+
+            const x1 = cx + r * Math.cos(startRad);
+            const y1 = cy + r * Math.sin(startRad);
+            const x2 = cx + r * Math.cos(endRad);
+            const y2 = cy + r * Math.sin(endRad);
+
+            const largeArcFlag = sliceAngle > 180 ? 1 : 0;
+
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            const d = `M ${cx} ${cy} L ${x1.toFixed(3)} ${y1.toFixed(3)} A ${r} ${r} 0 ${largeArcFlag} 1 ${x2.toFixed(3)} ${y2.toFixed(3)} Z`;
+            path.setAttribute("d", d);
+            path.setAttribute("fill", item.color);
+            path.setAttribute("class", "pie-slice");
+
+            const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+            title.textContent = `${item.label}: ${formatChartPercent(item.percent)}`;
+            path.appendChild(title);
+            svg.appendChild(path);
+
+            // Se la fetta è abbastanza ampia (>= 6%), mostriamo la percentuale direttamente sopra
+            if (item.percent >= 6) {
+                const midAngle = startAngle + sliceAngle / 2;
+                const midRad = (midAngle - 90) * Math.PI / 180;
+                const labelRadius = r * 0.65;
+                const lx = cx + labelRadius * Math.cos(midRad);
+                const ly = cy + labelRadius * Math.sin(midRad);
+
+                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttribute("x", lx.toFixed(3));
+                text.setAttribute("y", ly.toFixed(3));
+                text.setAttribute("text-anchor", "middle");
+                text.setAttribute("dominant-baseline", "central");
+                text.setAttribute("class", "pie-slice-label");
+                text.textContent = formatChartPercent(item.percent);
+                svg.appendChild(text);
+            }
+        });
+    }
+
+    // Popola la legenda con le voci e le relative percentuali
+    items.forEach(item => {
+        const legendItem = document.createElement("div");
+        legendItem.className = "pie-legend-item";
+
+        const left = document.createElement("div");
+        left.className = "pie-legend-left";
+
+        const colorDot = document.createElement("span");
+        colorDot.className = "pie-legend-color";
+        colorDot.style.backgroundColor = item.color;
+
+        const labelSpan = document.createElement("span");
+        labelSpan.textContent = item.label;
+
+        left.appendChild(colorDot);
+        left.appendChild(labelSpan);
+
+        const percentSpan = document.createElement("span");
+        percentSpan.className = "pie-legend-percent";
+        percentSpan.textContent = formatChartPercent(item.percent);
+
+        legendItem.appendChild(left);
+        legendItem.appendChild(percentSpan);
+        legend.appendChild(legendItem);
+    });
+}
+
+function formatChartPercent(val) {
+    if (!Number.isFinite(val) || val <= 0) return "0,0%";
+    if (val < 0.1) {
+        return val.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "%";
+    }
+    return val.toLocaleString("it-IT", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + "%";
 }
 
 function resetMessage() {
